@@ -1,0 +1,13 @@
+file	zh	en	formula	space_group	cod
+halite.cif	岩盐（氯化钠）	Halite	NaCl	F m -3 m	9003308
+fluorite.cif	萤石	Fluorite	CaF₂	F m -3 m	9007060
+perovskite.cif	钙钛矿	Perovskite	CaTiO₃	P b n m	9006172
+cooperite.cif	硫铂矿	Cooperite	PtS	P 42/m m c	1011334
+rutile.cif	金红石	Rutile	TiO₂	P 42/m n m	9004141
+brookite.cif	板钛矿	Brookite	TiO₂	P b c a	9004137
+anatase.cif	锐钛矿	Anatase	TiO₂	I 41/a m d :1	9008213
+sphalerite.cif	闪锌矿	Sphalerite	ZnS	F -4 3 m	1100043
+wurtzite.cif	纤锌矿（2H）	Wurtzite (2H)	ZnS	P 63 m c	1100044
+diamond.cif	金刚石	Diamond	C	F d -3 m :1	9011997
+quartz.cif	α-石英	α-Quartz	SiO₂	P 32 2 1	9013321
+calcite.cif	方解石	Calcite	CaCO₃	R -3 c :H	9000965

@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>CrystalLens 路 renderer demo</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #020305; }
+  #viewport { position: fixed; inset: 0; }
+  canvas { display: block; }
+  #cl-error-log, #cl-render-log { display: none; }
+</style>
+</head>
+<body>
+<div id="viewport"></div>
+<pre id="cl-error-log" style="display:none">[]</pre>
+<pre id="cl-render-log" style="display:none">{}</pre>
+<!-- self-contained render-layer demo: no core/parser/model files, mock DisplayModel only -->
+<script src="../js/lib/math.js"></script>
+<script src="../js/lib/periodic_table.js"></script>
+<script src="../js/render/camera.js"></script>
+<script src="../js/render/gl.js"></script>
+<script src="../js/render/renderer.js"></script>
+<script src="../js/render/overlay.js"></script>
+<script src="render-demo.js"></script>
+</body>
+</html>

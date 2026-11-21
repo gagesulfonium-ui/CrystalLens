@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CrystalLens integration probe</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #020305; overflow: hidden; }
+  #viewport { position: fixed; inset: 0; }
+  #log { position: fixed; left: 8px; top: 8px; color: #8b98a5; font: 12px monospace; white-space: pre; z-index: 10; }
+  #cl-error-log { display: none; }
+</style>
+</head>
+<body>
+<div id="viewport"></div>
+<div id="log"></div>
+<pre id="cl-error-log" style="display:none">[]</pre>
+<pre id="cl-selftest" style="display:none"></pre>
+
+<script src="../../web/js/lib/math.js"></script>
+<script src="../../web/js/lib/periodic_table.js"></script>
+<script src="../../web/js/core/cif.js"></script>
+<script src="../../web/js/core/xyz.js"></script>
+<script src="../../web/js/core/vesta.js"></script>
+<script src="../../web/js/core/parsers.js"></script>
+<script src="../../web/js/core/crystal.js"></script>
+<script src="../../web/js/core/format.js"></script>
+<script src="../../web/js/render/camera.js"></script>
+<script src="../../web/js/render/gl.js"></script>
+<script src="../../web/js/render/renderer.js"></script>
+<script src="../../web/js/render/overlay.js"></script>
+<script src="../../web/js/data/library.js"></script>
+<script>
+(function () {
+  'use strict';
+  var errors = [];
+  window.onerror = function (m, s, l) { errors.push(String(m) + ' @' + s + ':' + l); };
+  window.addEventListener('unhandledrejection', function (e) { errors.push('unhandled: ' + e.reason); });
+  var logEl = document.getElementById('log');
+  var logLines = [];
+  function log(s) { logLines.push(s); logEl.textContent = logLines.join('\n'); }
+  function finish() {
+    document.getElementById('cl-error-log').textContent = JSON.stringify(errors);
+    document.getElementById('cl-selftest').textContent = JSON.stringify({
+      pass: errors.length ? 0 : 1,
+      fail: errors.length,
+      failures: errors,
+      info: window.__probeInfo || {}
+    });
+  }
+
+  function qs(name, dflt) {
+    var m = new RegExp('[?&]' + name + '=([^&]*)').exec(location.search);
+    return m ? decodeURIComponent(m[1]) : dflt;
+  }
+
+  function run() {
+    var libId = qs('lib', 'halite');
+    var style = qs('style', 'ball-stick');
+    var scRaw = qs('supercell', '1x1x1').split('x');
+    var supercell = [parseInt(scRaw[0], 10) || 1, parseInt(scRaw[1], 10) || 1, parseInt(scRaw[2], 10) || 1];
+    var showBoundary = qs('showBoundary', '1') !== '0';
+    var showLabels = qs('labels', '0') === '1';
+
+    var entry = null;
+    (CL.data.library || []).forEach(function (e) { if (e.id === libId) entry = e; });
+    if (!entry) {
+      errors.push('library entry not found: ' + libId);
+      finish();
+      return;
+    }
+    var t0 = performance.now();
+    var structure = CL.crystal.finalize(CL.parsers.parse(entry.text, entry.file));
+    var t1 = performance.now();
+    var model = CL.crystal.buildDisplayModel(structure, {
+      supercell: supercell,
+      showBoundary: showBoundary,
+      style: style
+    });
+    var t2 = performance.now();
+
+    var host = document.getElementById('viewport');
+    var renderer = new CL.Renderer(host);
+    renderer.setModel(model);
+    var appearance = {
+      cellColor: 0xD6DEE9,
+      backgroundColor: 0x020305,
+      cellLineWidth: 1.0,
+      polyTransparency: 66,
+      polyEdgeWidth: 1.2,
+      polyEdgeColor: 0x91B4D3
+    };
+    renderer.setOptions({
+      style: style,
+      showCell: true,
+      showAxes: true,
+      showBonds: true,
+      showLabels: showLabels,
+      showBoundary: showBoundary,
+      atomScale: 0.30,
+      bondRadius: 0.105,
+      supercell: supercell,
+      appearance: appearance,
+      language: 'zh'
+    });
+    var camera = new CL.Camera();
+    var w = host.clientWidth, h = host.clientHeight;
+    renderer.resize(w, h, Math.min(window.devicePixelRatio || 1, 2));
+    var pts = renderer.getVisiblePoints();
+    camera.fitPoints(pts, w / Math.max(1, h), 1.16);
+    renderer.render(camera);
+
+    // Render synchronously a few times, then write the selftest result immediately.
+    // Headless --dump-dom may snapshot before requestAnimationFrame callbacks run.
+    for (var i = 0; i < 3; i++) { renderer.render(camera); }
+    var frames = 3;
+    function loop() {
+      if (++frames < 60) { requestAnimationFrame(loop); }
+    }
+    requestAnimationFrame(loop);
+    {
+      window.__probeInfo = {
+        libId: libId,
+        style: style,
+        supercell: supercell,
+        parseMs: Math.round(t1 - t0),
+        modelMs: Math.round(t2 - t1),
+        atoms: model.atoms.length,
+        bonds: model.bonds.length,
+        lines: model.lines.length,
+        visibleAtomCount: model.stats.visibleAtomCount,
+        visibleBondCount: model.stats.visibleBondCount,
+        polyhedra: model.polyhedra && model.polyhedra.enabled,
+        polyhedronTriangles: model.polyhedra ? model.polyhedra.triangles.length : 0,
+        polyhedronCenters: model.polyhedra ? model.polyhedra.centers.length : 0,
+        visiblePoints: pts.length,
+        rendererSupported: renderer.supported,
+        screenshotBytes: (renderer.screenshot() || '').length
+      };
+      log('ok ' + JSON.stringify(window.__probeInfo));
+      finish();
+    }
+  }
+
+  try { run(); } catch (e) { errors.push('exception: ' + (e && e.stack || e)); finish(); }
+})();
+</script>
+</body>
+</html>

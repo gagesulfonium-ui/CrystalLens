@@ -1,0 +1,1006 @@
+{
+  "app.title": {
+    "zh": "CrystalLens",
+    "en": "CrystalLens"
+  },
+  "app.tagline": {
+    "zh": "晶体结构，清晰可见",
+    "en": "Crystallography, beautifully rendered"
+  },
+  "status.ready": {
+    "zh": "就绪",
+    "en": "Ready"
+  },
+  "common.unknown": {
+    "zh": "未知",
+    "en": "Unknown"
+  },
+  "common.none": {
+    "zh": "—",
+    "en": "—"
+  },
+  "menu.file": {
+    "zh": "文件",
+    "en": "File"
+  },
+  "menu.edit": {
+    "zh": "编辑",
+    "en": "Edit"
+  },
+  "menu.view": {
+    "zh": "视图",
+    "en": "View"
+  },
+  "menu.measure": {
+    "zh": "测量",
+    "en": "Measure"
+  },
+  "menu.help": {
+    "zh": "帮助",
+    "en": "Help"
+  },
+  "library.title": {
+    "zh": "经典晶体库",
+    "en": "Crystal library"
+  },
+  "library.hint": {
+    "zh": "双击打开一个晶体，或按住 Ctrl / Shift 多选，在独立窗口中打开。",
+    "en": "Double-click a crystal, or use Ctrl / Shift to open several in separate windows."
+  },
+  "viewport.hud.no-coordination-hull": {
+    "zh": "无三维配位 · 球棍",
+    "en": "No 3D shell · ball and stick"
+  },
+  "library.col.mineral": {
+    "zh": "晶体名称",
+    "en": "Crystal"
+  },
+  "library.col.formula": {
+    "zh": "化学式",
+    "en": "Formula"
+  },
+  "library.col.space-group": {
+    "zh": "空间群",
+    "en": "Space group"
+  },
+  "library.open": {
+    "zh": "打开",
+    "en": "Open"
+  },
+  "library.unavailable": {
+    "zh": "无法打开晶体库。请检查程序旁的 library 文件夹是否完整。",
+    "en": "Cannot open the crystal library. Check the library folder beside the executable."
+  },
+  "file.open": {
+    "zh": "打开结构文件…",
+    "en": "Open structure…"
+  },
+  "file.reload": {
+    "zh": "重新载入",
+    "en": "Reload"
+  },
+  "file.save-screenshot": {
+    "zh": "保存视图截图",
+    "en": "Save viewport image"
+  },
+  "file.exit": {
+    "zh": "退出",
+    "en": "Exit"
+  },
+  "edit.copy-summary": {
+    "zh": "复制结构摘要",
+    "en": "Copy structure summary"
+  },
+  "edit.clear-measurements": {
+    "zh": "清除全部测量",
+    "en": "Clear all measurements"
+  },
+  "file.save": {
+    "zh": "保存结构…",
+    "en": "Save structure…"
+  },
+  "edit.undo": {
+    "zh": "撤销",
+    "en": "Undo"
+  },
+  "edit.redo": {
+    "zh": "重做",
+    "en": "Redo"
+  },
+  "edit.cell": {
+    "zh": "编辑晶胞…",
+    "en": "Edit unit cell…"
+  },
+  "edit.add-atom": {
+    "zh": "添加原子…",
+    "en": "Add atom…"
+  },
+  "edit.edit-atom": {
+    "zh": "编辑选中原子…",
+    "en": "Edit selected atom…"
+  },
+  "edit.delete-atom": {
+    "zh": "删除选中原子",
+    "en": "Delete selected atom"
+  },
+  "dialog.ok": {
+    "zh": "确定",
+    "en": "OK"
+  },
+  "dialog.cancel": {
+    "zh": "取消",
+    "en": "Cancel"
+  },
+  "dialog.error.invalid-number": {
+    "zh": "请输入有效数字",
+    "en": "Enter valid numbers"
+  },
+  "dialog.edit-cell.title": {
+    "zh": "编辑晶胞参数",
+    "en": "Edit unit-cell parameters"
+  },
+  "dialog.edit-cell.subtitle": {
+    "zh": "应用后将重新展开对称原子并重建化学键。",
+    "en": "Applying the change re-expands symmetry copies and rebuilds bonds."
+  },
+  "dialog.edit-cell.error.invalid": {
+    "zh": "晶胞参数无效，请检查长度和角度",
+    "en": "Invalid cell parameters; check lengths and angles"
+  },
+  "dialog.add-atom.title": {
+    "zh": "添加原子",
+    "en": "Add atom"
+  },
+  "dialog.edit-atom.title": {
+    "zh": "编辑原子",
+    "en": "Edit atom"
+  },
+  "dialog.atom.subtitle-fractional": {
+    "zh": "输入元素、标签、占位率与分数坐标；新原子会按对称操作展开。",
+    "en": "Enter element, label, occupancy and fractional coordinates; symmetry copies are generated."
+  },
+  "dialog.atom.subtitle-cartesian": {
+    "zh": "输入元素、标签、占位率与笛卡尔坐标（Å）。",
+    "en": "Enter element, label, occupancy and Cartesian coordinates (Å)."
+  },
+  "dialog.edit-atom.subtitle-fractional": {
+    "zh": "修改不对称单元中该位点的元素、标签、占位率与分数坐标。",
+    "en": "Edit the asymmetric-unit site: element, label, occupancy and fractional coordinates."
+  },
+  "dialog.edit-atom.subtitle-cartesian": {
+    "zh": "修改该原子的元素、标签、占位率与笛卡尔坐标（Å）。",
+    "en": "Edit this atom's element, label, occupancy and Cartesian coordinates (Å)."
+  },
+  "dialog.edit-atom.symmetry-note": {
+    "zh": "该原子由对称操作生成；修改会同时作用于全部等价原子。",
+    "en": "This atom is symmetry-generated; editing affects all equivalent copies."
+  },
+  "dialog.atom.error.invalid-element": {
+    "zh": "未知元素，请输入元素符号或原子序数",
+    "en": "Unknown element; enter a symbol or atomic number"
+  },
+  "dialog.atom.error.invalid-occupancy": {
+    "zh": "占位率必须在 0 与 1 之间（不含 0）",
+    "en": "Occupancy must be in (0, 1]"
+  },
+  "toast.select-atom-first": {
+    "zh": "请先在三维视图中选择一个原子",
+    "en": "Select an atom in the viewport first"
+  },
+  "toast.no-cell-for-edit": {
+    "zh": "当前结构没有晶胞参数，无法编辑晶胞",
+    "en": "This structure has no unit cell to edit"
+  },
+  "toast.no-cell-for-cif": {
+    "zh": "CIF 导出需要晶胞参数；请改用 XYZ 格式",
+    "en": "CIF export requires a unit cell; choose XYZ instead"
+  },
+  "dialog.save.title": {
+    "zh": "保存结构",
+    "en": "Save structure"
+  },
+  "toast.save.saved-title": {
+    "zh": "结构已保存",
+    "en": "Structure saved"
+  },
+  "toast.save.saved": {
+    "zh": "已保存到 %s",
+    "en": "Saved to %s"
+  },
+  "toast.save.failed": {
+    "zh": "保存结构失败",
+    "en": "Could not save the structure"
+  },
+  "status.structure-updated": {
+    "zh": "结构已更新",
+    "en": "Structure updated"
+  },
+  "status.undone": {
+    "zh": "已撤销",
+    "en": "Undone"
+  },
+  "status.redone": {
+    "zh": "已重做",
+    "en": "Redone"
+  },
+  "status.atom-deleted": {
+    "zh": "已删除原子",
+    "en": "Atom deleted"
+  },
+  "status.modified": {
+    "zh": "已修改  ·  Ctrl+S 保存结构",
+    "en": "Modified  ·  Ctrl+S to save"
+  },
+  "dialog.unsaved.title": {
+    "zh": "未保存的修改",
+    "en": "Unsaved changes"
+  },
+  "dialog.unsaved.message": {
+    "zh": "当前结构有未保存的修改。继续将丢失这些修改，是否继续？",
+    "en": "The structure has unsaved changes. Continue and discard them?"
+  },
+  "panel.selection.edit-atom": {
+    "zh": "编辑原子",
+    "en": "Edit atom"
+  },
+  "panel.selection.delete": {
+    "zh": "删除",
+    "en": "Delete"
+  },
+  "panel.cell.edit": {
+    "zh": "编辑",
+    "en": "Edit"
+  },
+  "tip.save": {
+    "zh": "保存结构   Ctrl+S",
+    "en": "Save structure   Ctrl+S"
+  },
+  "tip.edit-cell": {
+    "zh": "编辑晶胞参数   Ctrl+E",
+    "en": "Edit unit-cell parameters   Ctrl+E"
+  },
+  "tip.add-atom": {
+    "zh": "添加原子   Ctrl+Shift+A",
+    "en": "Add atom   Ctrl+Shift+A"
+  },
+  "tip.edit-atom": {
+    "zh": "编辑选中原子   F2",
+    "en": "Edit selected atom   F2"
+  },
+  "tip.delete-atom": {
+    "zh": "删除选中原子   Delete",
+    "en": "Delete selected atom   Delete"
+  },
+  "tip.undo": {
+    "zh": "撤销   Ctrl+Z",
+    "en": "Undo   Ctrl+Z"
+  },
+  "tip.redo": {
+    "zh": "重做   Ctrl+Y",
+    "en": "Redo   Ctrl+Y"
+  },
+  "help.shortcut.save": {
+    "zh": "保存结构",
+    "en": "Save structure"
+  },
+  "help.shortcut.undo": {
+    "zh": "撤销 / 重做",
+    "en": "Undo / redo"
+  },
+  "help.shortcut.edit": {
+    "zh": "编辑晶胞 / 原子",
+    "en": "Edit cell / atom"
+  },
+  "dialog.atom.hint.element": {
+    "zh": "符号 / Z",
+    "en": "Symbol / Z"
+  },
+  "dialog.field.hint.optional": {
+    "zh": "可选",
+    "en": "Optional"
+  },
+  "dialog.field.hint.fractional": {
+    "zh": "分数",
+    "en": "Fractional"
+  },
+  "view.reset": {
+    "zh": "重置视图",
+    "en": "Reset view"
+  },
+  "view.fit": {
+    "zh": "适应窗口",
+    "en": "Fit to window"
+  },
+  "view.perspective": {
+    "zh": "透视投影",
+    "en": "Perspective projection"
+  },
+  "view.orthographic": {
+    "zh": "正交投影",
+    "en": "Orthographic projection"
+  },
+  "view.toggle-cell": {
+    "zh": "显示晶胞边框",
+    "en": "Show unit-cell frame"
+  },
+  "view.toggle-bonds": {
+    "zh": "显示化学键",
+    "en": "Show bonds"
+  },
+  "view.toggle-labels": {
+    "zh": "显示原子标签",
+    "en": "Show atom labels"
+  },
+  "view.toggle-axes": {
+    "zh": "显示坐标轴",
+    "en": "Show axes"
+  },
+  "view.toggle-left-panel": {
+    "zh": "显示结构面板",
+    "en": "Show structure panel"
+  },
+  "view.toggle-right-panel": {
+    "zh": "显示测量面板",
+    "en": "Show measurement panel"
+  },
+  "panel.style.ball-and-stick": {
+    "zh": "球棍模型",
+    "en": "Ball & stick"
+  },
+  "panel.style.space-fill": {
+    "zh": "空间填充",
+    "en": "Space filling"
+  },
+  "panel.style.polyhedral": {
+    "zh": "多面体",
+    "en": "Polyhedral"
+  },
+  "language.chinese": {
+    "zh": "中文",
+    "en": "Chinese"
+  },
+  "language.english": {
+    "zh": "English",
+    "en": "English"
+  },
+  "measure.distance": {
+    "zh": "距离测量",
+    "en": "Distance"
+  },
+  "measure.angle": {
+    "zh": "角度测量",
+    "en": "Angle"
+  },
+  "measure.exit": {
+    "zh": "退出测量模式",
+    "en": "Exit measuring mode"
+  },
+  "help.menu.about": {
+    "zh": "关于 CrystalLens",
+    "en": "About CrystalLens"
+  },
+  "help.menu.shortcuts": {
+    "zh": "快捷键与操作",
+    "en": "Shortcuts & controls"
+  },
+  "dialog.open.title": {
+    "zh": "打开晶体结构文件",
+    "en": "Open a crystal structure"
+  },
+  "dialog.open.filter.all": {
+    "zh": "所有支持的结构文件",
+    "en": "All supported structures"
+  },
+  "dialog.open.filter.cif": {
+    "zh": "CIF 晶体文件 (*.cif;*.mcif)",
+    "en": "CIF crystals (*.cif;*.mcif)"
+  },
+  "dialog.open.filter.vesta": {
+    "zh": "VESTA 文件 (*.vesta)",
+    "en": "VESTA files (*.vesta)"
+  },
+  "dialog.open.filter.xyz": {
+    "zh": "XYZ 分子文件 (*.xyz)",
+    "en": "XYZ molecules (*.xyz)"
+  },
+  "panel.section.structure": {
+    "zh": "晶体结构",
+    "en": "STRUCTURE"
+  },
+  "panel.section.cell": {
+    "zh": "晶胞参数",
+    "en": "UNIT CELL"
+  },
+  "panel.section.display": {
+    "zh": "显示",
+    "en": "DISPLAY"
+  },
+  "panel.section.appearance": {
+    "zh": "外观",
+    "en": "APPEARANCE"
+  },
+  "panel.section.selection": {
+    "zh": "选择",
+    "en": "SELECTION"
+  },
+  "panel.section.measurements": {
+    "zh": "测量",
+    "en": "MEASUREMENTS"
+  },
+  "viewport.hud.supercell-limited": {
+    "zh": "超胞过大，显示单胞",
+    "en": "Supercell limit: showing one cell"
+  },
+  "viewport.hud.boundary-limited": {
+    "zh": "边界副本已截断",
+    "en": "Boundary images truncated"
+  },
+  "common.atoms": {
+    "zh": "原子",
+    "en": "Atoms"
+  },
+  "common.bonds": {
+    "zh": "化学键",
+    "en": "Bonds"
+  },
+  "common.space-group": {
+    "zh": "空间群",
+    "en": "Space group"
+  },
+  "common.formula": {
+    "zh": "化学式",
+    "en": "Formula"
+  },
+  "common.cell-contents": {
+    "zh": "晶胞内容",
+    "en": "Cell contents"
+  },
+  "common.source": {
+    "zh": "来源",
+    "en": "Source"
+  },
+  "common.symmetry-ops": {
+    "zh": "对称操作",
+    "en": "Symmetry ops"
+  },
+  "common.asymmetric-unit": {
+    "zh": "不对称单元",
+    "en": "Asymmetric unit"
+  },
+  "common.volume": {
+    "zh": "体积",
+    "en": "Volume"
+  },
+  "common.format": {
+    "zh": "格式",
+    "en": "Format"
+  },
+  "common.data-block": {
+    "zh": "数据块",
+    "en": "Data block"
+  },
+  "panel.empty.hint": {
+    "zh": "打开文件后在此查看结构信息",
+    "en": "Open a structure to inspect it here"
+  },
+  "panel.display.cell": {
+    "zh": "晶胞边框",
+    "en": "Cell frame"
+  },
+  "panel.display.bonds": {
+    "zh": "化学键",
+    "en": "Bonds"
+  },
+  "panel.display.labels": {
+    "zh": "原子标签",
+    "en": "Atom labels"
+  },
+  "panel.display.axes": {
+    "zh": "坐标轴",
+    "en": "Axes"
+  },
+  "panel.display.boundary": {
+    "zh": "边界原子",
+    "en": "Boundary"
+  },
+  "view.supercell": {
+    "zh": "超胞…",
+    "en": "Supercell…"
+  },
+  "dialog.supercell.title": {
+    "zh": "超胞设置",
+    "en": "Supercell"
+  },
+  "dialog.supercell.subtitle": {
+    "zh": "沿 a、b、c 方向重复晶胞的次数（1–16）",
+    "en": "Repeat the unit cell along a, b, c (1–16)"
+  },
+  "dialog.supercell.a": {
+    "zh": "a 方向",
+    "en": "a repeats"
+  },
+  "dialog.supercell.b": {
+    "zh": "b 方向",
+    "en": "b repeats"
+  },
+  "dialog.supercell.c": {
+    "zh": "c 方向",
+    "en": "c repeats"
+  },
+  "panel.cell.supercell-link": {
+    "zh": "超胞",
+    "en": "Supercell"
+  },
+  "view.appearance": {
+    "zh": "外观设置…",
+    "en": "Appearance…"
+  },
+  "panel.appearance.settings": {
+    "zh": "设置",
+    "en": "Settings"
+  },
+  "dialog.appearance.title": {
+    "zh": "外观设置",
+    "en": "Appearance"
+  },
+  "dialog.appearance.subtitle": {
+    "zh": "设置晶胞边框、背景与配位多面体",
+    "en": "Cell frame, background and coordination polyhedra"
+  },
+  "dialog.appearance.cell-color": {
+    "zh": "晶胞边框颜色",
+    "en": "Cell frame colour"
+  },
+  "dialog.appearance.poly-transparency": {
+    "zh": "多面体面透明度",
+    "en": "Face transparency"
+  },
+  "dialog.appearance.poly-edge-color": {
+    "zh": "多面体描边",
+    "en": "Polyhedron outline"
+  },
+  "dialog.appearance.poly-edge-width": {
+    "zh": "多面体描边宽度（0 关闭）",
+    "en": "Outline width (0 = off)"
+  },
+  "dialog.supercell.error.budget": {
+    "zh": "请减小倍率，超胞内部最多 65,536 个位点、300,000 条周期键。",
+    "en": "Reduce repeats to fit 65,536 sites and 300,000 periodic bonds."
+  },
+  "dialog.appearance.cell-width": {
+    "zh": "边框粗细",
+    "en": "Frame width"
+  },
+  "dialog.appearance.background-color": {
+    "zh": "背景颜色",
+    "en": "Background colour"
+  },
+  "dialog.appearance.brightness": {
+    "zh": "明度",
+    "en": "Brightness"
+  },
+  "dialog.appearance.reset": {
+    "zh": "恢复默认",
+    "en": "Reset defaults"
+  },
+  "dialog.appearance.live-hint": {
+    "zh": "拖动色轮或滑杆时，视口会实时预览",
+    "en": "Drag the wheel or sliders for a live preview"
+  },
+  "dialog.appearance.error.color": {
+    "zh": "颜色格式应为 #RRGGBB",
+    "en": "Colour must be #RRGGBB"
+  },
+  "dialog.appearance.error.width": {
+    "zh": "边框粗细应在 0.5–4 之间",
+    "en": "Frame width must be between 0.5 and 4"
+  },
+  "dialog.supercell.error.invalid": {
+    "zh": "超胞倍率必须是 1–16 的整数",
+    "en": "Supercell repeats must be integers from 1 to 16"
+  },
+  "tip.boundary": {
+    "zh": "显示晶胞外的相邻原子和完整配位",
+    "en": "Show neighbouring boundary atoms and full coordination"
+  },
+  "panel.appearance.atom-size": {
+    "zh": "原子尺寸",
+    "en": "Atom size"
+  },
+  "panel.appearance.style": {
+    "zh": "渲染样式",
+    "en": "Style"
+  },
+  "panel.section.elements": {
+    "zh": "元素",
+    "en": "Elements"
+  },
+  "panel.badge.periodic": {
+    "zh": "周期性晶体",
+    "en": "Periodic crystal"
+  },
+  "panel.badge.molecule": {
+    "zh": "分子结构",
+    "en": "Molecule"
+  },
+  "panel.selection.none": {
+    "zh": "未选择原子",
+    "en": "No atom selected"
+  },
+  "panel.selection.hint": {
+    "zh": "在三维视图中点击原子以查看信息",
+    "en": "Click an atom in the viewport to inspect it"
+  },
+  "dialog.atom.label": {
+    "zh": "标签",
+    "en": "Label"
+  },
+  "dialog.atom.element": {
+    "zh": "元素",
+    "en": "Element"
+  },
+  "panel.selection.fractional": {
+    "zh": "分数坐标",
+    "en": "Fractional"
+  },
+  "panel.selection.cartesian": {
+    "zh": "笛卡尔坐标",
+    "en": "Cartesian"
+  },
+  "dialog.atom.occupancy": {
+    "zh": "占位率",
+    "en": "Occupancy"
+  },
+  "panel.selection.uiso": {
+    "zh": "Uiso",
+    "en": "Uiso"
+  },
+  "panel.selection.site": {
+    "zh": "位点",
+    "en": "Site"
+  },
+  "panel.selection.symmetry-image": {
+    "zh": "对称等价位置",
+    "en": "Symmetry image"
+  },
+  "panel.measurements.empty": {
+    "zh": "还没有测量结果",
+    "en": "No measurements yet"
+  },
+  "panel.measurements.empty-hint": {
+    "zh": "选择距离或角度，再点击原子",
+    "en": "Pick a mode, then click atoms"
+  },
+  "measurement.type.distance": {
+    "zh": "键长",
+    "en": "Distance"
+  },
+  "measurement.type.angle": {
+    "zh": "键角",
+    "en": "Angle"
+  },
+  "panel.measurements.clear-all": {
+    "zh": "清除全部",
+    "en": "Clear all"
+  },
+  "measurement.pick.distance": {
+    "zh": "点击两个原子测量距离",
+    "en": "Click two atoms to measure distance"
+  },
+  "measurement.pick.angle": {
+    "zh": "依次点击三个原子测量键角",
+    "en": "Click three atoms to measure the angle"
+  },
+  "measurement.selected-count": {
+    "zh": "已选 %d / %d",
+    "en": "Selected %d / %d"
+  },
+  "measurement.remove": {
+    "zh": "删除此测量",
+    "en": "Remove this measurement"
+  },
+  "viewport.hint.navigate": {
+    "zh": "左键拖动旋转   ·   滚轮缩放   ·   中键 / 右键平移",
+    "en": "Drag to rotate   ·   Scroll to zoom   ·   Middle/right-drag to pan"
+  },
+  "viewport.legend.boundary-on": {
+    "zh": "边界原子 = 相邻晶胞中的原子",
+    "en": "Boundary atoms come from neighbouring cells"
+  },
+  "viewport.legend.boundary-off": {
+    "zh": "仅显示晶胞内原子与键",
+    "en": "Only unit-cell atoms and bonds are shown"
+  },
+  "viewport.hint.measure-distance": {
+    "zh": "距离测量：点击两个原子   ·   Esc 退出",
+    "en": "Distance: click two atoms   ·   Esc to exit"
+  },
+  "viewport.hint.measure-angle": {
+    "zh": "角度测量：依次点击三个原子   ·   Esc 退出",
+    "en": "Angle: click three atoms   ·   Esc to exit"
+  },
+  "viewport.empty.title": {
+    "zh": "打开结构文件，开始探索晶体世界",
+    "en": "Open a structure and explore its crystal world"
+  },
+  "viewport.empty.subtitle": {
+    "zh": "将 CIF、VESTA 或 XYZ 文件拖放到窗口",
+    "en": "Drop a CIF, VESTA or XYZ file here"
+  },
+  "viewport.empty.open": {
+    "zh": "打开结构文件",
+    "en": "Open structure"
+  },
+  "viewport.empty.formats": {
+    "zh": "CIF   ·   VESTA   ·   XYZ",
+    "en": "CIF   ·   VESTA   ·   XYZ"
+  },
+  "viewport.empty.footnote": {
+    "zh": "本地解析 · 硬件加速渲染 · 无需联网",
+    "en": "Local parsing · GPU accelerated · offline"
+  },
+  "viewport.hud.atoms-bonds": {
+    "zh": "%d 原子   %d 键",
+    "en": "%d atoms   %d bonds"
+  },
+  "toast.no-structure": {
+    "zh": "请先打开一个结构文件",
+    "en": "Open a structure first"
+  },
+  "toast.open-failed-title": {
+    "zh": "无法打开文件",
+    "en": "Could not open file"
+  },
+  "toast.loaded": {
+    "zh": "已载入 %s",
+    "en": "Loaded %s"
+  },
+  "toast.screenshot.saved-title": {
+    "zh": "截图已保存",
+    "en": "Screenshot saved"
+  },
+  "toast.screenshot.saved": {
+    "zh": "截图已保存到 %s",
+    "en": "Screenshot saved to %s"
+  },
+  "toast.screenshot.failed": {
+    "zh": "截图保存失败",
+    "en": "Could not save the screenshot"
+  },
+  "toast.copied-summary": {
+    "zh": "结构摘要已复制到剪贴板",
+    "en": "Structure summary copied to clipboard"
+  },
+  "error.renderer.title": {
+    "zh": "无法初始化 OpenGL 3.3 渲染器",
+    "en": "Could not initialize the OpenGL 3.3 renderer"
+  },
+  "error.renderer.hint": {
+    "zh": "请更新显卡驱动后重新启动 CrystalLens",
+    "en": "Update your graphics driver and restart CrystalLens"
+  },
+  "status.renderer-info": {
+    "zh": "OpenGL %s · %s",
+    "en": "OpenGL %s · %s"
+  },
+  "dialog.about.title": {
+    "zh": "关于 CrystalLens",
+    "en": "About CrystalLens"
+  },
+  "dialog.about.version": {
+    "zh": "版本 %s   ·   原生 C++ / OpenGL 3.3",
+    "en": "Version %s   ·   Native C++ / OpenGL 3.3"
+  },
+  "dialog.about.description": {
+    "zh": "面向真实 CIF 数据的晶体结构查看与编辑工具。完整边界晶格、平滑 3D 球棍、元素图例与晶胞叠加框，打开、观察、测量和编辑结构。",
+    "en": "Crystal-structure viewing and editing built for real CIF data, with full boundary lattices, smooth 3D ball-and-stick, an element legend and a cell overlay."
+  },
+  "dialog.about.feature1": {
+    "zh": "CIF / VESTA / XYZ 解析与对称展开",
+    "en": "CIF / VESTA / XYZ parsing with symmetry expansion"
+  },
+  "dialog.about.feature2": {
+    "zh": "可调超胞、边界原子与专业晶胞显示",
+    "en": "Adjustable supercells, boundary atoms and professional cell views"
+  },
+  "dialog.about.feature3": {
+    "zh": "晶胞与原子编辑、撤销/重做、CIF/XYZ 导出",
+    "en": "Cell and atom editing, undo/redo, CIF/XYZ export"
+  },
+  "dialog.about.feature4": {
+    "zh": "键长键角测量、高 DPI 与中英双语",
+    "en": "Geometry measurement, high DPI and Chinese/English"
+  },
+  "dialog.about.shortcuts": {
+    "zh": "快捷键",
+    "en": "Shortcuts"
+  },
+  "help.shortcut.orbit": {
+    "zh": "旋转",
+    "en": "Orbit"
+  },
+  "help.shortcut.zoom": {
+    "zh": "缩放",
+    "en": "Zoom"
+  },
+  "help.shortcut.pan": {
+    "zh": "平移",
+    "en": "Pan"
+  },
+  "help.shortcut.fit": {
+    "zh": "适应窗口",
+    "en": "Fit to window"
+  },
+  "help.shortcut.reset": {
+    "zh": "重置视图",
+    "en": "Reset view"
+  },
+  "help.shortcut.distance": {
+    "zh": "距离测量",
+    "en": "Distance"
+  },
+  "help.shortcut.angle": {
+    "zh": "角度测量",
+    "en": "Angle"
+  },
+  "help.shortcut.cancel": {
+    "zh": "取消 / 退出测量",
+    "en": "Cancel / exit measuring"
+  },
+  "help.shortcut.screenshot": {
+    "zh": "保存截图",
+    "en": "Screenshot"
+  },
+  "help.shortcut.panels": {
+    "zh": "显示 / 隐藏侧栏",
+    "en": "Toggle side panels"
+  },
+  "help.shortcut.reload": {
+    "zh": "重新载入",
+    "en": "Reload"
+  },
+  "help.shortcut.open": {
+    "zh": "打开文件",
+    "en": "Open file"
+  },
+  "dialog.about.close": {
+    "zh": "关闭",
+    "en": "Close"
+  },
+  "dialog.about.footnote": {
+    "zh": "© 2026 CrystalLens Project · 供科研与教学使用",
+    "en": "© 2026 CrystalLens Project · for research and teaching"
+  },
+  "dialog.about.build": {
+    "zh": "构建于 %s",
+    "en": "Built %s"
+  },
+  "tip.open": {
+    "zh": "打开结构文件   Ctrl+O",
+    "en": "Open structure   Ctrl+O"
+  },
+  "tip.reload": {
+    "zh": "重新载入   Ctrl+R",
+    "en": "Reload   Ctrl+R"
+  },
+  "tip.screenshot": {
+    "zh": "保存截图到图片文件夹   Ctrl+Shift+S",
+    "en": "Save image to Pictures   Ctrl+Shift+S"
+  },
+  "tip.fit": {
+    "zh": "适应窗口   F",
+    "en": "Fit to window   F"
+  },
+  "tip.reset": {
+    "zh": "重置视图   Home",
+    "en": "Reset view   Home"
+  },
+  "tip.projection": {
+    "zh": "切换透视 / 正交投影",
+    "en": "Toggle perspective / orthographic"
+  },
+  "tip.cell": {
+    "zh": "显示或隐藏晶胞边框   C",
+    "en": "Show or hide unit-cell frame   C"
+  },
+  "tip.bonds": {
+    "zh": "显示或隐藏化学键   B",
+    "en": "Show or hide bonds   B"
+  },
+  "tip.labels": {
+    "zh": "显示或隐藏原子标签   L",
+    "en": "Show or hide atom labels   L"
+  },
+  "tip.distance": {
+    "zh": "距离测量   D",
+    "en": "Measure distance   D"
+  },
+  "tip.angle": {
+    "zh": "角度测量   A",
+    "en": "Measure angle   A"
+  },
+  "tip.clear-measurements": {
+    "zh": "清除所有测量结果",
+    "en": "Clear all measurements"
+  },
+  "tip.left-panel": {
+    "zh": "显示或隐藏结构面板",
+    "en": "Show or hide the structure panel"
+  },
+  "tip.right-panel": {
+    "zh": "显示或隐藏测量面板",
+    "en": "Show or hide the measurement panel"
+  },
+  "tip.language": {
+    "zh": "切换中文 / English",
+    "en": "Switch Chinese / English"
+  },
+  "tip.about": {
+    "zh": "关于与快捷键",
+    "en": "About and shortcuts"
+  },
+  "tip.cancel-measure": {
+    "zh": "退出测量模式   Esc",
+    "en": "Exit measuring mode   Esc"
+  },
+  "status.loaded": {
+    "zh": "已载入  %s",
+    "en": "Loaded  %s"
+  },
+  "status.file-info": {
+    "zh": "%s  ·  %d 原子  ·  %d 键",
+    "en": "%s  ·  %d atoms  ·  %d bonds"
+  },
+  "status.hover": {
+    "zh": "%s  ·  %s  ·  点击选择",
+    "en": "%s  ·  %s  ·  click to inspect"
+  },
+  "status.measure": {
+    "zh": "%s  ·  %s",
+    "en": "%s  ·  %s"
+  },
+  "status.ready-hint": {
+    "zh": "打开 CIF / VESTA / XYZ 文件开始",
+    "en": "Open a CIF / VESTA / XYZ file to begin"
+  },
+  "error.unsupported-format": {
+    "zh": "不支持的文件格式",
+    "en": "Unsupported file format"
+  },
+  "common.untitled": {
+    "zh": "（未命名）",
+    "en": "(untitled)"
+  },
+  "clipboard.atom-line": {
+    "zh": "%s  %s  frac(%.4f, %.4f, %.4f)",
+    "en": "%s  %s  frac(%.4f, %.4f, %.4f)"
+  },
+  "app.version": {
+    "zh": "v1.1",
+    "en": "v1.1"
+  },
+  "tooltip.panel-left": {
+    "zh": "结构面板",
+    "en": "Structure panel"
+  },
+  "tooltip.panel-right": {
+    "zh": "测量面板",
+    "en": "Measurement panel"
+  },
+  "panel.elements.more": {
+    "zh": "+%d 种元素",
+    "en": "+%d more"
+  },
+  "panel.info.no-bonds": {
+    "zh": "该结构未生成化学键",
+    "en": "No bonds generated for this structure"
+  },
+  "panel.info.truncated": {
+    "zh": "结构过大，显示已截断",
+    "en": "Structure truncated for performance"
+  },
+  "dialog.search.placeholder": {
+    "zh": "搜索",
+    "en": "Search"
+  }
+}

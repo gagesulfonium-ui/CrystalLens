@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#020305">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>CrystalLens</title>
+<link rel="icon" href="assets/icons/icon-favicon-32.png">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="app" class="app">
+
+  <!-- boot placeholder -------------------------------------------------- -->
+  <div id="boot-screen" class="boot-screen">
+    <div class="boot-glow"></div>
+    <img id="boot-logo" class="boot-logo" alt="CrystalLens" width="72" height="72">
+    <div class="boot-name" data-i18n="app.title">CrystalLens</div>
+    <div id="boot-status" class="boot-status" data-i18n="ui.loading">正在启动…</div>
+  </div>
+
+  <!-- top app bar ------------------------------------------------------- -->
+  <header id="appbar" class="appbar" role="banner">
+    <div class="brand">
+      <img id="brand-logo" class="brand-logo" alt="" width="26" height="26">
+      <span class="brand-name" data-i18n="app.title">CrystalLens</span>
+      <span class="brand-version" data-i18n="app.version">v1.1</span>
+    </div>
+    <div class="appbar-title" id="appbar-title" hidden></div>
+    <div class="appbar-actions">
+      <button type="button" class="icon-btn" id="btn-open" data-action="open" data-i18n-title="tip.open" data-i18n-aria-label="file.open">
+        <span class="ico" data-icon="open"></span><span class="btn-label" data-i18n="ui.open">打开</span>
+      </button>
+      <button type="button" class="icon-btn" id="btn-library" data-action="library" data-i18n-title="library.title" data-i18n-aria-label="library.title">
+        <span class="ico" data-icon="library"></span><span class="btn-label desktop-only" data-i18n="ui.library">晶体库</span>
+      </button>
+      <button type="button" class="icon-btn desktop-only" id="btn-undo" data-action="undo" data-i18n-title="tip.undo" data-i18n-aria-label="edit.undo">
+        <span class="ico" data-icon="undo"></span>
+      </button>
+      <button type="button" class="icon-btn desktop-only" id="btn-redo" data-action="redo" data-i18n-title="tip.redo" data-i18n-aria-label="edit.redo">
+        <span class="ico" data-icon="redo"></span>
+      </button>
+      <button type="button" class="icon-btn" id="btn-save" data-action="save" data-i18n-title="tip.save" data-i18n-aria-label="file.save">
+        <span class="ico" data-icon="save"></span><span class="btn-label desktop-only" data-i18n="ui.save">保存</span>
+      </button>
+      <button type="button" class="icon-btn desktop-only" id="btn-screenshot" data-action="screenshot" data-i18n-title="tip.screenshot" data-i18n-aria-label="file.save-screenshot">
+        <span class="ico" data-icon="camera"></span>
+      </button>
+      <button type="button" class="lang-pill" id="btn-lang" data-action="lang" data-i18n-title="tip.language" aria-label="language">中文</button>
+      <button type="button" class="icon-btn" id="btn-more" data-action="menu" data-i18n-title="ui.menu" data-i18n-aria-label="ui.menu">
+        <span class="ico" data-icon="more"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- document tabs ----------------------------------------------------- -->
+  <nav id="tabs" class="tabs" aria-label="documents" hidden>
+    <div id="tabs-list" class="tabs-list"></div>
+    <button type="button" class="tab-add" id="btn-tab-add" data-action="open" data-i18n-title="tip.open" aria-label="open">
+      <span class="ico" data-icon="plus"></span>
+    </button>
+  </nav>
+
+  <!-- workspace --------------------------------------------------------- -->
+  <div class="workspace" id="workspace">
+
+    <aside id="left-panel" class="side-panel panel-left" aria-label="structure panel">
+      <div class="panel-scroll" id="left-content"></div>
+      <button type="button" class="panel-close" data-action="close-left" data-i18n-aria-label="ui.close"><span class="ico" data-icon="close"></span></button>
+    </aside>
+
+    <main id="viewport-region" class="viewport-region">
+      <div id="viewport" class="viewport"></div>
+
+      <div id="hud" class="hud">
+        <div id="hud-title" class="hud-title" hidden>
+          <span class="hud-dot"></span>
+          <span class="hud-title-text" id="hud-title-text"></span>
+          <span class="hud-title-suffix" id="hud-title-suffix"></span>
+        </div>
+        <div id="hud-banner" class="hud-banner" hidden>
+          <span class="hud-banner-dot"></span>
+          <span id="hud-banner-text"></span>
+        </div>
+        <div id="hud-legend" class="hud-legend" hidden></div>
+        <div id="hud-hint" class="hud-hint" hidden></div>
+        <div id="hud-flash" class="hud-flash" hidden></div>
+        <div id="hud-labels" class="hud-labels"></div>
+        <canvas id="gizmo" class="gizmo" width="172" height="172" aria-hidden="true"></canvas>
+      </div>
+
+      <div id="empty-state" class="empty-state" hidden>
+        <div class="empty-art" aria-hidden="true">
+          <svg viewBox="0 0 220 220" width="100%" height="100%" fill="none" stroke-linecap="round">
+            <circle cx="110" cy="110" r="96" stroke="#2E57B0" stroke-opacity="0.10"/>
+            <circle cx="110" cy="110" r="72" stroke="#2E57B0" stroke-opacity="0.16"/>
+            <circle cx="110" cy="110" r="50" stroke="#35D3AF" stroke-opacity="0.14"/>
+            <path d="M110 38 L172 74 L172 146 L110 182 L48 146 L48 74 Z" stroke="#85ABFF" stroke-opacity="0.5" stroke-width="1.4"/>
+            <path d="M110 74 L140 92 L140 128 L110 146 L80 128 L80 92 Z" stroke="#35D3AF" stroke-opacity="0.55" stroke-width="1.2"/>
+            <path d="M110 38 L110 74 M172 74 L140 92 M172 146 L140 128 M110 182 L110 146 M48 146 L80 128 M48 74 L80 92" stroke="#5BCCFF" stroke-opacity="0.22" stroke-width="1"/>
+            <circle cx="110" cy="38" r="3" fill="#85ABFF"/><circle cx="172" cy="74" r="3" fill="#5BCCFF"/>
+            <circle cx="172" cy="146" r="3" fill="#35D3AF"/><circle cx="110" cy="182" r="3" fill="#5BCCFF"/>
+            <circle cx="48" cy="146" r="3" fill="#35D3AF"/><circle cx="48" cy="74" r="3" fill="#85ABFF"/>
+            <circle cx="110" cy="110" r="5" stroke="#85ABFF" stroke-opacity="0.85" stroke-width="1.4"/>
+            <circle cx="110" cy="110" r="2" fill="#EAF0F8"/>
+          </svg>
+        </div>
+        <h1 class="empty-title" data-i18n="viewport.empty.title">打开结构文件，开始探索晶体世界</h1>
+        <p class="empty-subtitle" data-i18n="viewport.empty.subtitle">将 CIF、VESTA 或 XYZ 文件拖放到窗口</p>
+        <button type="button" class="empty-button" id="btn-empty-open" data-action="library">
+          <span class="ico" data-icon="library"></span>
+          <span data-i18n="library.title">经典晶体库</span>
+        </button>
+        <div class="empty-formats" data-i18n="viewport.empty.formats">CIF   ·   VESTA   ·   XYZ</div>
+        <div class="empty-footnote" data-i18n="viewport.empty.footnote">本地解析 · 硬件加速渲染 · 无需联网</div>
+      </div>
+
+      <div id="renderer-error" class="renderer-error" hidden>
+        <div class="renderer-error-title" data-i18n="error.renderer.title">无法初始化渲染器</div>
+        <div class="renderer-error-hint" data-i18n="error.renderer.hint"></div>
+        <pre id="renderer-error-detail" class="renderer-error-detail"></pre>
+      </div>
+
+      <div id="drop-overlay" class="drop-overlay" hidden>
+        <div class="drop-card">
+          <span class="ico ico-48" data-icon="open"></span>
+          <div data-i18n="viewport.empty.subtitle">将 CIF、VESTA 或 XYZ 文件拖放到窗口</div>
+        </div>
+      </div>
+    </main>
+
+    <aside id="right-panel" class="side-panel panel-right" aria-label="measurement panel">
+      <div class="panel-scroll" id="right-content"></div>
+      <button type="button" class="panel-close" data-action="close-right" data-i18n-aria-label="ui.close"><span class="ico" data-icon="close"></span></button>
+    </aside>
+  </div>
+
+  <!-- mobile bottom action bar ------------------------------------------ -->
+  <div id="mobile-toolbar" class="mobile-toolbar" role="toolbar">
+    <button type="button" class="mob-btn" data-action="open"><span class="ico" data-icon="open"></span><span data-i18n="ui.open">打开</span></button>
+    <button type="button" class="mob-btn" data-action="library"><span class="ico" data-icon="library"></span><span data-i18n="ui.library">晶体库</span></button>
+    <button type="button" class="mob-btn" data-action="measure-distance"><span class="ico" data-icon="ruler"></span><span data-i18n="measurement.type.distance">键长</span></button>
+    <button type="button" class="mob-btn" data-action="measure-angle"><span class="ico" data-icon="angle"></span><span data-i18n="measurement.type.angle">键角</span></button>
+    <button type="button" class="mob-btn" data-action="left"><span class="ico" data-icon="panel-left"></span><span data-i18n="panel.section.structure">结构</span></button>
+    <button type="button" class="mob-btn" data-action="right"><span class="ico" data-icon="panel-right"></span><span data-i18n="panel.section.measurements">测量</span></button>
+    <button type="button" class="mob-btn" data-action="menu"><span class="ico" data-icon="more"></span><span data-i18n="ui.more">更多</span></button>
+  </div>
+
+  <!-- status bar --------------------------------------------------------- -->
+  <footer id="statusbar" class="statusbar" role="status">
+    <span id="status-dot" class="status-dot"></span>
+    <span id="status-text" class="status-text"></span>
+    <span id="status-info" class="status-info"></span>
+  </footer>
+
+  <!-- overlays ----------------------------------------------------------- -->
+  <div id="scrim" class="scrim" hidden></div>
+  <div id="menu-root" class="menu-root" hidden></div>
+  <div id="sheet-root" class="sheet-root" aria-hidden="true"></div>
+  <div id="toast-root" class="toast-root" aria-live="polite" aria-atomic="true"></div>
+  <input id="file-input" class="file-input" type="file" multiple hidden
+         accept=".cif,.mcif,.xyz,.vesta,.txt,text/plain,chemical/x-cif,chemical/x-xyz">
+</div>
+<pre id="cl-error-log" style="display:none">[]</pre>
+<!-- Keep this script order in sync with docs/CONTRACT.md §4 -->
+<script src="js/lib/math.js"></script>
+<script src="js/lib/periodic_table.js"></script>
+<script src="js/core/cif.js"></script>
+<script src="js/core/xyz.js"></script>
+<script src="js/core/vesta.js"></script>
+<script src="js/core/parsers.js"></script>
+<script src="js/core/crystal.js"></script>
+<script src="js/core/measure.js"></script>
+<script src="js/core/edit.js"></script>
+<script src="js/core/export.js"></script>
+<script src="js/core/format.js"></script>
+<script src="js/render/camera.js"></script>
+<script src="js/render/gl.js"></script>
+<script src="js/render/renderer.js"></script>
+<script src="js/render/overlay.js"></script>
+<script src="js/ui/i18n.js"></script>
+<script src="js/ui/native.js"></script>
+<script src="js/data/library.js"></script>
+<script src="js/ui/app.js"></script>
+<script src="js/ui/panels.js"></script>
+<script src="js/ui/dialogs.js"></script>
+<script src="js/boot.js"></script>
+</body>
+</html>

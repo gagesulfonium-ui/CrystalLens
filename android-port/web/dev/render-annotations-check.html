@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CrystalLens 路 annotations overlay check</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #020305; }
+  #viewport { position: fixed; inset: 0; }
+  #cl-error-log { display: none; }
+  #cl-render-log { display: none; }
+</style>
+</head>
+<body>
+<div id="viewport"></div>
+<pre id="cl-error-log" style="display:none">[]</pre>
+<pre id="cl-render-log" style="display:none">{}</pre>
+<!-- Dev-only check page: real library model + renderer annotations (measurements
+     + pending + hover tooltip). Not shipped with the app. -->
+<script src="../js/lib/math.js"></script>
+<script src="../js/lib/periodic_table.js"></script>
+<script src="../js/core/cif.js"></script>
+<script src="../js/core/xyz.js"></script>
+<script src="../js/core/vesta.js"></script>
+<script src="../js/core/parsers.js"></script>
+<script src="../js/core/crystal.js"></script>
+<script src="../js/core/measure.js"></script>
+<script src="../js/core/format.js"></script>
+<script src="../js/render/camera.js"></script>
+<script src="../js/render/gl.js"></script>
+<script src="../js/render/renderer.js"></script>
+<script src="../js/render/overlay.js"></script>
+<script src="../js/data/library.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CL = window.CL;
+  var errors = [];
+  function flush() { document.getElementById('cl-error-log').textContent = JSON.stringify(errors); }
+  window.onerror = function (m, s, l) { errors.push(String(m) + ' @' + s + ':' + l); flush(); };
+  flush();
+
+  function qs(name, dflt) {
+    var m = new RegExp('[?&]' + name + '=([^&]*)').exec(location.search);
+    return m ? decodeURIComponent(m[1]) : dflt;
+  }
+
+  var libId = qs('lib', 'halite');
+  var style = qs('style', 'ball-stick');
+  var supercellRaw = qs('supercell', '2x2x2').split('x');
+  var supercell = [
+    parseInt(supercellRaw[0], 10) || 1,
+    parseInt(supercellRaw[1], 10) || 1,
+    parseInt(supercellRaw[2], 10) || 1
+  ];
+  var hover = parseInt(qs('hover', '-1'), 10);
+
+  var entry = null;
+  (CL.data.library || []).forEach(function (e) { if (e.id === libId) entry = e; });
+  if (!entry) { errors.push('library entry not found: ' + libId); flush(); return; }
+
+  var structure = CL.crystal.finalize(CL.parsers.parse(entry.text, entry.file));
+  var model = CL.crystal.buildDisplayModel(structure, {
+    supercell: supercell,
+    showBoundary: true,
+    style: style
+  });
+
+  var host = document.getElementById('viewport');
+  var renderer = new CL.Renderer(host);
+  renderer.setModel(model);
+  renderer.setOptions({
+    style: style,
+    showCell: true,
+    showAxes: true,
+    show3dAxes: false,
+    showBonds: true,
+    showLabels: false,
+    showBoundary: true,
+    atomScale: 0.30,
+    bondRadius: 0.105,
+    supercell: supercell,
+    appearance: {
+      cellColor: 0xD6DEE9,
+      backgroundColor: 0x020305,
+      cellLineWidth: 1.0,
+      polyTransparency: 66,
+      polyEdgeWidth: 1.2,
+      polyEdgeColor: 0x91B4D3
+    },
+    language: 'zh',
+    // exactly what the app UI passes (CONTRACT 搂5.4 HUD split)
+    overlay: { gizmo: false, legend: false, labels: false, measurements: true }
+  });
+
+  // ---- build real measurements through the public core API -----------------
+  var measurements = [];
+  var cellAtoms = [];
+  for (var i = 0; i < model.atoms.length; i++) {
+    if (model.atoms[i].kind === 'cell') cellAtoms.push(model.atoms[i].id);
+  }
+  // distance: first bonded pair with both endpoints inside the displayed cell
+  var dist = null;
+  for (var bi = 0; bi < model.bonds.length && !dist; bi++) {
+    var a = model.bonds[bi].a, b = model.bonds[bi].b;
+    if (model.atoms[a].kind !== 'cell' || model.atoms[b].kind !== 'cell') continue;
+    dist = CL.crystal.measureDistance(model, a, b);
+  }
+  if (dist) measurements.push(dist);
+
+  // angle: pick two least collinear neighbours around an atom adjacent to the
+  // measured pair (so the angle stays near the camera target)
+  var angle = null;
+  var centre = -1;
+  if (dist) {
+    var angleCandidates = [];
+    for (var bq = 0; bq < model.bonds.length; bq++) {
+      var bqBond = model.bonds[bq];
+      if (dist.atomIds.indexOf(bqBond.a) >= 0 && angleCandidates.indexOf(bqBond.b) < 0) angleCandidates.push(bqBond.b);
+      if (dist.atomIds.indexOf(bqBond.b) >= 0 && angleCandidates.indexOf(bqBond.a) < 0) angleCandidates.push(bqBond.a);
+    }
+    for (var ca = 0; ca < angleCandidates.length && centre < 0; ca++) {
+      var cand = angleCandidates[ca];
+      if (dist.atomIds.indexOf(cand) >= 0) continue;
+      var candNeigh = [];
+      for (var bj = 0; bj < model.bonds.length; bj++) {
+        var bond = model.bonds[bj];
+        var other = -1;
+        if (bond.a === cand) other = bond.b;
+        else if (bond.b === cand) other = bond.a;
+        if (other >= 0 && candNeigh.indexOf(other) < 0) candNeigh.push(other);
+      }
+      if (candNeigh.length < 2) continue;
+      var bestPair = null, bestScore = 1e9;
+      var cp = model.atoms[cand].pos;
+      for (var n1 = 0; n1 < candNeigh.length; n1++) {
+        for (var n2 = n1 + 1; n2 < candNeigh.length; n2++) {
+          var p1 = model.atoms[candNeigh[n1]].pos, p2 = model.atoms[candNeigh[n2]].pos;
+          var v1 = [p1[0] - cp[0], p1[1] - cp[1], p1[2] - cp[2]];
+          var v2 = [p2[0] - cp[0], p2[1] - cp[1], p2[2] - cp[2]];
+          var l1 = Math.sqrt(v1[0] * v1[0] + v1[1] * v1[1] + v1[2] * v1[2]);
+          var l2 = Math.sqrt(v2[0] * v2[0] + v2[1] * v2[1] + v2[2] * v2[2]);
+          var cos = (v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]) / (l1 * l2 || 1);
+          if (Math.abs(cos) < bestScore) { bestScore = Math.abs(cos); bestPair = [candNeigh[n1], candNeigh[n2]]; }
+        }
+      }
+      if (bestPair) { angle = CL.crystal.measureAngle(model, bestPair[0], cand, bestPair[1]); centre = cand; }
+    }
+    if (angle) measurements.push(angle);
+    // pending measurement line (two atoms, dashed gold), away from the labels
+    var pendingA = cellAtoms.length > 3 ? cellAtoms[cellAtoms.length - 1] : -1;
+    var pendingB = cellAtoms.length > 4 ? cellAtoms[cellAtoms.length - 2] : -1;
+    var pending = (pendingA >= 0 && pendingB >= 0) ? [pendingA, pendingB] : [];
+    renderer.setAnnotations({ measurements: measurements, pending: pending });
+  }
+  if (!angle) renderer.setAnnotations({ measurements: measurements, pending: [] });
+
+  var hoveredId = hover;
+  if (hover < 0 && model.atoms.length > 0) {
+    // hover one visible atom in the middle so the tooltip is on screen
+    hoveredId = cellAtoms.length ? cellAtoms[Math.floor(cellAtoms.length / 2)] : -1;
+  }
+  var selected = cellAtoms.length > 2 ? [cellAtoms[1], cellAtoms[Math.floor(cellAtoms.length / 2)]] : [];
+  renderer.setHighlight({ selected: selected, hovered: hoveredId });
+
+  var camera = new CL.Camera();
+  var w = host.clientWidth || window.innerWidth;
+  var h = host.clientHeight || window.innerHeight;
+  renderer.resize(w, h, window.devicePixelRatio || 1);
+  var aspect = w / Math.max(1, h);
+  camera.setScene([0, 0, 0], 8);
+  var pts = renderer.getVisiblePoints();
+  camera.fitScenePoints(pts.length ? pts : [[0, 0, 0]], aspect, 1.18);
+  if (qs('close', '0') === '1' && dist) {
+    // close-up on the measured pair (manual screenshot inspection)
+    var mid = [
+      (dist.points[0][0] + dist.points[1][0]) * 0.5,
+      (dist.points[0][1] + dist.points[1][1]) * 0.5,
+      (dist.points[0][2] + dist.points[1][2]) * 0.5
+    ];
+    camera.target = mid;
+    camera.distance = 21;
+  }
+  for (var f = 0; f < 3; f++) renderer.render(camera);
+
+  var info = renderer.info();
+  info.lib = libId;
+  info.measurements = measurements.map(function (m) {
+    return { kind: m.kind, value: m.value, label: m.label, points: m.points.length };
+  });
+  info.pending = 2;
+  info.hovered = hoveredId;
+  info.errors = errors;
+  document.getElementById('cl-render-log').textContent = JSON.stringify(info);
+  document.title = errors.length ? 'annotations-fail' : 'annotations-ok';
+  window.__CL_ANNOT_INFO__ = info;
+  window.__CL_ANNOT__ = { renderer: renderer, camera: camera, model: model };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Deep space background used by the host window and by the splash overlay. -->
+    <color name="window_bg">#FF020305</color>
+    <color name="window_bg_translucent">#00020305</color>
+    <color name="app_accent">#FF4FD1C5</color>
+    <color name="app_text">#FFE6F1F5</color>
+    <color name="ic_launcher_background">#FF020305</color>
+</resources>

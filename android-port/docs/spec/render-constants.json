@@ -1,0 +1,2820 @@
+{
+  "$schema": "crystallens.render-constants/1",
+  "meta": {
+    "project": "CrystalLens Android re-render (JS + WebGL2)",
+    "sourceBaseline": "reference/CrystalLens v1.1.0 (C++17 / Win32 / OpenGL 3.3 Core)",
+    "doNotUse": "D:/vibe/crystal/src (old v0.7.0)",
+    "units": {
+      "length": "angstrom (A)",
+      "angle": "radians internally, degrees in UI",
+      "screen": "device pixels"
+    },
+    "coordinates": {
+      "world": "right-handed, z-up; scene geometry centered by subtracting structure.center",
+      "screen": "origin top-left, y-down",
+      "ndc": "y-up"
+    },
+    "notes": [
+      "Colors are linear sRGB values used directly (no gamma conversion in shaders).",
+      "hexWithAlpha = 0xAARRGGBB only where noted; u32 colors default to 0xRRGGBB.",
+      "All overlay layout sizes are 'design px' and must be multiplied by dpiScale (= devicePixelRatio)."
+    ]
+  },
+  "palette": {
+    "hud": {
+      "text": {
+        "hex": "0xEAF0F8",
+        "rgb": [
+          0.917647,
+          0.941176,
+          0.972549
+        ],
+        "alpha": 1.0
+      },
+      "dim": {
+        "hex": "0x9DABBF",
+        "rgb": [
+          0.615686,
+          0.670588,
+          0.74902
+        ],
+        "alpha": 1.0
+      },
+      "faint": {
+        "hex": "0x718097",
+        "rgb": [
+          0.443137,
+          0.501961,
+          0.592157
+        ],
+        "alpha": 1.0
+      },
+      "accent": {
+        "hex": "0x6392FF",
+        "rgb": [
+          0.388235,
+          0.572549,
+          1.0
+        ],
+        "alpha": 1.0
+      },
+      "accentLight": {
+        "hex": "0x8DB0FF",
+        "rgb": [
+          0.552941,
+          0.690196,
+          1.0
+        ],
+        "alpha": 1.0
+      },
+      "teal": {
+        "hex": "0x35D3AF",
+        "rgb": [
+          0.207843,
+          0.827451,
+          0.686275
+        ],
+        "alpha": 1.0
+      },
+      "gold": {
+        "hex": "0xFFC95B",
+        "rgb": [
+          1.0,
+          0.788235,
+          0.356863
+        ],
+        "alpha": 1.0
+      },
+      "cyan": {
+        "hex": "0x5BCCFF",
+        "rgb": [
+          0.356863,
+          0.8,
+          1.0
+        ],
+        "alpha": 1.0
+      },
+      "red": {
+        "hex": "0xFF6B7A",
+        "rgb": [
+          1.0,
+          0.419608,
+          0.478431
+        ],
+        "alpha": 1.0
+      },
+      "panel": {
+        "hex": "0x0B111B",
+        "rgb": [
+          0.043137,
+          0.066667,
+          0.105882
+        ],
+        "alpha": 0.8
+      },
+      "panelSoft": {
+        "hex": "0x0A0F18",
+        "rgb": [
+          0.039216,
+          0.058824,
+          0.094118
+        ],
+        "alpha": 0.58
+      },
+      "panelBorder": {
+        "hex": "0x2A3549",
+        "rgb": [
+          0.164706,
+          0.207843,
+          0.286275
+        ],
+        "alpha": 0.85
+      }
+    },
+    "cell": {
+      "defaultColor": {
+        "hex": "0xD6DEE9",
+        "rgb": [
+          0.839216,
+          0.870588,
+          0.913725
+        ],
+        "alpha": 1.0
+      },
+      "innerLineFlags": 6,
+      "outerLineFlags": 2,
+      "overlayPassAlpha": 0.18
+    },
+    "bond": {
+      "color": [
+        0.66,
+        0.7,
+        0.76
+      ],
+      "defaultRadius": 0.105,
+      "hydrogenRadiusScale": 0.82
+    },
+    "measurement": {
+      "distanceLine": {
+        "rgb": [
+          1.0,
+          0.76,
+          0.28
+        ],
+        "hex": "0xFFC247",
+        "radius": 0.028,
+        "flags": 1
+      },
+      "pendingLine": {
+        "rgb": [
+          1.0,
+          0.76,
+          0.28
+        ],
+        "hex": "0xFFC247",
+        "radius": 0.03,
+        "flags": 1
+      },
+      "angleLine": {
+        "rgb": [
+          0.38,
+          0.83,
+          1.0
+        ],
+        "hex": "0x61D4FF",
+        "radius": 0.028,
+        "flags": 1
+      },
+      "distanceLabelColor": {
+        "hex": "0xFFC95B",
+        "rgb": [
+          1.0,
+          0.788235,
+          0.356863
+        ],
+        "alpha": 1.0
+      },
+      "angleLabelColor": {
+        "hex": "0x5BCCFF",
+        "rgb": [
+          0.356863,
+          0.8,
+          1.0
+        ],
+        "alpha": 1.0
+      },
+      "distanceFormat": "%.3f Å",
+      "angleFormat": "%.2f°"
+    },
+    "atomHighlight": {
+      "selected": {
+        "ringMix": [
+          1.0,
+          0.8,
+          0.3
+        ],
+        "ringStrength": 0.9,
+        "smoothstep": [
+          0.38,
+          0.92
+        ],
+        "rimAdd": [
+          0.22,
+          0.15,
+          0.03
+        ]
+      },
+      "hovered": {
+        "mix": [
+          0.62,
+          0.86,
+          1.0
+        ],
+        "rimStrength": 0.55,
+        "brightness": 1.08
+      }
+    },
+    "atomGhost": {
+      "mix": [
+        0.085,
+        0.115,
+        0.155
+      ],
+      "mixStrength": 0.22,
+      "alphaScale": 0.36
+    },
+    "polyhedron": {
+      "edgeColor": {
+        "hex": "0x91B4D3",
+        "rgb": [
+          0.568627,
+          0.705882,
+          0.827451
+        ],
+        "alpha": 1.0
+      },
+      "edgeWidthDefault": 1.2,
+      "edgeWidthRangePx": [
+        0.0,
+        4.0
+      ],
+      "transparencyDefaultPercent": 66,
+      "transparencyRangePercent": [
+        0,
+        100
+      ],
+      "faceColor": "element color of the center atom"
+    },
+    "emptyState": {
+      "glow": {
+        "hex": "0x355CFF",
+        "rgb": [
+          0.207843,
+          0.360784,
+          1.0
+        ],
+        "alpha": 1.0
+      },
+      "edgeEven": {
+        "hex": "0x6F9BFF",
+        "rgb": [
+          0.435294,
+          0.607843,
+          1.0
+        ],
+        "alpha": 0.85
+      },
+      "edgeOdd": {
+        "hex": "0x35D3AF",
+        "rgb": [
+          0.207843,
+          0.827451,
+          0.686275
+        ],
+        "alpha": 0.7
+      },
+      "spoke": {
+        "hex": "0x7FA8FF",
+        "rgb": [
+          0.498039,
+          0.658824,
+          1.0
+        ],
+        "alpha": 0.2
+      },
+      "spokeMain": {
+        "hex": "0xD9E4FF",
+        "rgb": [
+          0.85098,
+          0.894118,
+          1.0
+        ],
+        "alpha": 0.52
+      },
+      "spokeSecondary": {
+        "hex": "0x77A9FF",
+        "rgb": [
+          0.466667,
+          0.662745,
+          1.0
+        ],
+        "alpha": 0.35
+      },
+      "vertexEven": {
+        "hex": "0x8DB0FF",
+        "rgb": [
+          0.552941,
+          0.690196,
+          1.0
+        ],
+        "alpha": 0.95
+      },
+      "vertexOdd": {
+        "hex": "0x35D3AF",
+        "rgb": [
+          0.207843,
+          0.827451,
+          0.686275
+        ],
+        "alpha": 0.9
+      },
+      "ring": {
+        "hex": "0x91B4FF",
+        "rgb": [
+          0.568627,
+          0.705882,
+          1.0
+        ],
+        "alpha": 0.35
+      },
+      "button": {
+        "hex": "0x5B8CFF",
+        "rgb": [
+          0.356863,
+          0.54902,
+          1.0
+        ],
+        "alpha": 0.94
+      },
+      "buttonHover": {
+        "hex": "0x7CA3FF",
+        "rgb": [
+          0.486275,
+          0.639216,
+          1.0
+        ],
+        "alpha": 0.98
+      },
+      "buttonHighlight": {
+        "hex": "0xFFFFFF",
+        "rgb": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "alpha": 0.06
+      },
+      "buttonUnderline": {
+        "hex": "0x9CB8FF",
+        "rgb": [
+          0.611765,
+          0.721569,
+          1.0
+        ],
+        "alpha": 0.35
+      },
+      "footnote": {
+        "hex": "0x596981",
+        "rgb": [
+          0.34902,
+          0.411765,
+          0.505882
+        ],
+        "alpha": 0.9
+      },
+      "labelShadow": {
+        "hex": "0x000000",
+        "rgb": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "alpha": 0.65
+      }
+    },
+    "background": {
+      "clearColor": [
+        0.007,
+        0.008,
+        0.011,
+        1.0
+      ],
+      "defaultBaseColor": {
+        "hex": "0x020305",
+        "rgb": [
+          0.007843,
+          0.011765,
+          0.019608
+        ],
+        "alpha": 1.0
+      }
+    }
+  },
+  "lighting": {
+    "space": "view space (lights rotate with the camera; directions are constants in view space)",
+    "keyDirectionRaw": [
+      -0.42,
+      0.5,
+      0.76
+    ],
+    "keyDirectionNormalized": [
+      -0.419163,
+      0.499003,
+      0.758485
+    ],
+    "fillDirectionRaw": [
+      0.55,
+      -0.18,
+      0.58
+    ],
+    "fillDirectionNormalized": [
+      0.671281,
+      -0.219692,
+      0.707896
+    ],
+    "atom": {
+      "diffuseAmbient": 0.24,
+      "diffuseKey": 0.8,
+      "fillMix": 0.16,
+      "keySpecColor": [
+        1.0,
+        0.96,
+        0.88
+      ],
+      "keySpecPower": 64.0,
+      "keySpecStrength": 0.3,
+      "fillSpecPower": 16.0,
+      "fillSpecStrength": 0.07,
+      "rimScale": 0.12,
+      "rimTint": [
+        0.1,
+        0.18,
+        0.26
+      ],
+      "rimTintScale": 0.07,
+      "rimPower": 3.0,
+      "alphaSmoothstep": [
+        0.0,
+        0.075
+      ]
+    },
+    "line": {
+      "diffuseAmbient": 0.28,
+      "diffuseKey": 0.8,
+      "fillMix": 0.16,
+      "specColor": [
+        1.0,
+        0.97,
+        0.92
+      ],
+      "specPower": 48.0,
+      "specStrength": 0.22,
+      "rimScale": 0.09,
+      "rimPower": 3.0,
+      "flatMix": 0.3,
+      "innerDarken": 0.57
+    },
+    "polyhedron": {
+      "diffuseAmbient": 0.34,
+      "diffuseKey": 0.66,
+      "fillMix": 0.18,
+      "normalFlipWhenBackFacing": true
+    }
+  },
+  "background": {
+    "gradient": {
+      "base": 0.55,
+      "range": 0.55,
+      "exponent": 0.82
+    },
+    "glow": {
+      "center": [
+        0.6,
+        0.5
+      ],
+      "strength": 0.45,
+      "falloff": 3.5
+    },
+    "vignette": {
+      "strength": 0.22,
+      "smoothstep": [
+        0.35,
+        1.05
+      ]
+    }
+  },
+  "camera": {
+    "defaults": {
+      "yawDeg": 35.0,
+      "pitchDeg": 24.0,
+      "fovYDeg": 38.0,
+      "distance": 20.0,
+      "sceneRadius": 10.0
+    },
+    "fovYRad": 0.6632251157578453,
+    "pitchLimitDeg": 85.0,
+    "worldUp": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "worldUpFallback": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "worldUpParallelEpsilon": 0.999,
+    "sceneRadiusMin": 0.5,
+    "nearFar": {
+      "nearOffsetFactor": 2.2,
+      "nearFloor": 0.02,
+      "farPad": 2.0,
+      "farRadiusFactor": 5.0,
+      "farExtra": 10.0
+    },
+    "fit": {
+      "marginSphereDefault": 1.12,
+      "marginPointsDefault": 1.16,
+      "marginViewport": 1.18,
+      "sphereClamp": [
+        0.06,
+        0.05,
+        30.0,
+        50.0
+      ],
+      "pointsClamp": [
+        0.05,
+        0.05,
+        30.0,
+        50.0
+      ],
+      "aspectFloor": 0.05,
+      "aspectFallback": 1.0,
+      "sinFloor": 0.0001
+    },
+    "orbit": {
+      "radiansPerPixel": 0.0072,
+      "keyboardPixels": 8.0
+    },
+    "pan": {
+      "formula": "worldPerPixel = 2*distance*tan(fovY/2)/viewportHeight"
+    },
+    "zoom": {
+      "exponent": 0.16,
+      "minFactor": 0.035,
+      "minAbsolute": 0.05,
+      "maxFactor": 40.0,
+      "maxPad": 100.0
+    },
+    "inertia": {
+      "velocityBlendOld": 0.7,
+      "velocityBlendNew": 0.3,
+      "velocityClampRadPerSec": 4.0,
+      "decayPerSecond": 6.0,
+      "velocityFloor": 0.04,
+      "easingDragging": 26.0,
+      "easingIdle": 18.0,
+      "settleEpsilonRad": 0.0004,
+      "dtClamp": [
+        0.001,
+        0.05
+      ],
+      "inputDtClamp": [
+        0.004,
+        0.05
+      ],
+      "timerDraggingMs": 8,
+      "timerIdleMs": 16
+    },
+    "dragClickThresholdPx": 3.0,
+    "screenRay": {
+      "ndcX": "2*x/width - 1",
+      "ndcY": "1 - 2*y/height"
+    },
+    "worldToScreen": {
+      "depthVisibleRange": [
+        -1.25,
+        1.25
+      ],
+      "nearHalfFactor": 0.5
+    }
+  },
+  "picking": {
+    "radiusScale": 1.04,
+    "boundRadiusMinFactor": 0.007,
+    "nearestHit": true,
+    "occlusionIgnored": true,
+    "boundaryImagesPickable": false,
+    "hiddenAtomsSkipped": true,
+    "hoverUsesSameTest": true,
+    "maxHighlightedAtoms": 3
+  },
+  "radii": {
+    "spaceFillScale": 0.92,
+    "atomScaleDefault": 0.3,
+    "atomScaleRenderClamp": [
+      0.1,
+      0.85
+    ],
+    "atomScaleUiRange": [
+      0.15,
+      0.8
+    ],
+    "atomScaleStoredClamp": [
+      0.15,
+      0.85
+    ],
+    "radiusFloor": 0.1,
+    "polyhedralAtomScale": 0.72,
+    "transitionMetalRanges": [
+      [
+        21,
+        30
+      ],
+      [
+        39,
+        48
+      ],
+      [
+        57,
+        80
+      ],
+      [
+        89,
+        118
+      ]
+    ],
+    "rule": "BallAndStick/Polyhedral: transition metals use covalent radius, all other elements use vdW; SpaceFill: always vdW with fixed 0.92 scale (atomScale ignored).",
+    "unknownElement": {
+      "z": 0,
+      "symbol": "X",
+      "name": "Unknown",
+      "covalent": 0.77,
+      "vdw": 1.7,
+      "color": "0x9AA4B2",
+      "rgb": [
+        0.603922,
+        0.643137,
+        0.698039
+      ]
+    }
+  },
+  "lines": {
+    "bondRadius": 0.105,
+    "bondRadiusHydrogenScale": 0.82,
+    "bondColor": [
+      0.66,
+      0.7,
+      0.76
+    ],
+    "cellBaseRadius": {
+      "factor": 0.005,
+      "min": 0.017,
+      "max": 0.065
+    },
+    "cellLineWidthClamp": [
+      0.5,
+      4.0
+    ],
+    "cellInnerRadiusScale": 0.52,
+    "cellOuterFlags": 2,
+    "cellInnerFlags": 6,
+    "measurementRadius": 0.028,
+    "pendingMeasurementRadius": 0.03,
+    "measurementFlags": 1,
+    "dash": {
+      "periods": 15.0,
+      "duty": 0.58
+    },
+    "overlayPassAlpha": 0.18,
+    "lineFlags": {
+      "dashed": 1,
+      "shadeFlat": 2,
+      "mainPassOnly": 4
+    },
+    "lineGeometry": {
+      "sides": 6,
+      "rings": 7,
+      "vertices": 14,
+      "caps": false,
+      "degenerateLength": 1e-07
+    }
+  },
+  "atomFlags": {
+    "selected": 1,
+    "hovered": 2,
+    "ghost": 4
+  },
+  "polyhedra": {
+    "ligandZ": [
+      7,
+      8,
+      9,
+      16,
+      17,
+      34,
+      35,
+      53
+    ],
+    "alkaliAlkalineZ": [
+      3,
+      4,
+      11,
+      12,
+      19,
+      20,
+      37,
+      38,
+      55,
+      56,
+      87,
+      88
+    ],
+    "minDistinctLigands": 4,
+    "maxDistinctLigands": 14,
+    "eps": 1e-06,
+    "dedupeLengthSq": 1e-12,
+    "planesKey": "bitmask of coplanar point indices",
+    "triangleFan": "from polygon[0]",
+    "boundaryFlagRule": "[true, i+2==polygon.length, i==1]",
+    "baryRule": "bary[j] = (vertexIndex==j || !boundary[j]) ? 1 : 0",
+    "sortEpsilonLengthSq": 1e-14,
+    "sortKey": "-dot(camera.forward, triangleCenter), ascending (far-to-near)",
+    "maxTrianglesPerCenter": 24,
+    "alphaFormula": "uAlpha = 1 - polyTransparency/100",
+    "edgePixelsFormula": "clamp(0.5*uEdgeWidth + 0.5 - pixels, 0, 1)",
+    "transparency": {
+      "default": 66,
+      "min": 0,
+      "max": 100
+    },
+    "edgeWidth": {
+      "default": 1.2,
+      "min": 0.0,
+      "max": 4.0,
+      "step": 0.1
+    },
+    "opaqueDepthWrite": "polyTransparency == 0",
+    "ghost": {
+      "populatedInV110": false,
+      "note": "reserved protocol: atom flags bit2 + separate blended pass; never filled in v1.1.0"
+    }
+  },
+  "limits": {
+    "maxCellRepeats": 16,
+    "supercellMaxSites": 65536,
+    "supercellMaxBonds": 300000,
+    "maxDisplayedImages": 80000,
+    "maxDisplayAtoms": 30000,
+    "maxBonds": 150000,
+    "maxCoordinationPoints": 14,
+    "maxHighlightSlots": 3,
+    "labelMaxAtoms": 400,
+    "labelMaxDrawn": 90,
+    "measurementLabelMax": 24,
+    "measurementLabelCollisionAttempts": 5,
+    "textCacheLimit": 600,
+    "msaaRequestedSamples": 4,
+    "maxFitsLabelLength": 12,
+    "labelTruncateTo": 11
+  },
+  "overlay": {
+    "designScale": "all sizes * dpiScale",
+    "primitives": {
+      "roundedRectMinRadius": 0.6,
+      "roundedRectSegmentRule": "clamp(4, 12, floor(radius*0.45)+4)",
+      "panelBorderMinThickness": 0.5,
+      "minLineThickness": 0.5,
+      "minCircleSegments": 8,
+      "defaultCircleSegments": 36
+    },
+    "fonts": {
+      "family": "Microsoft YaHei UI",
+      "fallback": "Segoe UI",
+      "minPx": 7,
+      "maxPx": 96,
+      "boldWeight": 600
+    },
+    "titlePanel": {
+      "origin": [
+        16.0,
+        14.0
+      ],
+      "height": 34.0,
+      "radius": 10.0,
+      "borderThickness": 1.0,
+      "iconCircle": [
+        31.0,
+        3.2
+      ],
+      "iconRing": [
+        5.5,
+        0.8
+      ],
+      "titleOffsetX": 43.0,
+      "titleSize": 12.5,
+      "suffixSize": 10.0,
+      "widthInset": 36.0,
+      "maxWidth": [
+        0.6,
+        580.0
+      ],
+      "compactWidthThreshold": 700.0,
+      "availableTitlePad": [
+        110.0,
+        60.0
+      ]
+    },
+    "elementLegend": {
+      "minViewportWidth": 560.0,
+      "maxElements": 8,
+      "rowHeight": 20.0,
+      "panelWidth": 50.0,
+      "rightMargin": 18.0,
+      "top": 54.0,
+      "dotOffsetX": 6.0,
+      "dotRadius": 4.2,
+      "dotSegments": 20,
+      "symbolSize": 9.2,
+      "dotAlpha": 0.9
+    },
+    "measureBanner": {
+      "yOffsetFromPanel": 8.0,
+      "height": 30.0,
+      "radius": 9.0,
+      "fill": {
+        "hex": "0x0D1118",
+        "rgb": [
+          0.05098,
+          0.066667,
+          0.094118
+        ],
+        "alpha": 0.82
+      },
+      "borderDistance": {
+        "hex": "0x6B5421",
+        "rgb": [
+          0.419608,
+          0.329412,
+          0.129412
+        ],
+        "alpha": 0.9
+      },
+      "borderAngle": {
+        "hex": "0x1F536A",
+        "rgb": [
+          0.121569,
+          0.32549,
+          0.415686
+        ],
+        "alpha": 0.9
+      },
+      "dotOffset": [
+        30.0,
+        15.0
+      ],
+      "dotRadius": 3.0,
+      "textOffsetX": 42.0,
+      "textSize": 10.5,
+      "paddingX": 34.0
+    },
+    "hintPanel": {
+      "margin": 16.0,
+      "height": 28.0,
+      "radius": 9.0,
+      "border": {
+        "hex": "0x222C3D",
+        "rgb": [
+          0.133333,
+          0.172549,
+          0.239216
+        ],
+        "alpha": 0.6
+      },
+      "borderThickness": 0.8,
+      "textSize": 10.0,
+      "textPadX": 12.0
+    },
+    "imageLegend": {
+      "height": 24.0,
+      "radius": 8.0,
+      "gap": 8.0,
+      "border": {
+        "hex": "0x222C3D",
+        "rgb": [
+          0.133333,
+          0.172549,
+          0.239216
+        ],
+        "alpha": 0.55
+      },
+      "borderThickness": 0.8,
+      "textSize": 9.2,
+      "dotOffsetX": 13.0,
+      "dotRadius": 3.0,
+      "dotSegments": 20,
+      "dotOnColor": {
+        "hex": "0x6EA8FF",
+        "rgb": [
+          0.431373,
+          0.658824,
+          1.0
+        ],
+        "alpha": 0.75
+      },
+      "dotOffColor": {
+        "hex": "0xE0B45A",
+        "rgb": [
+          0.878431,
+          0.705882,
+          0.352941
+        ],
+        "alpha": 0.8
+      },
+      "paddingX": 34.0,
+      "textOffsetX": 24.0
+    },
+    "flash": {
+      "durationMs": 2400,
+      "fadeMs": 500,
+      "bottomOffset": 58.0,
+      "height": 28.0,
+      "radius": 9.0,
+      "fill": {
+        "hex": "0x0C1119",
+        "rgb": [
+          0.047059,
+          0.066667,
+          0.098039
+        ],
+        "alpha": 0.88
+      },
+      "border": {
+        "hex": "0x8A6B2E",
+        "rgb": [
+          0.541176,
+          0.419608,
+          0.180392
+        ],
+        "alpha": 0.9
+      },
+      "textColor": {
+        "hex": "0xFFD98A",
+        "rgb": [
+          1.0,
+          0.85098,
+          0.541176
+        ],
+        "alpha": 1.0
+      },
+      "textSize": 10.5,
+      "paddingX": 30.0
+    },
+    "axisGizmo": {
+      "margin": 16.0,
+      "sizeNormal": 100.0,
+      "sizeCompact": 86.0,
+      "compactWidthThreshold": 700.0,
+      "radius": 11.0,
+      "fill": {
+        "hex": "0x0A0F18",
+        "rgb": [
+          0.039216,
+          0.058824,
+          0.094118
+        ],
+        "alpha": 0.58
+      },
+      "border": {
+        "hex": "0x253044",
+        "rgb": [
+          0.145098,
+          0.188235,
+          0.266667
+        ],
+        "alpha": 0.65
+      },
+      "borderThickness": 0.8,
+      "centerYFactor": 0.53,
+      "lengthFactor": 0.27,
+      "ballRadius": 2.2,
+      "axisThickness": 1.7,
+      "backAlpha": 0.55,
+      "frontAlpha": 1.0,
+      "labelSize": 9.5,
+      "labelOffset": 10.0,
+      "ringRadius": 2.2,
+      "ringThickness": 0.8,
+      "ringColor": {
+        "hex": "0x94A5BE",
+        "rgb": [
+          0.580392,
+          0.647059,
+          0.745098
+        ],
+        "alpha": 0.5
+      },
+      "colors": {
+        "a": {
+          "hex": "0xFF6B7A",
+          "rgb": [
+            1.0,
+            0.419608,
+            0.478431
+          ],
+          "alpha": 1.0
+        },
+        "b": {
+          "hex": "0x35D3AF",
+          "rgb": [
+            0.207843,
+            0.827451,
+            0.686275
+          ],
+          "alpha": 1.0
+        },
+        "c": {
+          "hex": "0x5BCCFF",
+          "rgb": [
+            0.356863,
+            0.8,
+            1.0
+          ],
+          "alpha": 1.0
+        }
+      }
+    },
+    "atomLabels": {
+      "textSize": 9.0,
+      "offsetX": 5.0,
+      "offsetYExtra": 3.0,
+      "screenMargin": 8.0,
+      "maxAtoms": 400,
+      "maxDrawn": 90,
+      "truncateAt": 12,
+      "colorFormula": "clamp(0.38 + 0.62*elementRGB, 0, 1).xyz, alpha 0.96",
+      "shadowColor": {
+        "hex": "0x000000",
+        "rgb": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "alpha": 0.65
+      },
+      "shadowOffset": 1.0
+    },
+    "measurementLabels": {
+      "textSize": 10.0,
+      "boxHeight": 22.0,
+      "boxPaddingX": 16.0,
+      "offsetX": 8.0,
+      "offsetY": 4.0,
+      "screenMargin": 20.0,
+      "radius": 7.0,
+      "fill": {
+        "hex": "0x0A0F18",
+        "rgb": [
+          0.039216,
+          0.058824,
+          0.094118
+        ],
+        "alpha": 0.88
+      },
+      "borderAlpha": 0.55,
+      "collisionLiftStep": 3.0,
+      "angleLabelBisectorLength": 0.7,
+      "maxLabels": 24
+    },
+    "hoverStatus": {
+      "format": "%s  ·  %s  ·  click to inspect"
+    },
+    "statusPanel": {
+      "size": 9.5,
+      "color": {
+        "hex": "0x8D9CB2",
+        "rgb": [
+          0.552941,
+          0.611765,
+          0.698039
+        ],
+        "alpha": 1.0
+      },
+      "rendererTextSize": 8.6,
+      "rendererColor": {
+        "hex": "0x58667A",
+        "rgb": [
+          0.345098,
+          0.4,
+          0.478431
+        ],
+        "alpha": 1.0
+      }
+    },
+    "emptyState": {
+      "glowLayers": 5,
+      "glowBaseRadiusFactor": 1.4,
+      "glowStep": 0.34,
+      "radiusClamp": [
+        38.0,
+        58.0
+      ],
+      "radiusFactor": 0.075,
+      "centerYOffset": 22.0,
+      "hexAnglesDeg": [
+        -90,
+        -30,
+        30,
+        90,
+        150,
+        210
+      ],
+      "hexYSquash": 0.95,
+      "hexCenterLift": 0.35,
+      "edgeThickness": 1.8,
+      "spokeThickness": 1.0,
+      "mainThickness": 1.2,
+      "vertexRadius": 2.4,
+      "vertexSegments": 24,
+      "ringRadiusFactor": 0.24,
+      "ringThickness": 1.0,
+      "ringSegments": 32,
+      "titleSize": [
+        21.0,
+        17.0
+      ],
+      "titleOffsetY": 54.0,
+      "titlePadY": 0.65,
+      "subtitleSize": 12.0,
+      "subtitleOffsetY": 33.0,
+      "buttonMinWidth": 198.0,
+      "buttonTextPad": 58.0,
+      "buttonHeight": 44.0,
+      "buttonOffsetY": 66.0,
+      "buttonRadius": 12.0,
+      "buttonTextSize": 12.5,
+      "buttonHighlightHeightFactor": 0.48,
+      "buttonUnderlineInset": 18.0,
+      "formatsOffsetY": 27.0,
+      "footnoteSize": 9.5,
+      "footnoteBottom": 20.0
+    },
+    "rendererFallback": {
+      "background": [
+        9,
+        13,
+        21
+      ],
+      "titleColor": [
+        232,
+        238,
+        248
+      ],
+      "hintColor": [
+        155,
+        168,
+        188
+      ],
+      "detailColor": [
+        108,
+        121,
+        143
+      ],
+      "titleSize": 18.0,
+      "hintSize": 11.0,
+      "detailSize": 9.0
+    },
+    "texts": {
+      "noCoordinationHull": {
+        "zh": "无三维配位 · 球棍",
+        "en": "No 3D shell · ball and stick"
+      },
+      "supercellLimited": {
+        "zh": "超胞过大，显示单胞",
+        "en": "Supercell limit: showing one cell"
+      },
+      "boundaryLimited": {
+        "zh": "边界副本已截断",
+        "en": "Boundary images truncated"
+      },
+      "atomsCount": {
+        "zh": "原子",
+        "en": "Atoms"
+      },
+      "bondsCount": {
+        "zh": "化学键",
+        "en": "Bonds"
+      },
+      "viewHint": {
+        "zh": "左键拖动旋转   ·   滚轮缩放   ·   中键 / 右键平移",
+        "en": "Drag to rotate   ·   Scroll to zoom   ·   Middle/right-drag to pan"
+      },
+      "measureHintDistance": {
+        "zh": "距离测量：点击两个原子   ·   Esc 退出",
+        "en": "Distance: click two atoms   ·   Esc to exit"
+      },
+      "measureHintAngle": {
+        "zh": "角度测量：依次点击三个原子   ·   Esc 退出",
+        "en": "Angle: click three atoms   ·   Esc to exit"
+      },
+      "measurementDistance": {
+        "zh": "键长",
+        "en": "Distance"
+      },
+      "measurementAngle": {
+        "zh": "键角",
+        "en": "Angle"
+      },
+      "measurementPickDistance": {
+        "zh": "点击两个原子测量距离",
+        "en": "Click two atoms to measure distance"
+      },
+      "measurementPickAngle": {
+        "zh": "依次点击三个原子测量键角",
+        "en": "Click three atoms to measure the angle"
+      },
+      "selectedCountFmt": {
+        "zh": "已选 %d / %d",
+        "en": "Selected %d / %d"
+      },
+      "imageLegendOn": {
+        "zh": "边界原子 = 相邻晶胞中的原子",
+        "en": "Boundary atoms come from neighbouring cells"
+      },
+      "imageLegendOff": {
+        "zh": "仅显示晶胞内原子与键",
+        "en": "Only unit-cell atoms and bonds are shown"
+      },
+      "emptyTitle": {
+        "zh": "打开结构文件，开始探索晶体世界",
+        "en": "Open a structure and explore its crystal world"
+      },
+      "emptySubtitle": {
+        "zh": "将 CIF、VESTA 或 XYZ 文件拖放到窗口",
+        "en": "Drop a CIF, VESTA or XYZ file here"
+      },
+      "libraryButton": {
+        "zh": "经典晶体库",
+        "en": "Crystal library"
+      },
+      "supportedFormats": {
+        "zh": "CIF   ·   VESTA   ·   XYZ",
+        "en": "CIF   ·   VESTA   ·   XYZ"
+      },
+      "emptyFootnote": {
+        "zh": "本地解析 · 硬件加速渲染 · 无需联网",
+        "en": "Local parsing · GPU accelerated · offline"
+      },
+      "hoverStatusFmt": {
+        "zh": "%s  ·  %s  ·  点击选择",
+        "en": "%s  ·  %s  ·  click to inspect"
+      }
+    }
+  },
+  "periodicTable": [
+    {
+      "z": 1,
+      "symbol": "H",
+      "name": "Hydrogen",
+      "covalent": 0.31,
+      "vdw": 1.2,
+      "color": "0xF2F4F8",
+      "rgb": [
+        0.94902,
+        0.956863,
+        0.972549
+      ]
+    },
+    {
+      "z": 2,
+      "symbol": "He",
+      "name": "Helium",
+      "covalent": 0.28,
+      "vdw": 1.4,
+      "color": "0xD9E7F2",
+      "rgb": [
+        0.85098,
+        0.905882,
+        0.94902
+      ]
+    },
+    {
+      "z": 3,
+      "symbol": "Li",
+      "name": "Lithium",
+      "covalent": 1.28,
+      "vdw": 1.82,
+      "color": "0xC7A6FF",
+      "rgb": [
+        0.780392,
+        0.65098,
+        1.0
+      ]
+    },
+    {
+      "z": 4,
+      "symbol": "Be",
+      "name": "Beryllium",
+      "covalent": 0.96,
+      "vdw": 1.53,
+      "color": "0x9FE3B0",
+      "rgb": [
+        0.623529,
+        0.890196,
+        0.690196
+      ]
+    },
+    {
+      "z": 5,
+      "symbol": "B",
+      "name": "Boron",
+      "covalent": 0.84,
+      "vdw": 1.92,
+      "color": "0xF0A98B",
+      "rgb": [
+        0.941176,
+        0.662745,
+        0.545098
+      ]
+    },
+    {
+      "z": 6,
+      "symbol": "C",
+      "name": "Carbon",
+      "covalent": 0.76,
+      "vdw": 1.7,
+      "color": "0x7F8A9A",
+      "rgb": [
+        0.498039,
+        0.541176,
+        0.603922
+      ]
+    },
+    {
+      "z": 7,
+      "symbol": "N",
+      "name": "Nitrogen",
+      "covalent": 0.71,
+      "vdw": 1.55,
+      "color": "0x5B8CFF",
+      "rgb": [
+        0.356863,
+        0.54902,
+        1.0
+      ]
+    },
+    {
+      "z": 8,
+      "symbol": "O",
+      "name": "Oxygen",
+      "covalent": 0.66,
+      "vdw": 1.52,
+      "color": "0xFF5C6C",
+      "rgb": [
+        1.0,
+        0.360784,
+        0.423529
+      ]
+    },
+    {
+      "z": 9,
+      "symbol": "F",
+      "name": "Fluorine",
+      "covalent": 0.57,
+      "vdw": 1.47,
+      "color": "0x66E0A3",
+      "rgb": [
+        0.4,
+        0.878431,
+        0.639216
+      ]
+    },
+    {
+      "z": 10,
+      "symbol": "Ne",
+      "name": "Neon",
+      "covalent": 0.58,
+      "vdw": 1.54,
+      "color": "0x9CD7E8",
+      "rgb": [
+        0.611765,
+        0.843137,
+        0.909804
+      ]
+    },
+    {
+      "z": 11,
+      "symbol": "Na",
+      "name": "Sodium",
+      "covalent": 1.66,
+      "vdw": 2.27,
+      "color": "0xD8C34A",
+      "rgb": [
+        0.847059,
+        0.764706,
+        0.290196
+      ]
+    },
+    {
+      "z": 12,
+      "symbol": "Mg",
+      "name": "Magnesium",
+      "covalent": 1.41,
+      "vdw": 1.73,
+      "color": "0x8FE58C",
+      "rgb": [
+        0.560784,
+        0.898039,
+        0.54902
+      ]
+    },
+    {
+      "z": 13,
+      "symbol": "Al",
+      "name": "Aluminium",
+      "covalent": 1.21,
+      "vdw": 1.84,
+      "color": "0x4FA3FF",
+      "rgb": [
+        0.309804,
+        0.639216,
+        1.0
+      ]
+    },
+    {
+      "z": 14,
+      "symbol": "Si",
+      "name": "Silicon",
+      "covalent": 1.11,
+      "vdw": 2.1,
+      "color": "0x5A7CFF",
+      "rgb": [
+        0.352941,
+        0.486275,
+        1.0
+      ]
+    },
+    {
+      "z": 15,
+      "symbol": "P",
+      "name": "Phosphorus",
+      "covalent": 1.07,
+      "vdw": 1.8,
+      "color": "0xFF9F43",
+      "rgb": [
+        1.0,
+        0.623529,
+        0.262745
+      ]
+    },
+    {
+      "z": 16,
+      "symbol": "S",
+      "name": "Sulfur",
+      "covalent": 1.05,
+      "vdw": 1.8,
+      "color": "0xFFD54A",
+      "rgb": [
+        1.0,
+        0.835294,
+        0.290196
+      ]
+    },
+    {
+      "z": 17,
+      "symbol": "Cl",
+      "name": "Chlorine",
+      "covalent": 1.02,
+      "vdw": 1.75,
+      "color": "0x4ADF7A",
+      "rgb": [
+        0.290196,
+        0.87451,
+        0.478431
+      ]
+    },
+    {
+      "z": 18,
+      "symbol": "Ar",
+      "name": "Argon",
+      "covalent": 1.06,
+      "vdw": 1.88,
+      "color": "0x88D6E8",
+      "rgb": [
+        0.533333,
+        0.839216,
+        0.909804
+      ]
+    },
+    {
+      "z": 19,
+      "symbol": "K",
+      "name": "Potassium",
+      "covalent": 2.03,
+      "vdw": 2.75,
+      "color": "0xB26BFF",
+      "rgb": [
+        0.698039,
+        0.419608,
+        1.0
+      ]
+    },
+    {
+      "z": 20,
+      "symbol": "Ca",
+      "name": "Calcium",
+      "covalent": 1.76,
+      "vdw": 2.31,
+      "color": "0x7FE08A",
+      "rgb": [
+        0.498039,
+        0.878431,
+        0.541176
+      ]
+    },
+    {
+      "z": 21,
+      "symbol": "Sc",
+      "name": "Scandium",
+      "covalent": 1.7,
+      "vdw": 2.15,
+      "color": "0xC9D18A",
+      "rgb": [
+        0.788235,
+        0.819608,
+        0.541176
+      ]
+    },
+    {
+      "z": 22,
+      "symbol": "Ti",
+      "name": "Titanium",
+      "covalent": 1.6,
+      "vdw": 2.11,
+      "color": "0x93A8C7",
+      "rgb": [
+        0.576471,
+        0.658824,
+        0.780392
+      ]
+    },
+    {
+      "z": 23,
+      "symbol": "V",
+      "name": "Vanadium",
+      "covalent": 1.53,
+      "vdw": 2.07,
+      "color": "0xE4B563",
+      "rgb": [
+        0.894118,
+        0.709804,
+        0.388235
+      ]
+    },
+    {
+      "z": 24,
+      "symbol": "Cr",
+      "name": "Chromium",
+      "covalent": 1.39,
+      "vdw": 2.06,
+      "color": "0xE040B0",
+      "rgb": [
+        0.878431,
+        0.25098,
+        0.690196
+      ]
+    },
+    {
+      "z": 25,
+      "symbol": "Mn",
+      "name": "Manganese",
+      "covalent": 1.39,
+      "vdw": 2.05,
+      "color": "0xC58BC9",
+      "rgb": [
+        0.772549,
+        0.545098,
+        0.788235
+      ]
+    },
+    {
+      "z": 26,
+      "symbol": "Fe",
+      "name": "Iron",
+      "covalent": 1.32,
+      "vdw": 2.04,
+      "color": "0xE3753F",
+      "rgb": [
+        0.890196,
+        0.458824,
+        0.247059
+      ]
+    },
+    {
+      "z": 27,
+      "symbol": "Co",
+      "name": "Cobalt",
+      "covalent": 1.26,
+      "vdw": 2.0,
+      "color": "0x2F5BD8",
+      "rgb": [
+        0.184314,
+        0.356863,
+        0.847059
+      ]
+    },
+    {
+      "z": 28,
+      "symbol": "Ni",
+      "name": "Nickel",
+      "covalent": 1.24,
+      "vdw": 1.97,
+      "color": "0x9AA7B8",
+      "rgb": [
+        0.603922,
+        0.654902,
+        0.721569
+      ]
+    },
+    {
+      "z": 29,
+      "symbol": "Cu",
+      "name": "Copper",
+      "covalent": 1.32,
+      "vdw": 1.96,
+      "color": "0xD98246",
+      "rgb": [
+        0.85098,
+        0.509804,
+        0.27451
+      ]
+    },
+    {
+      "z": 30,
+      "symbol": "Zn",
+      "name": "Zinc",
+      "covalent": 1.22,
+      "vdw": 2.01,
+      "color": "0xA99BD8",
+      "rgb": [
+        0.662745,
+        0.607843,
+        0.847059
+      ]
+    },
+    {
+      "z": 31,
+      "symbol": "Ga",
+      "name": "Gallium",
+      "covalent": 1.22,
+      "vdw": 1.87,
+      "color": "0xC9A16B",
+      "rgb": [
+        0.788235,
+        0.631373,
+        0.419608
+      ]
+    },
+    {
+      "z": 32,
+      "symbol": "Ge",
+      "name": "Germanium",
+      "covalent": 1.2,
+      "vdw": 2.11,
+      "color": "0x9DBF9D",
+      "rgb": [
+        0.615686,
+        0.74902,
+        0.615686
+      ]
+    },
+    {
+      "z": 33,
+      "symbol": "As",
+      "name": "Arsenic",
+      "covalent": 1.19,
+      "vdw": 1.85,
+      "color": "0xC99BCB",
+      "rgb": [
+        0.788235,
+        0.607843,
+        0.796078
+      ]
+    },
+    {
+      "z": 34,
+      "symbol": "Se",
+      "name": "Selenium",
+      "covalent": 1.2,
+      "vdw": 1.9,
+      "color": "0xF2A65A",
+      "rgb": [
+        0.94902,
+        0.65098,
+        0.352941
+      ]
+    },
+    {
+      "z": 35,
+      "symbol": "Br",
+      "name": "Bromine",
+      "covalent": 1.2,
+      "vdw": 1.85,
+      "color": "0xA65A38",
+      "rgb": [
+        0.65098,
+        0.352941,
+        0.219608
+      ]
+    },
+    {
+      "z": 36,
+      "symbol": "Kr",
+      "name": "Krypton",
+      "covalent": 1.16,
+      "vdw": 2.02,
+      "color": "0x92D8E8",
+      "rgb": [
+        0.572549,
+        0.847059,
+        0.909804
+      ]
+    },
+    {
+      "z": 37,
+      "symbol": "Rb",
+      "name": "Rubidium",
+      "covalent": 2.2,
+      "vdw": 3.03,
+      "color": "0xC36BFF",
+      "rgb": [
+        0.764706,
+        0.419608,
+        1.0
+      ]
+    },
+    {
+      "z": 38,
+      "symbol": "Sr",
+      "name": "Strontium",
+      "covalent": 1.95,
+      "vdw": 2.49,
+      "color": "0x7FE08A",
+      "rgb": [
+        0.498039,
+        0.878431,
+        0.541176
+      ]
+    },
+    {
+      "z": 39,
+      "symbol": "Y",
+      "name": "Yttrium",
+      "covalent": 1.9,
+      "vdw": 2.32,
+      "color": "0x9BBFD1",
+      "rgb": [
+        0.607843,
+        0.74902,
+        0.819608
+      ]
+    },
+    {
+      "z": 40,
+      "symbol": "Zr",
+      "name": "Zirconium",
+      "covalent": 1.75,
+      "vdw": 2.23,
+      "color": "0x99B873",
+      "rgb": [
+        0.6,
+        0.721569,
+        0.45098
+      ]
+    },
+    {
+      "z": 41,
+      "symbol": "Nb",
+      "name": "Niobium",
+      "covalent": 1.64,
+      "vdw": 2.14,
+      "color": "0x92A8C4",
+      "rgb": [
+        0.572549,
+        0.658824,
+        0.768627
+      ]
+    },
+    {
+      "z": 42,
+      "symbol": "Mo",
+      "name": "Molybdenum",
+      "covalent": 1.54,
+      "vdw": 2.17,
+      "color": "0x7FA9DD",
+      "rgb": [
+        0.498039,
+        0.662745,
+        0.866667
+      ]
+    },
+    {
+      "z": 43,
+      "symbol": "Tc",
+      "name": "Technetium",
+      "covalent": 1.47,
+      "vdw": 2.16,
+      "color": "0xC9A46B",
+      "rgb": [
+        0.788235,
+        0.643137,
+        0.419608
+      ]
+    },
+    {
+      "z": 44,
+      "symbol": "Ru",
+      "name": "Ruthenium",
+      "covalent": 1.46,
+      "vdw": 2.13,
+      "color": "0x8FC0B8",
+      "rgb": [
+        0.560784,
+        0.752941,
+        0.721569
+      ]
+    },
+    {
+      "z": 45,
+      "symbol": "Rh",
+      "name": "Rhodium",
+      "covalent": 1.42,
+      "vdw": 2.1,
+      "color": "0xA4B6D8",
+      "rgb": [
+        0.643137,
+        0.713725,
+        0.847059
+      ]
+    },
+    {
+      "z": 46,
+      "symbol": "Pd",
+      "name": "Palladium",
+      "covalent": 1.39,
+      "vdw": 2.05,
+      "color": "0xA8B8C8",
+      "rgb": [
+        0.658824,
+        0.721569,
+        0.784314
+      ]
+    },
+    {
+      "z": 47,
+      "symbol": "Ag",
+      "name": "Silver",
+      "covalent": 1.45,
+      "vdw": 2.03,
+      "color": "0xCFD6E2",
+      "rgb": [
+        0.811765,
+        0.839216,
+        0.886275
+      ]
+    },
+    {
+      "z": 48,
+      "symbol": "Cd",
+      "name": "Cadmium",
+      "covalent": 1.44,
+      "vdw": 2.18,
+      "color": "0xD5C58A",
+      "rgb": [
+        0.835294,
+        0.772549,
+        0.541176
+      ]
+    },
+    {
+      "z": 49,
+      "symbol": "In",
+      "name": "Indium",
+      "covalent": 1.42,
+      "vdw": 1.93,
+      "color": "0xC6A5D8",
+      "rgb": [
+        0.776471,
+        0.647059,
+        0.847059
+      ]
+    },
+    {
+      "z": 50,
+      "symbol": "Sn",
+      "name": "Tin",
+      "covalent": 1.39,
+      "vdw": 2.17,
+      "color": "0xA6B8C5",
+      "rgb": [
+        0.65098,
+        0.721569,
+        0.772549
+      ]
+    },
+    {
+      "z": 51,
+      "symbol": "Sb",
+      "name": "Antimony",
+      "covalent": 1.39,
+      "vdw": 2.06,
+      "color": "0xC89BD8",
+      "rgb": [
+        0.784314,
+        0.607843,
+        0.847059
+      ]
+    },
+    {
+      "z": 52,
+      "symbol": "Te",
+      "name": "Tellurium",
+      "covalent": 1.38,
+      "vdw": 2.06,
+      "color": "0xD8A45A",
+      "rgb": [
+        0.847059,
+        0.643137,
+        0.352941
+      ]
+    },
+    {
+      "z": 53,
+      "symbol": "I",
+      "name": "Iodine",
+      "covalent": 1.39,
+      "vdw": 1.98,
+      "color": "0xA97BFF",
+      "rgb": [
+        0.662745,
+        0.482353,
+        1.0
+      ]
+    },
+    {
+      "z": 54,
+      "symbol": "Xe",
+      "name": "Xenon",
+      "covalent": 1.4,
+      "vdw": 2.16,
+      "color": "0x8FD8E8",
+      "rgb": [
+        0.560784,
+        0.847059,
+        0.909804
+      ]
+    },
+    {
+      "z": 55,
+      "symbol": "Cs",
+      "name": "Caesium",
+      "covalent": 2.44,
+      "vdw": 3.43,
+      "color": "0xB36BFF",
+      "rgb": [
+        0.701961,
+        0.419608,
+        1.0
+      ]
+    },
+    {
+      "z": 56,
+      "symbol": "Ba",
+      "name": "Barium",
+      "covalent": 2.15,
+      "vdw": 2.68,
+      "color": "0x8CE38A",
+      "rgb": [
+        0.54902,
+        0.890196,
+        0.541176
+      ]
+    },
+    {
+      "z": 57,
+      "symbol": "La",
+      "name": "Lanthanum",
+      "covalent": 2.07,
+      "vdw": 2.4,
+      "color": "0x9BC98F",
+      "rgb": [
+        0.607843,
+        0.788235,
+        0.560784
+      ]
+    },
+    {
+      "z": 58,
+      "symbol": "Ce",
+      "name": "Cerium",
+      "covalent": 2.04,
+      "vdw": 2.35,
+      "color": "0xB8D18A",
+      "rgb": [
+        0.721569,
+        0.819608,
+        0.541176
+      ]
+    },
+    {
+      "z": 59,
+      "symbol": "Pr",
+      "name": "Praseodymium",
+      "covalent": 2.03,
+      "vdw": 2.39,
+      "color": "0xA6D19A",
+      "rgb": [
+        0.65098,
+        0.819608,
+        0.603922
+      ]
+    },
+    {
+      "z": 60,
+      "symbol": "Nd",
+      "name": "Neodymium",
+      "covalent": 2.01,
+      "vdw": 2.29,
+      "color": "0x9CCB9D",
+      "rgb": [
+        0.611765,
+        0.796078,
+        0.615686
+      ]
+    },
+    {
+      "z": 61,
+      "symbol": "Pm",
+      "name": "Promethium",
+      "covalent": 1.99,
+      "vdw": 2.36,
+      "color": "0x9EC9A8",
+      "rgb": [
+        0.619608,
+        0.788235,
+        0.658824
+      ]
+    },
+    {
+      "z": 62,
+      "symbol": "Sm",
+      "name": "Samarium",
+      "covalent": 1.98,
+      "vdw": 2.29,
+      "color": "0x9CC7AA",
+      "rgb": [
+        0.611765,
+        0.780392,
+        0.666667
+      ]
+    },
+    {
+      "z": 63,
+      "symbol": "Eu",
+      "name": "Europium",
+      "covalent": 1.98,
+      "vdw": 2.33,
+      "color": "0xA0C8B8",
+      "rgb": [
+        0.627451,
+        0.784314,
+        0.721569
+      ]
+    },
+    {
+      "z": 64,
+      "symbol": "Gd",
+      "name": "Gadolinium",
+      "covalent": 1.96,
+      "vdw": 2.37,
+      "color": "0x9DC4B5",
+      "rgb": [
+        0.615686,
+        0.768627,
+        0.709804
+      ]
+    },
+    {
+      "z": 65,
+      "symbol": "Tb",
+      "name": "Terbium",
+      "covalent": 1.94,
+      "vdw": 2.21,
+      "color": "0x99C0B8",
+      "rgb": [
+        0.6,
+        0.752941,
+        0.721569
+      ]
+    },
+    {
+      "z": 66,
+      "symbol": "Dy",
+      "name": "Dysprosium",
+      "covalent": 1.92,
+      "vdw": 2.29,
+      "color": "0x95BCC0",
+      "rgb": [
+        0.584314,
+        0.737255,
+        0.752941
+      ]
+    },
+    {
+      "z": 67,
+      "symbol": "Ho",
+      "name": "Holmium",
+      "covalent": 1.92,
+      "vdw": 2.16,
+      "color": "0x91B8C8",
+      "rgb": [
+        0.568627,
+        0.721569,
+        0.784314
+      ]
+    },
+    {
+      "z": 68,
+      "symbol": "Er",
+      "name": "Erbium",
+      "covalent": 1.89,
+      "vdw": 2.35,
+      "color": "0x8DB4CE",
+      "rgb": [
+        0.552941,
+        0.705882,
+        0.807843
+      ]
+    },
+    {
+      "z": 69,
+      "symbol": "Tm",
+      "name": "Thulium",
+      "covalent": 1.9,
+      "vdw": 2.27,
+      "color": "0x89B0D2",
+      "rgb": [
+        0.537255,
+        0.690196,
+        0.823529
+      ]
+    },
+    {
+      "z": 70,
+      "symbol": "Yb",
+      "name": "Ytterbium",
+      "covalent": 1.87,
+      "vdw": 2.42,
+      "color": "0x85ACD6",
+      "rgb": [
+        0.521569,
+        0.67451,
+        0.839216
+      ]
+    },
+    {
+      "z": 71,
+      "symbol": "Lu",
+      "name": "Lutetium",
+      "covalent": 1.87,
+      "vdw": 2.21,
+      "color": "0x81A8D8",
+      "rgb": [
+        0.505882,
+        0.658824,
+        0.847059
+      ]
+    },
+    {
+      "z": 72,
+      "symbol": "Hf",
+      "name": "Hafnium",
+      "covalent": 1.75,
+      "vdw": 2.12,
+      "color": "0x8FB1C2",
+      "rgb": [
+        0.560784,
+        0.694118,
+        0.760784
+      ]
+    },
+    {
+      "z": 73,
+      "symbol": "Ta",
+      "name": "Tantalum",
+      "covalent": 1.7,
+      "vdw": 2.17,
+      "color": "0x8BA8C9",
+      "rgb": [
+        0.545098,
+        0.658824,
+        0.788235
+      ]
+    },
+    {
+      "z": 74,
+      "symbol": "W",
+      "name": "Tungsten",
+      "covalent": 1.62,
+      "vdw": 2.1,
+      "color": "0x87A0D0",
+      "rgb": [
+        0.529412,
+        0.627451,
+        0.815686
+      ]
+    },
+    {
+      "z": 75,
+      "symbol": "Re",
+      "name": "Rhenium",
+      "covalent": 1.51,
+      "vdw": 2.17,
+      "color": "0x8398D6",
+      "rgb": [
+        0.513725,
+        0.596078,
+        0.839216
+      ]
+    },
+    {
+      "z": 76,
+      "symbol": "Os",
+      "name": "Osmium",
+      "covalent": 1.44,
+      "vdw": 2.16,
+      "color": "0x7F90D8",
+      "rgb": [
+        0.498039,
+        0.564706,
+        0.847059
+      ]
+    },
+    {
+      "z": 77,
+      "symbol": "Ir",
+      "name": "Iridium",
+      "covalent": 1.41,
+      "vdw": 2.02,
+      "color": "0x7B88D9",
+      "rgb": [
+        0.482353,
+        0.533333,
+        0.85098
+      ]
+    },
+    {
+      "z": 78,
+      "symbol": "Pt",
+      "name": "Platinum",
+      "covalent": 1.36,
+      "vdw": 2.09,
+      "color": "0x7780DA",
+      "rgb": [
+        0.466667,
+        0.501961,
+        0.854902
+      ]
+    },
+    {
+      "z": 79,
+      "symbol": "Au",
+      "name": "Gold",
+      "covalent": 1.36,
+      "vdw": 2.14,
+      "color": "0xFFD34E",
+      "rgb": [
+        1.0,
+        0.827451,
+        0.305882
+      ]
+    },
+    {
+      "z": 80,
+      "symbol": "Hg",
+      "name": "Mercury",
+      "covalent": 1.32,
+      "vdw": 2.23,
+      "color": "0xCFC7D8",
+      "rgb": [
+        0.811765,
+        0.780392,
+        0.847059
+      ]
+    },
+    {
+      "z": 81,
+      "symbol": "Tl",
+      "name": "Thallium",
+      "covalent": 1.45,
+      "vdw": 1.96,
+      "color": "0xA6B29C",
+      "rgb": [
+        0.65098,
+        0.698039,
+        0.611765
+      ]
+    },
+    {
+      "z": 82,
+      "symbol": "Pb",
+      "name": "Lead",
+      "covalent": 1.46,
+      "vdw": 2.02,
+      "color": "0x8C96AE",
+      "rgb": [
+        0.54902,
+        0.588235,
+        0.682353
+      ]
+    },
+    {
+      "z": 83,
+      "symbol": "Bi",
+      "name": "Bismuth",
+      "covalent": 1.48,
+      "vdw": 2.07,
+      "color": "0xD77AA8",
+      "rgb": [
+        0.843137,
+        0.478431,
+        0.658824
+      ]
+    },
+    {
+      "z": 84,
+      "symbol": "Po",
+      "name": "Polonium",
+      "covalent": 1.4,
+      "vdw": 1.97,
+      "color": "0xC96B8F",
+      "rgb": [
+        0.788235,
+        0.419608,
+        0.560784
+      ]
+    },
+    {
+      "z": 85,
+      "symbol": "At",
+      "name": "Astatine",
+      "covalent": 1.5,
+      "vdw": 2.02,
+      "color": "0xB85A7E",
+      "rgb": [
+        0.721569,
+        0.352941,
+        0.494118
+      ]
+    },
+    {
+      "z": 86,
+      "symbol": "Rn",
+      "name": "Radon",
+      "covalent": 1.5,
+      "vdw": 2.2,
+      "color": "0x8ED0E8",
+      "rgb": [
+        0.556863,
+        0.815686,
+        0.909804
+      ]
+    },
+    {
+      "z": 87,
+      "symbol": "Fr",
+      "name": "Francium",
+      "covalent": 2.6,
+      "vdw": 3.48,
+      "color": "0xC36BFF",
+      "rgb": [
+        0.764706,
+        0.419608,
+        1.0
+      ]
+    },
+    {
+      "z": 88,
+      "symbol": "Ra",
+      "name": "Radium",
+      "covalent": 2.21,
+      "vdw": 2.83,
+      "color": "0x8CE38A",
+      "rgb": [
+        0.54902,
+        0.890196,
+        0.541176
+      ]
+    },
+    {
+      "z": 89,
+      "symbol": "Ac",
+      "name": "Actinium",
+      "covalent": 2.15,
+      "vdw": 2.6,
+      "color": "0x9CCBA4",
+      "rgb": [
+        0.611765,
+        0.796078,
+        0.643137
+      ]
+    },
+    {
+      "z": 90,
+      "symbol": "Th",
+      "name": "Thorium",
+      "covalent": 2.06,
+      "vdw": 2.37,
+      "color": "0xB0C88A",
+      "rgb": [
+        0.690196,
+        0.784314,
+        0.541176
+      ]
+    },
+    {
+      "z": 91,
+      "symbol": "Pa",
+      "name": "Protactinium",
+      "covalent": 2.0,
+      "vdw": 2.43,
+      "color": "0xA6C29A",
+      "rgb": [
+        0.65098,
+        0.760784,
+        0.603922
+      ]
+    },
+    {
+      "z": 92,
+      "symbol": "U",
+      "name": "Uranium",
+      "covalent": 1.96,
+      "vdw": 2.4,
+      "color": "0xFFB84D",
+      "rgb": [
+        1.0,
+        0.721569,
+        0.301961
+      ]
+    },
+    {
+      "z": 93,
+      "symbol": "Np",
+      "name": "Neptunium",
+      "covalent": 1.9,
+      "vdw": 2.39,
+      "color": "0x9AB8C6",
+      "rgb": [
+        0.603922,
+        0.721569,
+        0.776471
+      ]
+    },
+    {
+      "z": 94,
+      "symbol": "Pu",
+      "name": "Plutonium",
+      "covalent": 1.87,
+      "vdw": 2.43,
+      "color": "0x9AA8D0",
+      "rgb": [
+        0.603922,
+        0.658824,
+        0.815686
+      ]
+    },
+    {
+      "z": 95,
+      "symbol": "Am",
+      "name": "Americium",
+      "covalent": 1.8,
+      "vdw": 2.44,
+      "color": "0x9AA0C0",
+      "rgb": [
+        0.603922,
+        0.627451,
+        0.752941
+      ]
+    },
+    {
+      "z": 96,
+      "symbol": "Cm",
+      "name": "Curium",
+      "covalent": 1.69,
+      "vdw": 2.45,
+      "color": "0x9A98B0",
+      "rgb": [
+        0.603922,
+        0.596078,
+        0.690196
+      ]
+    },
+    {
+      "z": 97,
+      "symbol": "Bk",
+      "name": "Berkelium",
+      "covalent": 1.68,
+      "vdw": 2.44,
+      "color": "0xB0A0B8",
+      "rgb": [
+        0.690196,
+        0.627451,
+        0.721569
+      ]
+    },
+    {
+      "z": 98,
+      "symbol": "Cf",
+      "name": "Californium",
+      "covalent": 1.68,
+      "vdw": 2.45,
+      "color": "0xB0A8C0",
+      "rgb": [
+        0.690196,
+        0.658824,
+        0.752941
+      ]
+    },
+    {
+      "z": 99,
+      "symbol": "Es",
+      "name": "Einsteinium",
+      "covalent": 1.65,
+      "vdw": 2.45,
+      "color": "0xB0B0C8",
+      "rgb": [
+        0.690196,
+        0.690196,
+        0.784314
+      ]
+    },
+    {
+      "z": 100,
+      "symbol": "Fm",
+      "name": "Fermium",
+      "covalent": 1.67,
+      "vdw": 2.45,
+      "color": "0xB0B8D0",
+      "rgb": [
+        0.690196,
+        0.721569,
+        0.815686
+      ]
+    },
+    {
+      "z": 101,
+      "symbol": "Md",
+      "name": "Mendelevium",
+      "covalent": 1.73,
+      "vdw": 2.46,
+      "color": "0xB8C0D8",
+      "rgb": [
+        0.721569,
+        0.752941,
+        0.847059
+      ]
+    },
+    {
+      "z": 102,
+      "symbol": "No",
+      "name": "Nobelium",
+      "covalent": 1.76,
+      "vdw": 2.46,
+      "color": "0xB8C8D8",
+      "rgb": [
+        0.721569,
+        0.784314,
+        0.847059
+      ]
+    },
+    {
+      "z": 103,
+      "symbol": "Lr",
+      "name": "Lawrencium",
+      "covalent": 1.61,
+      "vdw": 2.46,
+      "color": "0xC0D0E0",
+      "rgb": [
+        0.752941,
+        0.815686,
+        0.878431
+      ]
+    },
+    {
+      "z": 104,
+      "symbol": "Rf",
+      "name": "Rutherfordium",
+      "covalent": 1.57,
+      "vdw": 2.4,
+      "color": "0xC8D0E0",
+      "rgb": [
+        0.784314,
+        0.815686,
+        0.878431
+      ]
+    },
+    {
+      "z": 105,
+      "symbol": "Db",
+      "name": "Dubnium",
+      "covalent": 1.49,
+      "vdw": 2.38,
+      "color": "0xC8C8D8",
+      "rgb": [
+        0.784314,
+        0.784314,
+        0.847059
+      ]
+    },
+    {
+      "z": 106,
+      "symbol": "Sg",
+      "name": "Seaborgium",
+      "covalent": 1.43,
+      "vdw": 2.32,
+      "color": "0xC0C0D0",
+      "rgb": [
+        0.752941,
+        0.752941,
+        0.815686
+      ]
+    },
+    {
+      "z": 107,
+      "symbol": "Bh",
+      "name": "Bohrium",
+      "covalent": 1.41,
+      "vdw": 2.3,
+      "color": "0xB8B8C8",
+      "rgb": [
+        0.721569,
+        0.721569,
+        0.784314
+      ]
+    },
+    {
+      "z": 108,
+      "symbol": "Hs",
+      "name": "Hassium",
+      "covalent": 1.34,
+      "vdw": 2.26,
+      "color": "0xB0B0C0",
+      "rgb": [
+        0.690196,
+        0.690196,
+        0.752941
+      ]
+    },
+    {
+      "z": 109,
+      "symbol": "Mt",
+      "name": "Meitnerium",
+      "covalent": 1.29,
+      "vdw": 2.2,
+      "color": "0xA8A8B8",
+      "rgb": [
+        0.658824,
+        0.658824,
+        0.721569
+      ]
+    },
+    {
+      "z": 110,
+      "symbol": "Ds",
+      "name": "Darmstadtium",
+      "covalent": 1.28,
+      "vdw": 2.2,
+      "color": "0xA0A0B0",
+      "rgb": [
+        0.627451,
+        0.627451,
+        0.690196
+      ]
+    },
+    {
+      "z": 111,
+      "symbol": "Rg",
+      "name": "Roentgenium",
+      "covalent": 1.21,
+      "vdw": 2.2,
+      "color": "0x9898A8",
+      "rgb": [
+        0.596078,
+        0.596078,
+        0.658824
+      ]
+    },
+    {
+      "z": 112,
+      "symbol": "Cn",
+      "name": "Copernicium",
+      "covalent": 1.22,
+      "vdw": 2.2,
+      "color": "0x9090A0",
+      "rgb": [
+        0.564706,
+        0.564706,
+        0.627451
+      ]
+    },
+    {
+      "z": 113,
+      "symbol": "Nh",
+      "name": "Nihonium",
+      "covalent": 1.36,
+      "vdw": 2.4,
+      "color": "0x888898",
+      "rgb": [
+        0.533333,
+        0.533333,
+        0.596078
+      ]
+    },
+    {
+      "z": 114,
+      "symbol": "Fl",
+      "name": "Flerovium",
+      "covalent": 1.43,
+      "vdw": 2.6,
+      "color": "0x808090",
+      "rgb": [
+        0.501961,
+        0.501961,
+        0.564706
+      ]
+    },
+    {
+      "z": 115,
+      "symbol": "Mc",
+      "name": "Moscovium",
+      "covalent": 1.62,
+      "vdw": 2.6,
+      "color": "0x787888",
+      "rgb": [
+        0.470588,
+        0.470588,
+        0.533333
+      ]
+    },
+    {
+      "z": 116,
+      "symbol": "Lv",
+      "name": "Livermorium",
+      "covalent": 1.75,
+      "vdw": 2.6,
+      "color": "0x707080",
+      "rgb": [
+        0.439216,
+        0.439216,
+        0.501961
+      ]
+    },
+    {
+      "z": 117,
+      "symbol": "Ts",
+      "name": "Tennessine",
+      "covalent": 1.65,
+      "vdw": 2.4,
+      "color": "0x686878",
+      "rgb": [
+        0.407843,
+        0.407843,
+        0.470588
+      ]
+    },
+    {
+      "z": 118,
+      "symbol": "Og",
+      "name": "Oganesson",
+      "covalent": 1.57,
+      "vdw": 2.3,
+      "color": "0x606070",
+      "rgb": [
+        0.376471,
+        0.376471,
+        0.439216
+      ]
+    }
+  ]
+}

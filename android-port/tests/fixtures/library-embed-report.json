@@ -1,0 +1,124 @@
+{
+  "generated": "D:\\vibe\\crystal\\github\\CrystalLens\\android-port\\web\\js\\data\\library.js",
+  "libraryCount": 12,
+  "exampleCount": 6,
+  "totalBytes": 43062,
+  "library": [
+    {
+      "id": "halite",
+      "file": "halite.cif",
+      "titleZh": "岩盐（氯化钠）",
+      "formula": "NaCl",
+      "sha256": "78f4a515a6a034b3d3a0308bc7eb1bd9618fb04da99329bd96f68bbf19be8103"
+    },
+    {
+      "id": "fluorite",
+      "file": "fluorite.cif",
+      "titleZh": "萤石",
+      "formula": "CaF₂",
+      "sha256": "9ccbdf57c182826b9673078c463138a164ce3e81869f0d80f6c71ab2824c36ab"
+    },
+    {
+      "id": "perovskite",
+      "file": "perovskite.cif",
+      "titleZh": "钙钛矿",
+      "formula": "CaTiO₃",
+      "sha256": "dac4b6abcca28ccc806ea87b1699a208f2c5cd794f4bd1d994fa718c3048e19b"
+    },
+    {
+      "id": "cooperite",
+      "file": "cooperite.cif",
+      "titleZh": "硫铂矿",
+      "formula": "PtS",
+      "sha256": "22cefe809e3e2b49bcc39619fd36776372e6c26095ec6e0ebc7c9c3d91ac60db"
+    },
+    {
+      "id": "rutile",
+      "file": "rutile.cif",
+      "titleZh": "金红石",
+      "formula": "TiO₂",
+      "sha256": "99f2f735243120d0e3b9d40619fcd17642048a44f08f1c85bc5a9a7077434cd5"
+    },
+    {
+      "id": "brookite",
+      "file": "brookite.cif",
+      "titleZh": "板钛矿",
+      "formula": "TiO₂",
+      "sha256": "d9a9e87c70e7c81280f2c4fc3b8901c067a4bde5ccfbfaa6e64642ed0f6615f1"
+    },
+    {
+      "id": "anatase",
+      "file": "anatase.cif",
+      "titleZh": "锐钛矿",
+      "formula": "TiO₂",
+      "sha256": "bc8b1ade9afc6780ca3e6011f471654ccd2d881b2562d942f7d02e0a41c7ee9b"
+    },
+    {
+      "id": "sphalerite",
+      "file": "sphalerite.cif",
+      "titleZh": "闪锌矿",
+      "formula": "ZnS",
+      "sha256": "ce1343a2f46a6db52b1ae136d083a4f27ad3b590d2377146fb06c799ed4b55ce"
+    },
+    {
+      "id": "wurtzite",
+      "file": "wurtzite.cif",
+      "titleZh": "纤锌矿（2H）",
+      "formula": "ZnS",
+      "sha256": "afd2197b3078388bfd25528385eb6358fdfffa170b4b90373b024ad2c79aafae"
+    },
+    {
+      "id": "diamond",
+      "file": "diamond.cif",
+      "titleZh": "金刚石",
+      "formula": "C",
+      "sha256": "fc43316d0cc970f009039e6b3581482931a1f95a28c6682e745478f603180ffe"
+    },
+    {
+      "id": "quartz",
+      "file": "quartz.cif",
+      "titleZh": "α-石英",
+      "formula": "SiO₂",
+      "sha256": "12c534551da2eceeedbbc88942fa72d108098f5c4acc1724e44db0274bbe4b30"
+    },
+    {
+      "id": "calcite",
+      "file": "calcite.cif",
+      "titleZh": "方解石",
+      "formula": "CaCO₃",
+      "sha256": "26a570b996696a456f041b3ac196cf050926a74bd7e034e38623dca3e9367147"
+    }
+  ],
+  "examples": [
+    {
+      "file": "benzene.xyz",
+      "titleZh": "苯",
+      "sha256": "5577b712783addced5b549aa979f0e7b2583bf040acc8d1727e05b9fe9798864"
+    },
+    {
+      "file": "diamond.cif",
+      "titleZh": "金刚石",
+      "sha256": "e0fcb748873f57df666f3f5e627d6e05c9c12cad9332b5a92539f1c8178a8e76"
+    },
+    {
+      "file": "nacl.vesta",
+      "titleZh": "岩盐（NaCl）",
+      "sha256": "d29e0847aaf66ea80640df8a85a92a9c635f52c98e24c974f30387b93113adb7"
+    },
+    {
+      "file": "quartz.cif",
+      "titleZh": "α-石英",
+      "sha256": "005f38e99d34806fb704e65183f0a94d1249e942b1d87bb4f50d453db9b193fb"
+    },
+    {
+      "file": "srtio3.cif",
+      "titleZh": "钛酸锶",
+      "sha256": "455c5cd141c09af03c21a76097f52846e60ee634710778dd2e4b25608a1663c8"
+    },
+    {
+      "file": "water.xyz",
+      "titleZh": "水",
+      "sha256": "be39ee8b69fc4cf050fa938e38bf2cbe0281161c6056c35f5bd6ccc02d7f6f5e"
+    }
+  ]
+}

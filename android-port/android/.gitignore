@@ -1,0 +1,6 @@
+# Gradle-style build output for the hand-rolled aapt2/javac/d8 pipeline.
+.build/
+
+# assets/www is repopulated by tools/build_apk.ps1 on every build (the committed
+# placeholder lives in android/placeholder/index.html and is restored when
+# dist/preview is not available).

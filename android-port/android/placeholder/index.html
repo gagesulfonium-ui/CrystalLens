@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>CrystalLens — Android host placeholder</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #020305; color: #d7e6ee;
+    font-family: -apple-system, "Segoe UI", Roboto, "Noto Sans SC", sans-serif; }
+  body { display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; padding: 24px; box-sizing: border-box; text-align: center;
+    background: radial-gradient(120% 90% at 50% 0%, #0b2130 0%, #020305 62%); }
+  h1 { margin: 0; font-size: 30px; letter-spacing: .18em; color: #7fe3d6; font-weight: 600; }
+  .sub { margin: 0; font-size: 13px; color: #7f97a4; letter-spacing: .04em; }
+  .card { width: min(560px, 100%); border: 1px solid rgba(79, 209, 197, .22);
+    border-radius: 14px; padding: 14px 16px; background: rgba(8, 20, 28, .72);
+    text-align: left; font-size: 12.5px; line-height: 1.55; }
+  .card h2 { margin: 0 0 8px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+    color: #4fd1c5; font-weight: 600; }
+  .row { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0;
+    border-bottom: 1px dashed rgba(127, 151, 164, .12); }
+  .row:last-child { border-bottom: 0; }
+  .k { color: #7f97a4; }
+  .v { color: #e6f1f5; font-family: ui-monospace, Consolas, monospace; overflow-wrap: anywhere;
+    text-align: right; }
+  .ok { color: #63e6a2; } .bad { color: #ff7b72; }
+  .warn { color: #f0b429; }
+  .btns { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  button { appearance: none; border: 1px solid rgba(79, 209, 197, .45); background: rgba(79, 209, 197, .08);
+    color: #b8f3ec; padding: 9px 14px; border-radius: 999px; font-size: 12.5px; }
+  button:active { background: rgba(79, 209, 197, .22); }
+  canvas { width: 88px; height: 88px; border-radius: 12px; border: 1px solid rgba(79, 209, 197, .2); }
+  .foot { font-size: 11px; color: #566b76; max-width: 560px; }
+</style>
+</head>
+<body>
+  <h1>CrystalLens</h1>
+  <p class="sub">Android host placeholder · Web 核心尚未集成</p>
+
+  <canvas id="gl" width="176" height="176" title="WebGL2 test canvas"></canvas>
+
+  <div class="card">
+    <h2>Native bridge · window.CLNative</h2>
+    <div class="row"><span class="k">CLNative</span><span class="v" id="bridge">—</span></div>
+    <div class="row"><span class="k">getInfo()</span><span class="v" id="info">—</span></div>
+    <div class="row"><span class="k">WebGL2</span><span class="v" id="webgl2">—</span></div>
+    <div class="row"><span class="k">index.html</span><span class="v" id="where">—</span></div>
+    <div class="row"><span class="k">__clOpenSharedFile</span><span class="v" id="shared">—</span></div>
+  </div>
+
+  <div class="btns">
+    <button onclick="try{CLNative.toast('CrystalLens bridge OK');}catch(e){}">Toast</button>
+    <button onclick="try{CLNative.vibrate(40);}catch(e){}">Vibrate</button>
+    <button onclick="selfTestExport('share')">导出测试 (share)</button>
+    <button onclick="selfTestExport('save')">导出测试 (save)</button>
+  </div>
+
+  <p class="foot">
+    这是占位页面。真实 Web 产物（dist/preview）就绪后，tools/build_apk.ps1 会整体覆盖
+    assets/www/。可直接把 APK 装到设备上验证 WebView / 沉浸式 / 文件打开 / 返回键 / 导出链路。
+  </p>
+
+<script>
+(function () {
+  "use strict";
+
+  var statusEl = document.getElementById("bridge");
+  var infoEl = document.getElementById("info");
+  var webglEl = document.getElementById("webgl2");
+  var whereEl = document.getElementById("where");
+  var sharedEl = document.getElementById("shared");
+
+  var bridge = (typeof window.CLNative !== "undefined" && window.CLNative) ? window.CLNative : null;
+  if (bridge) {
+    statusEl.textContent = "available";
+    statusEl.className = "v ok";
+    var raw = "—";
+    try { raw = bridge.getInfo(); } catch (e) { raw = "getInfo threw: " + e; }
+    infoEl.textContent = raw;
+    try {
+      var parsed = JSON.parse(raw);
+      if (parsed && parsed.platform === "android") {
+        infoEl.className = "v ok";
+        infoEl.textContent = parsed.appVersion + " (" + parsed.versionCode + ") · sdk "
+          + parsed.sdkInt + " · " + parsed.model;
+      }
+    } catch (e) { /* keep raw */ }
+  } else {
+    statusEl.textContent = "not available (non-Android browser)";
+    statusEl.className = "v warn";
+  }
+
+  try {
+    var gl = document.getElementById("gl").getContext("webgl2");
+    if (gl) {
+      webglEl.textContent = "supported · " + gl.getParameter(gl.VERSION);
+      webglEl.className = "v ok";
+      gl.clearColor(0.02, 0.14, 0.19, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+    } else {
+      webglEl.textContent = "NOT supported";
+      webglEl.className = "v bad";
+    }
+  } catch (e) {
+    webglEl.textContent = "error: " + e;
+    webglEl.className = "v bad";
+  }
+
+  whereEl.textContent = location.href;
+  sharedEl.textContent = typeof window.__clOpenSharedFile === "function" ? "defined" : "undefined";
+  sharedEl.className = typeof window.__clOpenSharedFile === "function" ? "v ok" : "v warn";
+
+  // Diagnostic sink for the Java side once the real web core replaces this page.
+  window.__clHandleBack = function () { return false; };
+  window.__clOpenSharedFile = function (name, base64) {
+    console.log("placeholder received shared file:", name, "base64 chars:", base64.length);
+    try { if (bridge && bridge.toast) { bridge.toast("收到文件：" + name); } } catch (e) {}
+    return true;
+  };
+
+  // Chunked export self-test: exercises beginExport/appendExportChunk/endExport end-to-end.
+  window.selfTestExport = function (mode) {
+    if (!bridge) { alert("CLNative 不可用"); return; }
+    var payload = "CrystalLens android export self-test\n" + new Date().toISOString() + "\n";
+    for (var i = 0; i < 24; i++) { payload += "line " + i + " 0123456789 abcdefghijklmnopqrstuvwxyz\n"; }
+    var bytes = new TextEncoder().encode(payload);
+    var chunkSize = 64; // tiny on purpose: many chunks, verifies ordering
+    bridge.beginExport("crystallens-selftest.txt", "text/plain", mode);
+    for (var offset = 0; offset < bytes.length; offset += chunkSize) {
+      var slice = bytes.subarray(offset, Math.min(offset + chunkSize, bytes.length));
+      bridge.appendExportChunk(bytesToBase64(slice));
+    }
+    var result = bridge.endExport();
+    console.log("endExport ->", result);
+    try { alert("endExport -> " + result); } catch (e) {}
+  };
+
+  function bytesToBase64(bytes) {
+    var binary = "";
+    for (var i = 0; i < bytes.length; i++) { binary += String.fromCharCode(bytes[i]); }
+    return btoa(binary);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# --- local toolchain (downloaded by tools/fetch_toolchain.ps1, ~300 MB) ----
+.toolchain/
+
+# --- build output ----------------------------------------------------------
+dist/
+android/.build/
+android/app/src/main/assets/www/
+tests/headless/out/
+*.zip
+*.apk
+*.idsig
+*.keystore
+
+# --- caches / temp ----------------------------------------------------------
+__pycache__/
+*.pyc
+.tmp/
+*.log
+
+# --- OS / editor noise ------------------------------------------------------
+Thumbs.db
+desktop.ini
+.vs/
+.vscode/
+.idea/
+.DS_Store

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  CrystalLens Android host manifest.
+
+  Design notes:
+  * No dangerous permissions. Files come in via ACTION_VIEW / ACTION_SEND content URIs
+    (the sending app grants read access), and exports go out via a local ContentProvider
+    plus ACTION_CREATE_DOCUMENT / ACTION_SEND. Therefore no READ/WRITE_EXTERNAL_STORAGE
+    and no INTERNET permission at all.
+  * The only permission is VIBRATE (normal permission, auto-granted at install).
+  * targetSdk 36 / minSdk 24, package com.crystallens.android.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.crystallens.android"
+    android:versionCode="110"
+    android:versionName="1.1.0"
+    android:installLocation="auto">
+
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="36" />
+
+    <!-- WebGL2 does not advertise GLES 3.0 reliably on every device; the web core falls back. -->
+    <uses-feature android:glEsVersion="0x00030000" android:required="false" />
+
+    <!-- Normal (non-dangerous) permission required by Vibrator#vibrate. -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:allowBackup="false"
+        android:forceDarkAllowed="false"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboardHidden|screenLayout|uiMode|density|fontScale"
+            android:enableOnBackInvokedCallback="false"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:resizeableActivity="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- "Open with CrystalLens" for content:// and file:// structure files. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+
+            <!-- Narrower, higher-priority filter so .cif/.xyz/.vesta files show CrystalLens first. -->
+            <intent-filter android:priority="10">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" android:pathPattern=".*\\.cif" />
+                <data android:scheme="content" android:pathPattern=".*\\.xyz" />
+                <data android:scheme="content" android:pathPattern=".*\\.vesta" />
+                <data android:scheme="file" android:pathPattern=".*\\.cif" />
+                <data android:scheme="file" android:pathPattern=".*\\.xyz" />
+                <data android:scheme="file" android:pathPattern=".*\\.vesta" />
+            </intent-filter>
+
+            <!-- Share sheet: "Share with CrystalLens". -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/octet-stream" />
+                <data android:mimeType="application/x-cif" />
+                <data android:mimeType="chemical/x-cif" />
+                <data android:mimeType="chemical/x-xyz" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity>
+
+        <!-- Minimal self-written ContentProvider (no AndroidX FileProvider dependency)
+             that serves cacheDir/exports/* so exports can be shared or saved by other apps. -->
+        <provider
+            android:name=".CacheFileProvider"
+            android:authorities="com.crystallens.android.files"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+    </application>
+</manifest>

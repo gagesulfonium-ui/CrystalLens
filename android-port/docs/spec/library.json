@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "app": "CrystalLens",
+  "version": "1.1.0",
+  "generatedFrom": "reference/CrystalLens/library/index.tsv + 12 CIF fields (_chemical_name_*, _chemical_formula_sum, _space_group*, _cell_*) + library/SOURCES.md",
+  "crystals": [
+    {
+      "id": "halite",
+      "file": "halite.cif",
+      "titleZh": "岩盐（氯化钠）",
+      "titleEn": "Halite",
+      "formula": "NaCl",
+      "spaceGroup": "F m -3 m",
+      "cell": { "a": 5.6401, "b": 5.6401, "c": 5.6401, "alpha": 90, "beta": 90, "gamma": 90 },
+      "sourceId": "9003308",
+      "sourceNote": "Walker, D.; Verma, P. K.; Cranswick, L. M. D.; Jones, R. L.; Clark, S. M.; Buhre, S. (2004). Halite-sylvite thermoelasticity. American Mineralogist 89:204-210. Sample msl416031, T = 25 C, P = 0.0 kbar. AMCSD 0003397.",
+      "kind": "crystal"
+    },
+    {
+      "id": "fluorite",
+      "file": "fluorite.cif",
+      "titleZh": "萤石",
+      "titleEn": "Fluorite",
+      "formula": "CaF₂",
+      "spaceGroup": "F m -3 m",
+      "cell": { "a": 5.4631, "b": 5.4631, "c": 5.4631, "alpha": 90, "beta": 90, "gamma": 90 },
+      "sourceId": "9007060",
+      "sourceNote": "Speziale, S.; Duffy, T. S. (2002). Single-crystal elastic constants of fluorite (CaF2) to 9.3 GPa. Physics and Chemistry of Minerals 29:465-472. doi:10.1007/s00269-002-0250-x. P = 0 GPa. AMCSD 0008645.",
+      "kind": "crystal"
+    },
+    {
+      "id": "perovskite",
+      "file": "perovskite.cif",
+      "titleZh": "钙钛矿",
+      "titleEn": "Perovskite",
+      "formula": "CaTiO₃",
+      "spaceGroup": "P b n m",
+      "cell": { "a": 5.3785, "b": 5.4419, "c": 7.64, "alpha": 90, "beta": 90, "gamma": 90 },
+      "sourceId": "9006172",
+      "sourceNote": "Liu, X.; Liebermann, R. C. (1993). X-ray powder diffraction study of CaTiO3 perovskite at high temperatures. Physics and Chemistry of Minerals 20:171-175. T = 298 K. AMCSD 0007754.",
+      "kind": "crystal"
+    },
+    {
+      "id": "cooperite",
+      "file": "cooperite.cif",
+      "titleZh": "硫铂矿",
+      "titleEn": "Cooperite",
+      "formula": "PtS",
+      "spaceGroup": "P 42/m m c",
+      "cell": { "a": 3.47, "b": 3.47, "c": 6.1, "alpha": 90, "beta": 90, "gamma": 90 },
+      "sourceId": "1011334",
+      "sourceNote": "Bannister, F. A.; Hey, M. H. (1932). Determination of minerals in platinum concentrates from the Transvaal by X-ray methods. Mineralogical Magazine and Journal of the Mineralogical Society 23:188-206. doi:10.1180/minmag.1932.023.138.05. Specimen from Transvaal.",
+      "kind": "crystal"
+    },
+    {
+      "id": "rutile",
+      "file": "rutile.cif",
+      "titleZh": "金红石",
+      "titleEn": "Rutile",
+      "formula": "TiO₂",
+      "spaceGroup": "P 42/m n m",
+      "cell": { "a": 4.593, "b": 4.593, "c": 2.959, "alpha": 90, "beta": 90, "gamma": 90 },
+      "sourceId": "9004141",
+      "sourceNote": "Meagher, E. P.; Lager, G. A. (1979). Polyhedral thermal expansion in the TiO2 polymorphs: Refinement of the crystal structure of rutile and brookite at high temperature. The Canadian Mineralogist 17:77-85. Sample at 25 C. AMCSD 0005164.",
+      "kind": "crystal"
+    },
+    {
+      "id": "brookite",
+      "file": "brookite.cif",
+      "titleZh": "板钛矿",
+      "titleEn": "Brookite",
+      "formula": "TiO₂",
+      "spaceGroup": "P b c a",
+      "cell": { "a": 9.174, "b": 5.449, "c": 5.138, "alpha": 90, "beta": 90, "gamma": 90 },
+      "sourceId": "9004137",
+      "sourceNote": "Meagher, E. P.; Lager, G. A. (1979). Polyhedral thermal expansion in the TiO2 polymorphs: Refinement of the crystal structure of rutile and brookite at high temperature. The Canadian Mineralogist 17:77-85. Sample at 25 C. AMCSD 0005160.",
+      "kind": "crystal"
+    },
+    {
+      "id": "anatase",
+      "file": "anatase.cif",
+      "titleZh": "锐钛矿",
+      "titleEn": "Anatase",
+      "formula": "TiO₂",
+      "spaceGroup": "I 41/a m d :1",
+      "cell": { "a": 3.7842, "b": 3.7842, "c": 9.5146, "alpha": 90, "beta": 90, "gamma": 90 },
+      "sourceId": "9008213",
+      "sourceNote": "Horn, M.; Schwerdtfeger, C. F.; Meagher, E. P. (1972). Refinement of the structure of anatase at several temperatures. Zeitschrift fur Kristallographie 136:273-281. doi:10.1524/zkri.1972.136.3-4.273. T = 25 C. Lengenbach quarry, Binnatal, Switzerland. AMCSD 0010735.",
+      "kind": "crystal"
+    },
+    {
+      "id": "sphalerite",
+      "file": "sphalerite.cif",
+      "titleZh": "闪锌矿",
+      "titleEn": "Sphalerite",
+      "formula": "ZnS",
+      "spaceGroup": "F -4 3 m",
+      "cell": { "a": 5.4145, "b": 5.4145, "c": 5.4145, "alpha": 90, "beta": 90, "gamma": 90 },
+      "sourceId": "1100043",
+      "sourceNote": "Jumpertz, E. A. (1955). Electron-density distribution in zinc blende. Zeitschrift fur Elektrochemie und angewandte physikalische Chemie 59:419-425. CIF a = 5.4145(90).",
+      "kind": "crystal"
+    },
+    {
+      "id": "wurtzite",
+      "file": "wurtzite.cif",
+      "titleZh": "纤锌矿（2H）",
+      "titleEn": "Wurtzite (2H)",
+      "formula": "ZnS",
+      "spaceGroup": "P 63 m c",
+      "cell": { "a": 3.8227, "b": 3.8227, "c": 6.2607, "alpha": 90, "beta": 90, "gamma": 120 },
+      "sourceId": "1100044",
+      "sourceNote": "Kisi, E. H.; Elcombe, M. M. (1989). u parameters for the wurtzite structure of ZnS and ZnO using powder neutron diffraction. Acta Crystallographica Section C 45:1867-1870. doi:10.1107/S0108270189004269. CIF a = 3.8227(1), c = 6.2607(1).",
+      "kind": "crystal"
+    },
+    {
+      "id": "diamond",
+      "file": "diamond.cif",
+      "titleZh": "金刚石",
+      "titleEn": "Diamond",
+      "formula": "C",
+      "spaceGroup": "F d -3 m :1",
+      "cell": { "a": 3.566986, "b": 3.566986, "c": 3.566986, "alpha": 90, "beta": 90, "gamma": 90 },
+      "sourceId": "9011997",
+      "sourceNote": "Hom, T.; Kiszenick, W.; Post, B. (1975). Accurate lattice constants from multiple reflection measurements II. Lattice constants of germanium, silicon and diamond. Journal of Applied Crystallography 8:457-458. doi:10.1107/S0021889875010965. T = 25 C. CIF a = 3.566986(15). AMCSD 0012842.",
+      "kind": "crystal"
+    },
+    {
+      "id": "quartz",
+      "file": "quartz.cif",
+      "titleZh": "α-石英",
+      "titleEn": "α-Quartz",
+      "formula": "SiO₂",
+      "spaceGroup": "P 32 2 1",
+      "cell": { "a": 4.913437, "b": 4.913437, "c": 5.405118, "alpha": 90, "beta": 90, "gamma": 120 },
+      "sourceId": "9013321",
+      "sourceNote": "Antao, S. M.; Hassan, I.; Wang, J.; Lee, P. L.; Toby, B. H. (2008). State-of-the-art high-resolution powder X-ray diffraction (HRPXRD) illustrated with Rietveld structure refinement of quartz, sodalite, tremolite, and meionite. The Canadian Mineralogist 46:1501-1509. doi:10.3749/canmin.46.5.1501. Locality not specified. AMCSD 0006212.",
+      "kind": "crystal"
+    },
+    {
+      "id": "calcite",
+      "file": "calcite.cif",
+      "titleZh": "方解石",
+      "titleEn": "Calcite",
+      "formula": "CaCO₃",
+      "spaceGroup": "R -3 c :H",
+      "cell": { "a": 4.988, "b": 4.988, "c": 17.061, "alpha": 90, "beta": 90, "gamma": 120 },
+      "sourceId": "9000965",
+      "sourceNote": "Markgraf, S. A.; Reeder, R. J. (1985). High-temperature structure refinements of calcite and magnesite. American Mineralogist 70:590-600. T = 24 C. AMCSD 0000984.",
+      "kind": "crystal"
+    }
+  ],
+  "examples": [
+    {
+      "file": "benzene.xyz",
+      "titleZh": "苯",
+      "titleEn": "Benzene",
+      "format": "XYZ",
+      "formula": "C₆H₆",
+      "note": "12 原子分子（D6h 优化几何），平面六元环；无晶胞，键按共价半径推测。"
+    },
+    {
+      "file": "diamond.cif",
+      "titleZh": "金刚石",
+      "titleEn": "Diamond",
+      "format": "CIF",
+      "formula": "C",
+      "note": "极小 CIF：F d -3 m（IT 227）常规胞内 8 个碳位点，无显式对称操作，按输入位点载入并提示缺少操作。"
+    },
+    {
+      "file": "nacl.vesta",
+      "titleZh": "岩盐（NaCl）",
+      "titleEn": "Rock salt (NaCl)",
+      "format": "VESTA",
+      "formula": "NaCl",
+      "note": "VESTA 3.5.4 文本格式，含 TITLE / CELLP / GROUP / SYMOP / STRUC；演示 .vesta 读取。"
+    },
+    {
+      "file": "quartz.cif",
+      "titleZh": "α-石英",
+      "titleEn": "α-Quartz",
+      "format": "CIF",
+      "formula": "SiO₂",
+      "note": "P 3_1 2 1（IT 152）简化 CIF，6 条显式对称操作 + Si/O 分数坐标；演示 SiO₄ 四面体。"
+    },
+    {
+      "file": "srtio3.cif",
+      "titleZh": "钛酸锶",
+      "titleEn": "Strontium titanate",
+      "format": "CIF",
+      "formula": "SrTiO₃",
+      "note": "立方钙钛矿 P m -3 m（IT 221），5 个位点；用于演示 TiO₆ 配位八面体（README v0.9 指引）。"
+    },
+    {
+      "file": "water.xyz",
+      "titleZh": "水",
+      "titleEn": "Water",
+      "format": "XYZ",
+      "formula": "H₂O",
+      "note": "3 原子分子，无晶胞；最小 XYZ 示例。"
+    }
+  ]
+}

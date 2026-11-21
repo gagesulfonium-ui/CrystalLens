@@ -1,0 +1,146 @@
+{
+  "target": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html",
+  "generatedAt": "2026-11-21T14:04:06.859Z",
+  "scenarios": [
+    {
+      "name": "desktop-halite",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?lib=halite",
+      "width": 1280,
+      "height": 800,
+      "screenshot": "tests/headless/out/desktop-halite.png",
+      "bytes": 251204,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "desktop-quartz-poly",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?lib=quartz&style=polyhedral",
+      "width": 1280,
+      "height": 800,
+      "screenshot": "tests/headless/out/desktop-quartz-poly.png",
+      "bytes": 177514,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "desktop-fluorite-spacefill",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?lib=fluorite&style=space-fill",
+      "width": 1280,
+      "height": 800,
+      "screenshot": "tests/headless/out/desktop-fluorite-spacefill.png",
+      "bytes": 217534,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "desktop-srtio3-supercell",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?lib=perovskite&supercell=2x2x2",
+      "width": 1280,
+      "height": 800,
+      "screenshot": "tests/headless/out/desktop-srtio3-supercell.png",
+      "bytes": 318842,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "desktop-halite-en",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?lib=halite&lang=en",
+      "width": 1280,
+      "height": 800,
+      "screenshot": "tests/headless/out/desktop-halite-en.png",
+      "bytes": 248151,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "phone-halite",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?lib=halite",
+      "width": 390,
+      "height": 844,
+      "screenshot": "tests/headless/out/phone-halite.png",
+      "bytes": 92548,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "phone-quartz-poly",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?lib=quartz&style=polyhedral",
+      "width": 390,
+      "height": 844,
+      "screenshot": "tests/headless/out/phone-quartz-poly.png",
+      "bytes": 53111,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "phone-diamond",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?lib=diamond&supercell=2x2x2",
+      "width": 390,
+      "height": 844,
+      "screenshot": "tests/headless/out/phone-diamond.png",
+      "bytes": 104922,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "phone-fluorite-spacefill",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?lib=fluorite&style=space-fill",
+      "width": 390,
+      "height": 844,
+      "screenshot": "tests/headless/out/phone-fluorite-spacefill.png",
+      "bytes": 75056,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "land-quartz",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?lib=quartz",
+      "width": 844,
+      "height": 390,
+      "screenshot": "tests/headless/out/land-quartz.png",
+      "bytes": 76334,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "land-poly",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?lib=quartz&style=polyhedral",
+      "width": 844,
+      "height": 390,
+      "screenshot": "tests/headless/out/land-poly.png",
+      "bytes": 78787,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "example-water",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?example=water.xyz",
+      "width": 390,
+      "height": 844,
+      "screenshot": "tests/headless/out/example-water.png",
+      "bytes": 37794,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "example-nacl-vesta",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?example=nacl.vesta",
+      "width": 390,
+      "height": 844,
+      "screenshot": "tests/headless/out/example-nacl-vesta.png",
+      "bytes": 92582,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "name": "library-open",
+      "url": "file:///D:/vibe/crystal/dist/CrystalLens-Android-Preview.html?library=1",
+      "width": 390,
+      "height": 844,
+      "screenshot": "tests/headless/out/library-open.png",
+      "bytes": 112075,
+      "ok": true,
+      "errors": []
+    }
+  ]
+}

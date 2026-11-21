@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CrystalLens</string>
+
+    <string name="press_back_again">再按一次返回键退出 CrystalLens / Press back again to exit</string>
+    <string name="opening_file">正在打开：%1$s</string>
+    <string name="file_too_large">文件过大（上限 8 MB）/ File is too large (8 MB max)</string>
+    <string name="file_read_error">无法读取共享文件 / Could not read the shared file</string>
+
+    <string name="no_app_for_link">没有可以打开该链接的应用 / No app can open this link</string>
+    <string name="no_file_picker">系统文件选择器不可用 / No system file picker available</string>
+
+    <string name="share_export">分享 CrystalLens 导出文件 / Share CrystalLens export</string>
+    <string name="choose_save_location">请选择保存位置 / Choose where to save</string>
+    <string name="saving">正在保存… / Saving…</string>
+    <string name="saved_ok">已保存 / Saved</string>
+    <string name="save_cancelled">已取消保存 / Save cancelled</string>
+    <string name="save_failed_fallback_share">保存失败，改为分享 / Save failed, opening share sheet instead</string>
+    <string name="export_failed">导出失败 / Export failed</string>
+
+    <string name="web_load_error">页面加载失败：%1$s\n\n请确认 APK 内的 assets/www/index.html 存在。\nFailed to load the web app: %1$s</string>
+</resources>

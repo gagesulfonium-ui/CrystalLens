@@ -368,3 +368,19 @@ crystal_camera_tests: 305 checks passed, 0 failed
 
 - 无第三方运行时库；使用 Windows SDK（Win32、GDI+、DWM、Common Dialogs、OpenGL `opengl32`）。
 - MIT License，详见 [LICENSE](LICENSE)。
+---
+
+## 📱 Android 版（v1.1.0 · 新增）
+
+本仓库同时提供 CrystalLens 的 **安卓移植版**（ndroid-port/）：Java WebView 宿主 + WebGL2 共享核心，功能对齐 v1.1（CIF/XYZ/VESTA 解析、对称展开、超胞/边界原子、周期键、配位多面体、测量、编辑撤销、导出、离线晶体库、中英文界面、触控交互）。
+
+| 版本 | 下载 / 使用 |
+|---|---|
+| **免安装预览版** | 下载 `CrystalLens-Android-Preview.html`，用手机 Chrome 直接打开（离线、无需安装） |
+| **APK（打包版）** | 下载 `CrystalLens-v1.1.0-android.apk` 侧载安装（Android 7.0+，仅 VIBRATE 权限） |
+
+- 发布页：**[Android v1.1.0 Release](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0-android)**
+- 详细说明与构建方法：[android-port/README.md](android-port/README.md)
+- 原有 Windows 版不受影响：[Windows v1.1.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0)
+
+![CrystalLens Android](android-port/screenshots/03-phone-portrait.png)
