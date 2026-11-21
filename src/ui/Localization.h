@@ -17,6 +17,14 @@ enum class Language { Chinese = 0, English = 1 };
     X(ViewMenu, L"视图", L"View")                                                                     \
     X(MeasureMenu, L"测量", L"Measure")                                                               \
     X(HelpMenu, L"帮助", L"Help")                                                                     \
+    X(Library, L"经典晶体库", L"Crystal library") \
+    X(LibraryHint, L"双击打开一个晶体，或按住 Ctrl / Shift 多选，在独立窗口中打开。", L"Double-click a crystal, or use Ctrl / Shift to open several in separate windows.") \
+    X(NoCoordinationHull, L"无三维配位 · 球棍", L"No 3D shell · ball and stick") \
+    X(LibraryMineral, L"晶体名称", L"Crystal") \
+    X(LibraryFormula, L"化学式", L"Formula") \
+    X(LibraryGroup, L"空间群", L"Space group") \
+    X(LibraryOpen, L"打开", L"Open") \
+    X(LibraryUnavailable, L"无法打开晶体库。请检查程序旁的 library 文件夹是否完整。", L"Cannot open the crystal library. Check the library folder beside the executable.") \
     X(OpenFile, L"打开结构文件…", L"Open structure…")                                                 \
     X(ReloadFile, L"重新载入", L"Reload")                                                             \
     X(SaveScreenshot, L"保存视图截图", L"Save viewport image")                                        \
@@ -256,7 +264,7 @@ enum class Language { Chinese = 0, English = 1 };
     X(UnsupportedFormat, L"不支持的文件格式", L"Unsupported file format")                            \
     X(EmptyFileName, L"（未命名）", L"(untitled)")                                                    \
     X(CopyAtomLineFmt, L"%s  %s  frac(%.4f, %.4f, %.4f)", L"%s  %s  frac(%.4f, %.4f, %.4f)")         \
-    X(VersionPrefix, L"v0.9", L"v0.9")                                                               \
+    X(VersionPrefix, L"v1.1", L"v1.1")                                                               \
     X(TooltipPanelLeft, L"结构面板", L"Structure panel")                                             \
     X(TooltipPanelRight, L"测量面板", L"Measurement panel")                                           \
     X(MoreElementsFmt, L"+%d 种元素", L"+%d more")                                                    \

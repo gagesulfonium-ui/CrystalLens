@@ -29,7 +29,7 @@ struct AppSettings : AppearanceState {
 class Settings {
 public:
     static AppSettings Load();
-    static void Save(const AppSettings& settings);
+    static void Save(const AppSettings& settings, const AppSettings& previous);
     static std::wstring SettingsPath();
 };
 

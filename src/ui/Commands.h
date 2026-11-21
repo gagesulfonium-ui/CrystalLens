@@ -39,7 +39,8 @@ enum CommandId : int {
     CmdToggleImages,
     CmdSupercell,
     CmdAppearance,
-    CmdPolyhedral
+    CmdPolyhedral,
+    CmdLibrary
 };
 
 } // namespace cl

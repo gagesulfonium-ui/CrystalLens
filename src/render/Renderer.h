@@ -3,6 +3,7 @@
 #include "render/Appearance.h"
 
 #include "Camera.h"
+#include "PolyhedronMesh.h"
 #include "GL.h"
 #include "core/Crystal.h"
 
@@ -46,6 +47,8 @@ public:
     void Clear(GLContext* context);
 
     int AtomCount() const { return atomCount_; }
+    const std::vector<float>& SiteRadii() const { return siteRadii_; }
+    int PolyhedronTriangleCount() const { return polyVertexCount_ / 3; }
     int BondCount() const { return visibleBondCount_; }
     int CellBondCount() const { return bondCount_; }
     bool SupercellLimited() const { return supercellLimited_; }
@@ -87,14 +90,14 @@ private:
     };
 
     void RebuildGeometry();
-    void RebuildAtoms();
+    void RebuildAtoms(const SiteMeshes& meshes);
     void RebuildLines();
     void UploadAtoms();
     void UploadGhosts();
     void UploadLines();
     void UploadPolyhedra();
     void SortPolyhedra(const Vec3& forward);
-    void BuildPolyhedra();
+    void BuildPolyhedra(const SiteMeshes& meshes);
     void AppendLine(const Vec3& p0, const Vec3& p1, float radius, const float c0[3], const float c1[3],
                     float flags);
     void AppendMeasurementLines();
@@ -125,6 +128,7 @@ private:
     std::vector<Measurement> measurements_;
     std::vector<int> pending_;
 
+    std::vector<float> siteRadii_; // original sites only, zero when hidden
     std::vector<AtomInstance> atoms_;
     std::vector<AtomInstance> ghosts_;
     std::vector<LineInstance> lines_;

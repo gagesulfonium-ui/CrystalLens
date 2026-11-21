@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <string>
 
@@ -606,6 +607,41 @@ C3 C .3 .2 .3 ? ? ? B 1
     CHECK(s.atoms[0].atomicNumber == 8 && s.atoms[1].atomicNumber == 0 && s.bonds.empty());
 }
 
+void TestLibraryStructures() {
+    const auto directory = std::filesystem::path(CL_EXAMPLES_DIR).parent_path() / "library";
+    struct Example {
+        const char* file;
+        const char* cod;
+        std::map<std::string, int> elements;
+    };
+    const Example examples[] = {
+        {"halite", "9003308", {{"Na",4},{"Cl",4}}},
+        {"fluorite", "9007060", {{"Ca",4},{"F",8}}},
+        {"perovskite", "9006172", {{"Ca",4},{"Ti",4},{"O",12}}},
+        {"cooperite", "1011334", {{"Pt",2},{"S",2}}},
+        {"rutile", "9004141", {{"Ti",2},{"O",4}}},
+        {"brookite", "9004137", {{"Ti",8},{"O",16}}},
+        {"anatase", "9008213", {{"Ti",4},{"O",8}}},
+        {"sphalerite", "1100043", {{"Zn",4},{"S",4}}},
+        {"wurtzite", "1100044", {{"Zn",2},{"S",2}}},
+        {"diamond", "9011997", {{"C",8}}},
+        {"quartz", "9013321", {{"Si",3},{"O",6}}},
+        {"calcite", "9000965", {{"Ca",6},{"C",6},{"O",18}}}
+    };
+    for (const auto& example : examples) {
+        Begin(std::string("COD library / ") + example.file);
+        Structure structure;
+        ParseError error;
+        const auto file = directory / (std::string(example.file) + ".cif");
+        CHECK(LoadStructureFile(file.wstring(), structure, error));
+        CHECK(structure.blockName == example.cod);
+        CHECK(structure.cell.valid && !structure.bonds.empty());
+        std::map<std::string, int> elements;
+        for (const auto& atom : structure.atoms) ++elements[atom.element];
+        CHECK(elements == example.elements);
+    }
+}
+
 void TestElementNames() {
     Begin("chemical element normalization");
     CHECK(NormalizeElementSymbol("Fe3+") == "Fe");
@@ -622,6 +658,7 @@ void TestElementNames() {
 int main() {
     std::cout << "CrystalLens core tests\n";
     TestElementNames();
+    TestLibraryStructures();
     TestSkewImagesAndGrid();
     TestCifCompatibility();
     TestCellMath();

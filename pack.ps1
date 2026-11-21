@@ -13,7 +13,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $BuildDir = Join-Path $Root 'build'
-$Version = '0.9.0'
+$Version = '1.1.0'
 $StageName = "CrystalLens-v$Version-win64"
 $DistDir = Join-Path $Root 'dist'
 $StageDir = Join-Path $DistDir $StageName
@@ -40,6 +40,8 @@ Copy-Item -LiteralPath $exe -Destination $StageDir
 Copy-Item -LiteralPath (Join-Path $Root 'README.md') -Destination $StageDir
 Copy-Item -LiteralPath (Join-Path $Root 'LICENSE') -Destination $StageDir
 
+Copy-Item -LiteralPath (Join-Path $Root 'library') -Destination $StageDir -Recurse
+
 $examplesDir = Join-Path $StageDir 'examples'
 New-Item -ItemType Directory -Path $examplesDir -Force | Out-Null
 Copy-Item -Path (Join-Path $Root 'examples\*.cif') -Destination $examplesDir -ErrorAction SilentlyContinue
@@ -48,7 +50,7 @@ Copy-Item -Path (Join-Path $Root 'examples\*.vesta') -Destination $examplesDir -
 
 $docsDest = Join-Path $StageDir 'docs'
 New-Item -ItemType Directory -Path $docsDest -Force | Out-Null
-foreach ($name in @('polyhedra-v09.png', 'screenshot-v08-srtio3.png', 'screenshot-main.png', 'screenshot-supercell.png', 'screenshot-polyhedral.png', 'screenshot-bi2te3.png', 'screenshot-crcobr3.png', 'screenshot-appearance.png', 'screenshot-help.png', 'screenshot-editcell.png', 'screenshot-editatom.png')) {
+foreach ($name in @('halite-polyhedra-v11.png', 'polyhedra-v09.png', 'screenshot-v08-srtio3.png', 'screenshot-main.png', 'screenshot-supercell.png', 'screenshot-polyhedral.png', 'screenshot-bi2te3.png', 'screenshot-crcobr3.png', 'screenshot-appearance.png', 'screenshot-help.png', 'screenshot-editcell.png', 'screenshot-editatom.png')) {
     $source = Join-Path $Root "docs\$name"
     if (Test-Path -LiteralPath $source) {
         Copy-Item -LiteralPath $source -Destination $docsDest

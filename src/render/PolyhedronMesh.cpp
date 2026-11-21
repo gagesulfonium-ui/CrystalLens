@@ -1,4 +1,6 @@
 #include "PolyhedronMesh.h"
+#include "core/Crystal.h"
+#include "core/PeriodicTable.h"
 
 #include <algorithm>
 #include <cstdint>
@@ -73,6 +75,33 @@ std::vector<PolyTriangle> CoordinationHull(const std::vector<Vec3>& ligands) {
         }
     }
     return mesh;
+}
+
+SiteMeshes CoordinationMeshes(const Structure& structure) {
+    if (!structure.cell.valid || structure.bonds.empty()) return {};
+    std::vector<std::vector<Vec3>> shells(structure.atoms.size());
+    for (const Bond& bond : structure.bonds) {
+        const Vec3 delta = structure.atoms[bond.b].cart + bond.imageOffset - structure.atoms[bond.a].cart;
+        shells[bond.a].push_back(delta);
+        shells[bond.b].push_back(-delta);
+    }
+
+    SiteMeshes meshes(shells.size());
+    // Prefer framework sites such as Ti in perovskite. In salts without such
+    // a hull, the alkali/alkaline-earth site defines the coordination cage.
+    for (const bool ionicCenters : {false, true}) {
+        bool found = false;
+        for (size_t site = 0; site < shells.size(); ++site) {
+            const int z = structure.atoms[site].atomicNumber;
+            const bool ligand = z == 7 || z == 8 || z == 9 || z == 16 || z == 17 ||
+                                z == 34 || z == 35 || z == 53;
+            if (z == 0 || ligand || IsAlkaliOrAlkaline(z) != ionicCenters || shells[site].size() < 4) continue;
+            meshes[site] = CoordinationHull(shells[site]);
+            if (!meshes[site].empty()) found = true;
+        }
+        if (found) return meshes;
+    }
+    return {};
 }
 
 } // namespace cl

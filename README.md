@@ -1,6 +1,30 @@
-# CrystalLens v0.9
+# CrystalLens v1.1
 
-CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编辑工具。它使用 **C++17 + Win32 + OpenGL 3.3** 实现，不依赖 Qt 或其他第三方运行库，发布形态是单个 `CrystalLens.exe`（便携版，无需安装）。
+CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编辑工具。它使用 **C++17 + Win32 + OpenGL 3.3** 实现，不依赖 Qt 或其他第三方运行库，便携包包含 `CrystalLens.exe` 和可离线打开的晶体结构库。
+
+## v1.1 配位多面体
+
+在经典晶体库中打开岩盐，选“多面体”，每个 Na 中心周围的六个 Cl 构成八面体。对 2×2×2 超胞，关闭边界原子时有 32 个 Na 中心，开启后可见 63 个。边界中心的多面体也包含相邻周期晶胞提供的配体。萤石显示 CaF₈ 立方体，钙钛矿保留 TiO₆ 骨架。
+
+若周期键无法构成三维配位壳，视图显示原子和已启用的键，并给出提示。图例、标签和鼠标拾取与实际显示的原子一致。
+
+![岩盐 2×2×2 超胞中的 NaCl₆ 八面体](docs/halite-polyhedra-v11.png)
+
+## v1.0 经典晶体库与多窗口
+
+启动后点击视口中央的 **经典晶体库**。已打开晶体时，可从 **文件 → 经典晶体库** 或按 **Ctrl+L** 再次进入。双击一行打开晶体，或按住 Ctrl / Shift 多选后点击“打开”。每个晶体使用独立窗口，能分别旋转、测量、编辑和撤销。要并排比较，可用 Windows 的 Win+← / Win+→ 排列两个窗口。
+
+| 结构 | 化学式 |
+|---|---|
+| 岩盐（氯化钠）、萤石 | NaCl、CaF₂ |
+| 钙钛矿、硫铂矿 | CaTiO₃、PtS |
+| 金红石、板钛矿、锐钛矿 | TiO₂ 的三种晶型 |
+| 闪锌矿、纤锌矿（2H） | ZnS 的立方和六方晶型 |
+| 金刚石、α-石英、方解石 | C、SiO₂、CaCO₃ |
+
+12 份 CIF 均从 COD 的格拉纳达大学镜像取得，存放在程序旁的 `library` 文件夹，解压后可离线使用。数据编号、原始论文及下载文件的 SHA-256 见[晶体库来源](library/SOURCES.md)。
+
+打开本地文件时也可多选或成组拖入。首个文件使用空窗口，后续每个文件新建一个窗口。关闭一个晶胞后，其余晶胞仍可继续操作。
 
 ## v0.9 配位多面体和大超胞
 
@@ -137,13 +161,13 @@ CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编�
 | 处理器 | 支持 SSE2 的 x64 处理器 |
 | 显卡 | 支持 OpenGL 3.3 Core 的显卡/驱动（不支持时程序会给出提示） |
 | 运行库 | 无需安装 Visual C++ 运行库，程序静态链接 CRT |
-| 硬盘 | v0.7 发布包约 4.3 MB（含示例与截图） |
+| 硬盘 | 便携包约 5 MB（含结构库、示例和截图） |
 
 程序通过清单启用 Per-Monitor V2 DPI 感知和 UTF-8 活动代码页，并通过 DWM 设置深色标题栏；已在 2880×1800 / 200% 缩放下验证。
 
 ## 快速开始
 
-1. 解压 `CrystalLens-v0.9.0-win64.zip`。
+1. 解压 `CrystalLens-v1.1.0-win64.zip`。
 2. 运行 `CrystalLens.exe`。
 3. 打开或拖入结构文件。示例包括：
    - `examples/quartz.cif`（α-石英）
@@ -156,10 +180,10 @@ CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编�
 6. “外观”区域可切换球棍/空间填充/多面体，并打开外观设置修改边框和背景。
 7. 若要只查看晶胞内原子，关闭左侧“显示 → 边界原子”；重新打开可显示完整配位。
 
-也可以把文件路径作为第一个参数：
+也可以在命令行传入一个或多个文件路径。
 
 ```powershell
-.\CrystalLens.exe examples\quartz.cif
+.\CrystalLens.exe library\rutile.cif library\brookite.cif
 ```
 
 ## 操作说明
@@ -184,6 +208,7 @@ CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编�
 
 | 快捷键 | 功能 |
 |---|---|
+| `Ctrl+L` | 打开经典晶体库 |
 | `Ctrl+O` | 打开文件 |
 | `Ctrl+R` | 重新载入 |
 | `Ctrl+S` | 保存结构 |
@@ -273,7 +298,7 @@ ctest --test-dir build -C Release --output-on-failure
 .\pack.ps1
 ```
 
-生成 `dist\CrystalLens-v0.9.0-win64.zip`。
+生成 `dist\CrystalLens-v1.1.0-win64.zip`。
 
 ## 项目结构
 
@@ -316,8 +341,8 @@ build\Release\crystal_camera_tests.exe
 当前结果：
 
 ```text
-crystal_tests:        359 checks passed, 0 failed
-crystal_camera_tests:  86 checks passed, 0 failed
+crystal_tests:        407 checks passed, 0 failed
+crystal_camera_tests: 305 checks passed, 0 failed
 ```
 
 覆盖解析、对称展开、无引号对称操作、去重、键搜索、最小镜像测量、晶胞修改、原子增删改、CIF/XYZ 导出往返。

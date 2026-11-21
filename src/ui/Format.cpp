@@ -82,7 +82,7 @@ std::wstring FormatFileStem(const std::wstring& path) {
 
 std::wstring BuildStructureSummary(const Structure& structure, const std::vector<Measurement>& measurements) {
     std::wstring text;
-    text += L"CrystalLens v0.9\n";
+    text += L"CrystalLens v1.1\n";
     text += Utf8ToWide(structure.title) + L"\n";
     text += std::wstring(L"Format: ") + FormatDisplayName(structure.format) + L"\n";
     text += std::wstring(L"Formula: ") + FormatFormulaText(structure) + L"\n";

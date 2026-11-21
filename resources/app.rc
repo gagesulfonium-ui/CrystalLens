@@ -1,10 +1,12 @@
 #include <windows.h>
+#include <commctrl.h>
+#include "library_ids.h"
 
 101 ICON "app.ico"
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,9,0,0
- PRODUCTVERSION 0,9,0,0
+ FILEVERSION 1,1,0,0
+ PRODUCTVERSION 1,1,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -21,16 +23,27 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "CrystalLens Project"
             VALUE "FileDescription", "CrystalLens Crystal Structure Viewer"
-            VALUE "FileVersion", "0.9.0.0"
+            VALUE "FileVersion", "1.1.0.0"
             VALUE "InternalName", "CrystalLens"
             VALUE "LegalCopyright", "Copyright (c) 2026 CrystalLens Project"
             VALUE "OriginalFilename", "CrystalLens.exe"
             VALUE "ProductName", "CrystalLens"
-            VALUE "ProductVersion", "0.9.0.0"
+            VALUE "ProductVersion", "1.1.0.0"
         END
     END
     BLOCK "VarFileInfo"
     BEGIN
         VALUE "Translation", 0x409, 1200
     END
+END
+
+IDD_LIBRARY DIALOGEX 0, 0, 330, 230
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Crystal library"
+FONT 9, "Segoe UI"
+BEGIN
+    LTEXT "", IDC_LIBRARY_HINT, 9, 8, 312, 17
+    CONTROL "", IDC_LIBRARY_LIST, "SysListView32", WS_TABSTOP | WS_BORDER | LVS_REPORT | LVS_SHOWSELALWAYS | LVS_NOSORTHEADER, 9, 26, 312, 174
+    DEFPUSHBUTTON "Open", IDOK, 206, 208, 56, 15
+    PUSHBUTTON "Cancel", IDCANCEL, 266, 208, 55, 15
 END

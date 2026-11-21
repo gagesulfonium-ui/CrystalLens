@@ -15,6 +15,7 @@ struct Element {
     uint32_t color = 0x9AA4B2;
 };
 
+bool IsAlkaliOrAlkaline(int z);
 const Element& ElementByZ(int z);
 const Element& ElementBySymbol(std::string_view symbol);
 

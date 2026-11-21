@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(CrystalLens VERSION 0.9.0 LANGUAGES CXX RC)
+project(CrystalLens VERSION 1.1.0 LANGUAGES CXX RC)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -38,6 +38,7 @@ add_executable(CrystalLens WIN32
     src/ui/Viewport.cpp
     src/ui/Popups.cpp
     src/ui/AppearanceWindow.cpp
+    src/ui/CrystalLibrary.cpp
     src/ui/MainWindow.cpp
     resources/app.rc
 )
@@ -68,6 +69,12 @@ if(MSVC)
     )
 endif()
 set_target_properties(CrystalLens PROPERTIES OUTPUT_NAME "CrystalLens")
+
+add_custom_target(crystal_library_data ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/library" "$<TARGET_FILE_DIR:CrystalLens>/library"
+    VERBATIM
+)
+add_dependencies(CrystalLens crystal_library_data)
 
 if(CRYSTALLENS_BUILD_TESTS)
     enable_testing()

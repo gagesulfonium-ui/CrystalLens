@@ -17,17 +17,6 @@
 namespace cl {
 namespace {
 
-bool IsLigandElement(int z) {
-    return z == 7 || z == 8 || z == 9 || z == 16 || z == 17 || z == 34 || z == 35 || z == 53;
-}
-
-bool IsAlkaliElement(int z) {
-    return z == 3 || z == 4 || z == 11 || z == 12 || z == 19 || z == 20 || z == 37 || z == 38 ||
-           z == 55 || z == 56 || z == 87 || z == 88;
-}
-
-bool IsPolyhedronCenter(int z) { return !IsLigandElement(z) && !IsAlkaliElement(z); }
-
 const char* kAtomVertex = R"GLSL(
 #version 330 core
 layout(location = 0) in vec2 aCorner;
@@ -582,14 +571,18 @@ void Renderer::SetAnnotations(const std::vector<Measurement>& measurements, cons
 }
 
 void Renderer::RebuildGeometry() {
-    RebuildAtoms();
+    SiteMeshes meshes;
+    if (structure_ && options_.style == AtomStyle::Polyhedral) meshes = CoordinationMeshes(*structure_);
+    RebuildAtoms(meshes);
+    BuildPolyhedra(meshes);
     RebuildLines();
     UploadAtoms();
     UploadGhosts();
     UploadPolyhedra();
 }
 
-void Renderer::RebuildAtoms() {
+void Renderer::RebuildAtoms(const SiteMeshes& meshes) {
+    siteRadii_.assign(structure_ ? structure_->atoms.size() : 0, 0.f);
     atoms_.clear();
     ghosts_.clear();
     images_.clear();
@@ -604,7 +597,7 @@ void Renderer::RebuildAtoms() {
         images.push_back(ImageInstance{atomIndex, tx, ty, tz,
                                        Vec3(cart.x - structure_->center.x, cart.y - structure_->center.y,
                                             cart.z - structure_->center.z)});
-        if (options_.style == AtomStyle::Polyhedral && !IsPolyhedronCenter(atom.atomicNumber)) {
+        if (!meshes.empty() && meshes[atomIndex].empty()) {
             return;
         }
         const Element& element = ElementByZ(atom.atomicNumber);
@@ -624,7 +617,8 @@ void Renderer::RebuildAtoms() {
         instance.b = (element.color & 0xFF) / 255.0f;
         instance.flags = 0.0f;
         instance.index = static_cast<float>(selectableIndex);
-        if (options_.style == AtomStyle::Polyhedral) instance.radius *= 0.72f;
+        if (!meshes.empty()) instance.radius *= 0.72f;
+        if (selectableIndex >= 0) siteRadii_[selectableIndex] = instance.radius;
         atoms_.push_back(instance);
     };
 
@@ -750,7 +744,6 @@ void Renderer::RebuildLines() {
     lines_.clear();
     sceneLineCount_ = 0;
     lineCount_ = cellLineCount_ = visibleBondCount_ = 0;
-    polyVertices_.clear();
     bondCount_ = structure_ ? static_cast<int>(structure_->bonds.size()) : 0;
     if (!structure_) return;
 
@@ -794,8 +787,7 @@ void Renderer::RebuildLines() {
 
     cellLineCount_ = static_cast<int>(lines_.size());
     visibleBondCount_ = 0;
-    polyVertices_.clear();
-    const bool polyhedral = options_.style == AtomStyle::Polyhedral;
+    const bool polyhedral = !polyVertices_.empty();
     if (options_.style != AtomStyle::SpaceFill && !images_.empty() && (options_.showBonds || polyhedral)) {
         using ImageKey = std::array<int, 4>;
         std::map<ImageKey, size_t> lookup;
@@ -821,27 +813,15 @@ void Renderer::RebuildLines() {
             }
         }
     }
-    if (polyhedral) BuildPolyhedra();
     sceneLineCount_ = lines_.size();
     AppendMeasurementLines();
     lineCount_ = static_cast<int>(lines_.size());
     UploadLines();
 }
 
-void Renderer::BuildPolyhedra() {
+void Renderer::BuildPolyhedra(const SiteMeshes& meshes) {
     polyVertices_.clear();
-    if (!structure_ || !structure_->cell.valid) return;
-    std::vector<std::vector<Vec3>> shells(structure_->atoms.size());
-    for (const Bond& bond : structure_->bonds) {
-        const Vec3 delta = structure_->atoms[bond.b].cart + bond.imageOffset - structure_->atoms[bond.a].cart;
-        shells[bond.a].push_back(delta);
-        shells[bond.b].push_back(-delta);
-    }
-    std::vector<std::vector<PolyTriangle>> meshes(shells.size());
-    for (size_t site = 0; site < shells.size(); ++site) {
-        if (IsPolyhedronCenter(structure_->atoms[site].atomicNumber))
-            meshes[site] = CoordinationHull(shells[site]);
-    }
+    if (meshes.empty()) return;
     size_t triangleCount = 0;
     for (const ImageInstance& image : images_) triangleCount += meshes[image.atom].size();
     polyVertices_.reserve(3 * triangleCount);

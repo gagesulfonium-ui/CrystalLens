@@ -451,8 +451,7 @@ void Viewport::UpdateAnnotations() {
 
 int Viewport::PickAtom(int x, int y) const {
     if (!structure_ || width_ <= 0 || height_ <= 0) return -1;
-    return cl::PickAtom(*structure_, camera_, width_, height_, x, y, options_.atomScale,
-                        options_.style == AtomStyle::SpaceFill);
+    return cl::PickAtom(*structure_, camera_, width_, height_, x, y, renderer_.SiteRadii());
 }
 
 void Viewport::HandleLeftClick(int x, int y) {
@@ -642,7 +641,7 @@ void Viewport::DrawEmptyState() {
     overlay_.Text(T(Str::EmptySubtitle), cx, titleY + S(33.0f), S(12.0f), kHudDim, TextAlign::Center,
                   TextVAlign::Middle);
 
-    const std::wstring buttonText = T(Str::OpenButton);
+    const std::wstring buttonText = T(Str::Library);
     const float buttonWidth = std::max(S(198.0f), overlay_.MeasureText(buttonText, S(12.5f), true) + S(58.0f));
     const float buttonHeight = S(44.0f);
     const float buttonX = cx - buttonWidth * 0.5f;
@@ -677,19 +676,11 @@ void Viewport::DrawElementLegend() {
     const float w = static_cast<float>(width_);
     const auto S = [&](float value) { return value * dpiScale_; };
     if (w < S(560.0f)) return;
-    auto isLigand = [](int z) {
-        return z == 7 || z == 8 || z == 9 || z == 16 || z == 17 || z == 34 || z == 35 || z == 53;
-    };
-    auto isAlkali = [](int z) {
-        return z == 3 || z == 4 || z == 11 || z == 12 || z == 19 || z == 20 || z == 37 || z == 38 ||
-               z == 55 || z == 56 || z == 87 || z == 88;
-    };
+    const auto& radii = renderer_.SiteRadii();
     std::vector<int> elements;
-    for (const Atom& atom : structure_->atoms) {
-        if (options_.style == AtomStyle::Polyhedral &&
-            (isLigand(atom.atomicNumber) || isAlkali(atom.atomicNumber))) {
-            continue;
-        }
+    for (size_t i = 0; i < radii.size(); ++i) {
+        if (radii[i] <= 0) continue;
+        const Atom& atom = structure_->atoms[i];
         if (std::find(elements.begin(), elements.end(), atom.atomicNumber) == elements.end()) {
             elements.push_back(atom.atomicNumber);
         }
@@ -729,11 +720,14 @@ void Viewport::DrawStructureHud() {
         rendererReady_ ? renderer_.BondCount() : static_cast<int>(structure_->bonds.size());
     std::wstring suffix = std::wstring(L"   ·   ") + FormatDisplayName(structure_->format) + L"   ·   " +
                           std::to_wstring(visibleAtoms) + L" " + T(Str::AtomsCount);
-    if (visibleBonds > 0 && options_.style != AtomStyle::Polyhedral) {
+    if (visibleBonds > 0 && renderer_.PolyhedronTriangleCount() == 0) {
         suffix += L"   " + std::to_wstring(visibleBonds) + L" " + T(Str::BondsCount);
     }
     if (compact) {
         suffix = std::wstring(L"   ·   ") + FormatDisplayName(structure_->format);
+    }
+    if (rendererReady_ && options_.style == AtomStyle::Polyhedral && renderer_.PolyhedronTriangleCount() == 0) {
+        suffix += std::wstring(L"  ·  ") + T(Str::NoCoordinationHull);
     }
     if (rendererReady_ && renderer_.SupercellLimited()) suffix += std::wstring(L"  ·  ") + T(Str::SupercellLimited);
     else if (rendererReady_ && renderer_.BoundaryLimited()) suffix += std::wstring(L"  ·  ") + T(Str::BoundaryLimited);
@@ -961,7 +955,9 @@ void Viewport::DrawAtomLabels() {
     };
     std::vector<Projected> projected;
     projected.reserve(structure_->atoms.size());
-    for (size_t i = 0; i < structure_->atoms.size(); ++i) {
+    const auto& radii = renderer_.SiteRadii();
+    for (size_t i = 0; i < radii.size(); ++i) {
+        if (radii[i] <= 0) continue;
         const ScreenPoint screen = camera_.WorldToScreen(AtomWorldPosition(static_cast<int>(i)), width_, height_);
         if (!screen.visible) continue;
         if (screen.x < S(8.0f) || screen.x > width_ - S(8.0f) || screen.y < S(8.0f) ||
@@ -1195,7 +1191,7 @@ LRESULT Viewport::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
         const int y = GET_Y_LPARAM(lParam);
         if (!structure_) {
             if (emptyButtonRectValid_ && PointInRect(emptyButtonRect_, x, y) && host_) {
-                host_->OnViewportOpenRequested();
+                host_->OnViewportCommand(CmdLibrary);
             }
             return 0;
         }
@@ -1384,18 +1380,8 @@ LRESULT Viewport::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
         return DLGC_WANTARROWS;
     case WM_CONTEXTMENU:
         return 0;
-    case WM_DROPFILES: {
-        HDROP drop = reinterpret_cast<HDROP>(wParam);
-        const UINT length = DragQueryFileW(drop, 0, nullptr, 0);
-        if (length > 0) {
-            std::wstring path(length + 1, L'\0');
-            DragQueryFileW(drop, 0, path.data(), length + 1);
-            path.resize(length);
-            if (host_) host_->OnViewportFileDropped(path);
-        }
-        DragFinish(drop);
-        return 0;
-    }
+    case WM_DROPFILES:
+        return SendMessageW(GetParent(hwnd_), WM_DROPFILES, wParam, lParam);
     case WM_DESTROY:
         KillTimer(hwnd_, kViewportTimer);
         ShutdownGraphics();

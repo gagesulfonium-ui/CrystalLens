@@ -10,6 +10,6 @@ namespace cl {
 // screen-space ray, or -1 when no atom is under the cursor. The visual radius
 // follows the same atom-size rules as the renderer.
 int PickAtom(const Structure& structure, const Camera& camera, int viewportWidth, int viewportHeight,
-             double screenX, double screenY, float atomScale, bool spaceFill);
+             double screenX, double screenY, const std::vector<float>& siteRadii);
 
 } // namespace cl

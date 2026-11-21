@@ -9,7 +9,6 @@
 #include <gdiplus.h>
 #include <shellapi.h>
 
-#include <cwctype>
 #include <string>
 #include <vector>
 
@@ -27,32 +26,17 @@ void EnableHighDpi() {
     }
 }
 
-std::wstring InitialFileFromCommandLine() {
+std::vector<std::wstring> InitialFilesFromCommandLine() {
     int count = 0;
     LPWSTR* args = CommandLineToArgvW(GetCommandLineW(), &count);
-    if (!args) return {};
-    std::wstring file;
-    for (int i = 1; i < count; ++i) {
-        std::wstring arg = args[i];
-        if (arg.empty() || arg[0] == L'-') continue;
-        const std::wstring lower = [&] {
-            std::wstring s = arg;
-            for (wchar_t& c : s) c = static_cast<wchar_t>(std::towlower(c));
-            return s;
-        }();
-        if (lower.size() >= 4 && (lower.substr(lower.size() - 4) == L".cif" ||
-                                  lower.substr(lower.size() - 4) == L".xyz")) {
-            file = arg;
-            break;
+    std::vector<std::wstring> files;
+    if (args) {
+        for (int i = 1; i < count; ++i) {
+            if (args[i][0] && args[i][0] != L'-') files.emplace_back(args[i]);
         }
-        if (lower.size() >= 6 && lower.substr(lower.size() - 6) == L".vesta") {
-            file = arg;
-            break;
-        }
-        if (file.empty()) file = arg;
+        LocalFree(args);
     }
-    LocalFree(args);
-    return file;
+    return files;
 }
 
 int RunApplication(HINSTANCE instance, int showCommand) {
@@ -66,8 +50,7 @@ int RunApplication(HINSTANCE instance, int showCommand) {
     }
     window.Show(showCommand);
 
-    const std::wstring initialFile = InitialFileFromCommandLine();
-    if (!initialFile.empty()) window.OpenPath(initialFile);
+    for (const auto& path : InitialFilesFromCommandLine()) window.OpenDocument(path);
 
     MSG message{};
     while (GetMessageW(&message, nullptr, 0, 0) > 0) {

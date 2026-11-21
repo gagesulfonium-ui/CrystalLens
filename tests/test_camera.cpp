@@ -131,7 +131,7 @@ void TestPolyhedronFaces() {
     cube.insert(cube.end(), {{0,0,0}, {1,0,0}, {1,1,0}, {1,1,1}});
     const auto mesh = CoordinationHull(cube);
     CHECK(mesh.size() == 12);
-    int sides = 0;
+    std::ptrdiff_t sides = 0;
     for (const auto& tri : mesh) {
         sides += std::count(tri.boundary.begin(), tri.boundary.end(), true);
         CHECK(Dot(tri.normal, tri.corners[0]) > 0.99);
@@ -183,6 +183,70 @@ void TestDisplayGeometry() {
     CHECK(renderer.AtomCount() == 0 && renderer.BondCount() == 0 && renderer.LineCount() == 0);
 }
 
+void TestCoordinationRendering() {
+    const auto library = std::filesystem::path(CL_EXAMPLES_DIR).parent_path() / "library";
+    const struct Example {
+        const char* file;
+        const char* center;
+        int sites;
+        int triangles;
+    } examples[] = {
+        {"halite.cif", "Na", 4, 8},
+        {"fluorite.cif", "Ca", 4, 12},
+        {"perovskite.cif", "Ti", 4, 8},
+        {"quartz.cif", "Si", 3, 4}
+    };
+    Renderer renderer;
+    Structure structure;
+    ParseError error;
+    RenderOptions options;
+    options.style = AtomStyle::Polyhedral;
+    options.showImages = false;
+    renderer.SetOptions(options);
+    for (const Example& example : examples) {
+        CHECK(LoadStructureFile((library / example.file).wstring(), structure, error));
+        renderer.SetStructure(&structure);
+        CHECK(renderer.AtomCount() == example.sites);
+        CHECK(renderer.PolyhedronTriangleCount() == example.sites * example.triangles);
+        const auto meshes = CoordinationMeshes(structure);
+        CHECK(meshes.size() == structure.atoms.size());
+        if (meshes.size() != structure.atoms.size()) continue;
+        for (size_t site = 0; site < meshes.size(); ++site) {
+            const bool center = structure.atoms[site].element == example.center;
+            CHECK((renderer.SiteRadii()[site] > 0) == center);
+            CHECK(meshes[site].size() == (center ? example.triangles : 0));
+        }
+    }
+    CHECK(LoadStructureFile((library / "halite.cif").wstring(), structure, error));
+    options.supercellX = options.supercellY = options.supercellZ = 2;
+    renderer.SetStructure(&structure);
+    renderer.SetOptions(options);
+    CHECK(renderer.AtomCount() == 32 && renderer.PolyhedronTriangleCount() == 256);
+    options.showImages = true;
+    options.showBonds = false;
+    renderer.SetOptions(options);
+    CHECK(renderer.AtomCount() == 63 && renderer.PolyhedronTriangleCount() == 504);
+    CHECK(renderer.LineCount() == 27);
+    const auto shells = CoordinationMeshes(structure);
+    for (const auto& mesh : shells) {
+        for (const auto& triangle : mesh) {
+            for (const Vec3& vertex : triangle.corners) CHECK_NEAR(Length(vertex), structure.cell.a / 2, 1e-6);
+        }
+    }
+
+    structure.bonds.clear();
+    renderer.SetStructure(&structure);
+    CHECK(renderer.PolyhedronTriangleCount() == 0 && renderer.AtomCount() == 125);
+    CHECK(LoadStructureFile((std::filesystem::path(CL_EXAMPLES_DIR) / "water.xyz").wstring(), structure, error));
+    renderer.SetStructure(&structure);
+    CHECK(renderer.AtomCount() == 3 && renderer.PolyhedronTriangleCount() == 0);
+    options.showBonds = true;
+    renderer.SetOptions(options);
+    CHECK(renderer.LineCount() == 2);
+    renderer.SetStructure(nullptr);
+    CHECK(renderer.SiteRadii().empty() && renderer.PolyhedronTriangleCount() == 0);
+}
+
 void TestSupercellFit() {
     Camera camera;
     std::vector<Vec3> points;
@@ -208,6 +272,8 @@ void TestAtomPicking() {
         ++gFailed;
         return;
     }
+    Renderer renderer;
+    renderer.SetStructure(&structure);
     Camera camera;
     camera.Reset(structure.center, structure.boundRadius, 1.35);
     int visibleAtoms = 0;
@@ -215,15 +281,15 @@ void TestAtomPicking() {
         const ScreenPoint screen = camera.WorldToScreen(structure.atoms[i].cart - structure.center, 1200, 900);
         if (!screen.visible) continue;
         ++visibleAtoms;
-        const int picked = PickAtom(structure, camera, 1200, 900, screen.x, screen.y, 0.38f, false);
+        const int picked = PickAtom(structure, camera, 1200, 900, screen.x, screen.y, renderer.SiteRadii());
         CHECK(picked >= 0);
     }
     CHECK(visibleAtoms == static_cast<int>(structure.atoms.size()));
-    CHECK(PickAtom(structure, camera, 1200, 900, 4.0, 4.0, 0.38f, false) == -1);
-    CHECK(PickAtom(structure, camera, 1200, 900, 1196.0, 4.0, 0.38f, false) == -1);
+    CHECK(PickAtom(structure, camera, 1200, 900, 4.0, 4.0, renderer.SiteRadii()) == -1);
+    CHECK(PickAtom(structure, camera, 1200, 900, 1196.0, 4.0, renderer.SiteRadii()) == -1);
     camera.SetProjection(true);
     const ScreenPoint screen = camera.WorldToScreen(structure.atoms[0].cart - structure.center, 1200, 900);
-    CHECK(PickAtom(structure, camera, 1200, 900, screen.x, screen.y, 0.38f, false) >= 0);
+    CHECK(PickAtom(structure, camera, 1200, 900, screen.x, screen.y, renderer.SiteRadii()) >= 0);
 }
 
 } // namespace
@@ -237,6 +303,7 @@ int RunCameraTests() {
     TestSupercellFit();
     TestPolyhedronFaces();
     TestDisplayGeometry();
+    TestCoordinationRendering();
     TestAtomPicking();
     return gFailed == 0 ? 0 : 1;
 }

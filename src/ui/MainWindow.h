@@ -25,14 +25,12 @@ public:
     void Show(int commandShow);
     HACCEL Accelerators() const { return accelerators_; }
     HWND Hwnd() const { return hwnd_; }
-    void OpenPath(const std::wstring& path);
+    void OpenDocument(const std::wstring& path);
 
     void OnViewportSelectionChanged(int atomIndex) override;
     void OnViewportMeasurementsChanged() override;
     void OnViewportHoverChanged(int atomIndex) override;
     void OnViewportModeChanged(MeasureMode mode) override;
-    void OnViewportOpenRequested() override;
-    void OnViewportFileDropped(const std::wstring& path) override;
     void OnViewportCommand(int commandId) override;
 
 private:
@@ -80,6 +78,7 @@ private:
     void SaveSettingsNow();
     void UpdateTitle();
     void OpenFileDialog();
+    void OpenPath(const std::wstring& path);
     void SaveScreenshotDialog();
     void SaveStructureDialog();
     void EditCellDialog();
@@ -165,7 +164,7 @@ private:
     HelpWindow help_;
     AppearanceWindow appearance_;
 
-    AppSettings initialSettings_;
+    AppSettings savedSettings_;
 };
 
 } // namespace cl

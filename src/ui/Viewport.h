@@ -22,8 +22,6 @@ public:
     virtual void OnViewportMeasurementsChanged() = 0;
     virtual void OnViewportHoverChanged(int atomIndex) = 0;
     virtual void OnViewportModeChanged(MeasureMode mode) = 0;
-    virtual void OnViewportOpenRequested() = 0;
-    virtual void OnViewportFileDropped(const std::wstring& path) = 0;
     virtual void OnViewportCommand(int commandId) = 0;
 };
 

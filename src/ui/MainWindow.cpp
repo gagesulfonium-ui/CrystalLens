@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 
 #include "Format.h"
+#include "CrystalLibrary.h"
 #include "Icons.h"
 #include "Localization.h"
 #include "core/PeriodicTable.h"
@@ -175,14 +176,14 @@ bool ShowSaveStructureDialog(HWND owner, const std::wstring& suggested, bool all
     return true;
 }
 
-bool ShowOpenDialog(HWND owner, std::wstring& path) {
+bool ShowOpenDialog(HWND owner, std::vector<std::wstring>& paths) {
     IFileOpenDialog* dialog = nullptr;
     if (FAILED(CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&dialog)))) {
         return false;
     }
     DWORD options = 0;
     dialog->GetOptions(&options);
-    dialog->SetOptions(options | FOS_FORCEFILESYSTEM | FOS_FILEMUSTEXIST | FOS_PATHMUSTEXIST);
+    dialog->SetOptions(options | FOS_ALLOWMULTISELECT | FOS_FORCEFILESYSTEM | FOS_FILEMUSTEXIST | FOS_PATHMUSTEXIST);
     dialog->SetTitle(T(Str::OpenDialogTitle));
     const COMDLG_FILTERSPEC filters[] = {
         {T(Str::AllSupportedFiles), L"*.cif;*.mcif;*.vesta;*.xyz"},
@@ -197,18 +198,24 @@ bool ShowOpenDialog(HWND owner, std::wstring& path) {
         dialog->Release();
         return false;
     }
-    IShellItem* item = nullptr;
-    result = dialog->GetResult(&item);
-    if (SUCCEEDED(result) && item) {
-        PWSTR value = nullptr;
-        if (SUCCEEDED(item->GetDisplayName(SIGDN_FILESYSPATH, &value)) && value) {
-            path = value;
-            CoTaskMemFree(value);
+    IShellItemArray* items = nullptr;
+    if (SUCCEEDED(dialog->GetResults(&items))) {
+        DWORD count = 0;
+        items->GetCount(&count);
+        for (DWORD i = 0; i < count; ++i) {
+            IShellItem* item = nullptr;
+            if (FAILED(items->GetItemAt(i, &item))) continue;
+            PWSTR value = nullptr;
+            if (SUCCEEDED(item->GetDisplayName(SIGDN_FILESYSPATH, &value))) {
+                paths.emplace_back(value);
+                CoTaskMemFree(value);
+            }
+            item->Release();
         }
-        item->Release();
+        items->Release();
     }
     dialog->Release();
-    return !path.empty();
+    return !paths.empty();
 }
 
 std::wstring PicturesDirectory() {
@@ -228,7 +235,7 @@ std::wstring PicturesDirectory() {
 
 } // namespace
 
-MainWindow::MainWindow(const AppSettings& settings) : viewport_(this), initialSettings_(settings) {
+MainWindow::MainWindow(const AppSettings& settings) : viewport_(this), savedSettings_(settings) {
     leftVisible_ = settings.leftPanel;
     rightVisible_ = settings.rightPanel;
     options_.showCell = settings.showCell;
@@ -291,7 +298,7 @@ bool MainWindow::Create(HINSTANCE instance) {
         statusMessage_ = T(Str::RendererError);
     }
     viewport_.SetOptions(options_);
-    viewport_.SetOrthographic(initialSettings_.orthographic);
+    viewport_.SetOrthographic(savedSettings_.orthographic);
 
     menu_.Create(hwnd_);
     tooltip_.Create(hwnd_);
@@ -302,6 +309,7 @@ bool MainWindow::Create(HINSTANCE instance) {
 
     ACCEL commands[] = {
         {FVIRTKEY | FCONTROL, 'O', CmdOpen},
+        {FVIRTKEY | FCONTROL, 'L', CmdLibrary},
         {FVIRTKEY | FCONTROL, 'R', CmdReload},
         {FVIRTKEY | FCONTROL, 'S', CmdSaveStructure},
         {FVIRTKEY | FCONTROL | FSHIFT, 'S', CmdScreenshot},
@@ -593,12 +601,14 @@ LRESULT MainWindow::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
         return 0;
     case WM_DROPFILES: {
         HDROP drop = reinterpret_cast<HDROP>(wParam);
-        const UINT length = DragQueryFileW(drop, 0, nullptr, 0);
-        if (length > 0 && ConfirmDiscardChanges()) {
+        const UINT count = DragQueryFileW(drop, 0xFFFFFFFF, nullptr, 0);
+        for (UINT i = 0; i < count; ++i) {
+            const UINT length = DragQueryFileW(drop, i, nullptr, 0);
             std::wstring path(length + 1, L'\0');
-            DragQueryFileW(drop, 0, path.data(), length + 1);
-            path.resize(length);
-            OpenPath(path);
+            if (DragQueryFileW(drop, i, path.data(), length + 1)) {
+                path.resize(length);
+                OpenDocument(path);
+            }
         }
         DragFinish(drop);
         return 0;
@@ -1590,6 +1600,7 @@ std::vector<MenuEntry> MainWindow::BuildMenu(int menuIndex) const {
     switch (menuIndex) {
     case 0:
         add(T(Str::OpenFile), L"Ctrl+O", CmdOpen);
+        add(T(Str::Library), L"Ctrl+L", CmdLibrary);
         add(T(Str::ReloadFile), L"Ctrl+R", CmdReload, !currentPath_.empty());
         add(T(Str::SaveStructure), L"Ctrl+S", CmdSaveStructure, loaded);
         add(T(Str::SaveScreenshot), L"Ctrl+Shift+S", CmdScreenshot, loaded);
@@ -1674,6 +1685,9 @@ void MainWindow::ToggleMeasureMode(MeasureMode mode) {
 void MainWindow::ExecuteCommand(int command) {
     if ((help_.IsVisible() || form_.IsVisible()) && command != CmdHelp) return;
     switch (command) {
+    case CmdLibrary:
+        for (const auto& path : ChooseLibraryStructures(hwnd_)) OpenDocument(path);
+        break;
     case CmdOpen:
         OpenFileDialog();
         break;
@@ -1851,7 +1865,8 @@ void MainWindow::SaveSettingsNow() {
     settings.supercellY = options_.supercellY;
     settings.supercellZ = options_.supercellZ;
     static_cast<AppearanceState&>(settings) = options_;
-    Settings::Save(settings);
+    Settings::Save(settings, savedSettings_);
+    savedSettings_ = settings;
 }
 
 std::wstring MainWindow::CurrentFileName() const {
@@ -1917,10 +1932,30 @@ void MainWindow::OpenPath(const std::wstring& path) {
     if (viewport_.Hwnd()) SetFocus(viewport_.Hwnd());
 }
 
+void MainWindow::OpenDocument(const std::wstring& path) {
+    if (!structure_) {
+        OpenPath(path);
+        return;
+    }
+    // Each document owns its OpenGL context, edit history and measurement state.
+    const std::wstring executable = ExecutablePath();
+    std::wstring command = L"\"" + executable + L"\" \"" + path + L"\"";
+    STARTUPINFOW startup{sizeof(startup)};
+    PROCESS_INFORMATION child{};
+    if (CreateProcessW(executable.c_str(), command.data(), nullptr, nullptr, FALSE, 0,
+                       nullptr, nullptr, &startup, &child)) {
+        CloseHandle(child.hThread);
+        CloseHandle(child.hProcess);
+    } else {
+        ShowToast(T(Str::OpenFailedTitle), path, ToastKind::Error);
+    }
+}
+
 void MainWindow::OpenFileDialog() {
-    if (!ConfirmDiscardChanges()) return;
-    std::wstring path;
-    if (ShowOpenDialog(hwnd_, path)) OpenPath(path);
+    std::vector<std::wstring> paths;
+    if (ShowOpenDialog(hwnd_, paths)) {
+        for (const auto& path : paths) OpenDocument(path);
+    }
 }
 
 void MainWindow::SaveScreenshotDialog() {
@@ -2346,12 +2381,6 @@ void MainWindow::OnViewportHoverChanged(int atomIndex) {
 void MainWindow::OnViewportModeChanged(MeasureMode mode) {
     (void)mode;
     InvalidateRect(hwnd_, nullptr, FALSE);
-}
-
-void MainWindow::OnViewportOpenRequested() { OpenFileDialog(); }
-
-void MainWindow::OnViewportFileDropped(const std::wstring& path) {
-    if (ConfirmDiscardChanges()) OpenPath(path);
 }
 
 void MainWindow::OnViewportCommand(int commandId) { ExecuteCommand(commandId); }

@@ -81,12 +81,12 @@ std::string LowerAscii(std::string_view s) {
 
 } // namespace
 
-namespace {
-
 bool IsAlkaliOrAlkaline(int z) {
     return z == 3 || z == 4 || z == 11 || z == 12 || z == 19 || z == 20 || z == 37 || z == 38 ||
            z == 55 || z == 56 || z == 87 || z == 88;
 }
+
+namespace {
 
 bool IsNonMetal(int z) {
     static const int values[] = {1,  2,  6,  7,  8,  9,  10, 15, 16, 17, 18, 34, 35, 36,

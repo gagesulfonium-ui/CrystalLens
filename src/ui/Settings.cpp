@@ -12,6 +12,27 @@
 namespace cl {
 namespace {
 
+// Several document processes share the same INI. Hold the lock for an entire
+// settings snapshot so a reader sees all three supercell repetitions together.
+class ProfileLock {
+public:
+    ProfileLock() {
+        if (handle_) {
+            const DWORD result = WaitForSingleObject(handle_, INFINITE);
+            owned_ = result == WAIT_OBJECT_0 || result == WAIT_ABANDONED;
+        }
+    }
+    ~ProfileLock() {
+        if (owned_) ReleaseMutex(handle_);
+        if (handle_) CloseHandle(handle_);
+    }
+    ProfileLock(const ProfileLock&) = delete;
+    ProfileLock& operator=(const ProfileLock&) = delete;
+private:
+    HANDLE handle_ = CreateMutexW(nullptr, FALSE, L"Local\\CrystalLens.Settings");
+    bool owned_ = false;
+};
+
 std::wstring AppDataDirectory() {
     wchar_t path[MAX_PATH]{};
     DWORD length = GetEnvironmentVariableW(L"APPDATA", path, MAX_PATH);
@@ -32,10 +53,6 @@ bool ReadBool(const std::wstring& path, const wchar_t* key, bool fallback) {
     return ReadInt(path, key, fallback ? 1 : 0) != 0;
 }
 
-void WriteBool(const std::wstring& path, const wchar_t* key, bool value) {
-    WriteInt(path, key, value ? 1 : 0);
-}
-
 } // namespace
 
 std::wstring Settings::SettingsPath() {
@@ -48,6 +65,7 @@ std::wstring Settings::SettingsPath() {
 
 AppSettings Settings::Load() {
     AppSettings settings;
+    const ProfileLock lock;
     const std::wstring path = SettingsPath();
     if (GetFileAttributesW(path.c_str()) == INVALID_FILE_ATTRIBUTES) return settings;
     settings.language = ReadInt(path, L"Language", 0) == 1 ? Language::English : Language::Chinese;
@@ -89,31 +107,44 @@ AppSettings Settings::Load() {
     return settings;
 }
 
-void Settings::Save(const AppSettings& settings) {
+void Settings::Save(const AppSettings& settings, const AppSettings& previous) {
+    const ProfileLock lock;
     const std::wstring path = SettingsPath();
-    WriteInt(path, L"SettingsVersion", 4);
-    WriteInt(path, L"Language", static_cast<int>(settings.language));
-    WriteBool(path, L"LeftPanel", settings.leftPanel);
-    WriteBool(path, L"RightPanel", settings.rightPanel);
-    WriteBool(path, L"ShowCell", settings.showCell);
-    WriteBool(path, L"ShowBonds", settings.showBonds);
-    WriteBool(path, L"ShowLabels", settings.showLabels);
-    WriteBool(path, L"ShowImages", settings.showImages);
-    WriteBool(path, L"ShowAxes", settings.showAxes);
-    WriteBool(path, L"Orthographic", settings.orthographic);
-    WriteInt(path, L"AtomStyle", settings.atomStyle);
-    WriteInt(path, L"PolyTransparency", settings.polyTransparency);
-    WriteInt(path, L"PolyEdgeTenths", static_cast<int>(std::lround(10 * settings.polyEdgeWidth)));
-    WriteInt(path, L"PolyEdgeColor", settings.polyEdgeColor);
-    WriteInt(path, L"SupercellX", settings.supercellX);
-    WriteInt(path, L"SupercellY", settings.supercellY);
-    WriteInt(path, L"SupercellZ", settings.supercellZ);
-    WriteInt(path, L"CellColor", static_cast<int>(settings.cellColor));
-    WriteInt(path, L"BackgroundColor", static_cast<int>(settings.backgroundColor));
-    const std::wstring cellWidth = std::to_wstring(settings.cellLineWidth);
-    WritePrivateProfileStringW(L"CrystalLens", L"CellWidth", cellWidth.c_str(), path.c_str());
-    const std::wstring scale = std::to_wstring(settings.atomScale);
-    WritePrivateProfileStringW(L"CrystalLens", L"AtomScale", scale.c_str(), path.c_str());
+    const bool initialize = ReadInt(path, L"SettingsVersion", 0) < 4;
+    // Only update preferences changed by this window. Other windows may have
+    // changed different preferences since this document opened.
+    auto store = [&](const wchar_t* key, auto before, auto after) {
+        if (initialize || before != after) WriteInt(path, key, static_cast<int>(after));
+    };
+    store(L"Language", previous.language, settings.language);
+    store(L"LeftPanel", previous.leftPanel, settings.leftPanel);
+    store(L"RightPanel", previous.rightPanel, settings.rightPanel);
+    store(L"ShowCell", previous.showCell, settings.showCell);
+    store(L"ShowBonds", previous.showBonds, settings.showBonds);
+    store(L"ShowLabels", previous.showLabels, settings.showLabels);
+    store(L"ShowImages", previous.showImages, settings.showImages);
+    store(L"ShowAxes", previous.showAxes, settings.showAxes);
+    store(L"Orthographic", previous.orthographic, settings.orthographic);
+    store(L"AtomStyle", previous.atomStyle, settings.atomStyle);
+    store(L"PolyTransparency", previous.polyTransparency, settings.polyTransparency);
+    store(L"PolyEdgeColor", previous.polyEdgeColor, settings.polyEdgeColor);
+    store(L"CellColor", previous.cellColor, settings.cellColor);
+    store(L"BackgroundColor", previous.backgroundColor, settings.backgroundColor);
+    store(L"PolyEdgeTenths", std::lround(10 * previous.polyEdgeWidth), std::lround(10 * settings.polyEdgeWidth));
+    if (initialize || settings.supercellX != previous.supercellX || settings.supercellY != previous.supercellY ||
+        settings.supercellZ != previous.supercellZ) {
+        WriteInt(path, L"SupercellX", settings.supercellX);
+        WriteInt(path, L"SupercellY", settings.supercellY);
+        WriteInt(path, L"SupercellZ", settings.supercellZ);
+    }
+    auto storeFloat = [&](const wchar_t* key, float before, float after) {
+        if (initialize || before != after) {
+            WritePrivateProfileStringW(L"CrystalLens", key, std::to_wstring(after).c_str(), path.c_str());
+        }
+    };
+    storeFloat(L"CellWidth", previous.cellLineWidth, settings.cellLineWidth);
+    storeFloat(L"AtomScale", previous.atomScale, settings.atomScale);
+    if (initialize) WriteInt(path, L"SettingsVersion", 4);
 }
 
 } // namespace cl
