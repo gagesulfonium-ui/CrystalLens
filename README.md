@@ -1,4 +1,47 @@
-# CrystalLens v1.1
+# CrystalLens
+
+**CrystalLens 是一个跨平台的晶体结构查看与编辑器**：以 Windows 原生版（C++17 + Win32 + OpenGL 3.3）为基础，并重构出 Android 版（Java WebView + WebGL2），两套实现共享相同的晶体学能力与深色专业界面。不依赖任何第三方运行库，内置 12 种常见矿物/晶体的离线结构库（CIF，来自 COD），支持 CIF / XYZ / VESTA 文件。
+
+| 平台 | 技术栈 | 版本 | 获取方式 |
+|---|---|---|---|
+| **Windows 10/11 x64** | C++17 · Win32 · OpenGL 3.3 | [v1.1.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0) | [便携版 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0/CrystalLens-v1.1.0-win64.zip) · [源码 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0/CrystalLens-v1.1.0-source.zip) |
+| **Android 7.0+**（无原生库，支持所有 ABI） | Java WebView · WebGL2 · JavaScript | [v1.1.0-android](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0-android) | [APK](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0-android/CrystalLens-v1.1.0-android.apk) · [免安装预览 HTML](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0-android/CrystalLens-Android-Preview.html) |
+
+> **免安装预览版**是单个 HTML 文件：复制到手机用 Chrome 打开即可，完全离线、无需安装；它与 APK 使用同一份 Web 核心代码。
+
+## 核心功能（两平台一致）
+
+- **结构读取**：CIF（对称操作展开、`1.234(5)` 不确定度数字、多 data block、无引号逐行对称操作、无序组/集合）、XYZ（元素符号/原子序数）、VESTA（CELLP / GROUP / SYMOP / STRUC）。
+- **三维显示**：晶胞/超胞（1–16 倍）与子晶胞线框、周期化学键、球棍 / 空间填充 / **配位多面体**（半透明面 + 像素级描边）、元素图例、原子标签、坐标轴、透视/正交投影。
+- **边界原子**：默认显示相邻晶胞的一层实心原子与完整键网络（可一键关闭），可见位点与 CrystalMaker 一致。
+- **测量与编辑**：周期最小镜像的键长/键角测量；晶胞参数编辑，原子增/删/改（作用于不对称单元，对称等价位点一起更新），50 步撤销/重做。
+- **导出**：CIF、XYZ、PNG 截图、结构摘要复制。
+- **界面与晶体库**：中文 / English 一键切换；外观设置（边框颜色/粗细、背景色、多面体透明度与描边）持久化；12 种结构离线晶体库（岩盐、萤石、钙钛矿、硫铂矿、金红石/板钛矿/锐钛矿、闪锌矿/纤锌矿、金刚石、α-石英、方解石）。
+- **平台差异**：Windows 版支持多窗口并排、完整键盘快捷键与文件拖放；Android 版为触屏优先（单指旋转带惯性、双指缩放/平移、双击适配视图），多个结构以标签页呈现，文件通过系统「打开方式」或应用内选择器打开。
+
+## 截图
+
+| Android · 手机竖屏 | Android · 配位多面体 |
+|---|---|
+| ![Android 竖屏](android-port/screenshots/03-phone-portrait.png) | ![Android 配位多面体](android-port/screenshots/02-polyhedral-quartz.png) |
+
+| Windows · 岩盐配位多面体 | Windows · 主界面 |
+|---|---|
+| ![Windows 配位多面体](docs/halite-polyhedra-v11.png) | ![Windows 主界面](docs/screenshot-main.png) |
+
+## 文档与链接
+
+| 内容 | 链接 |
+|---|---|
+| Android 版说明与构建 | [android-port/README.md](android-port/README.md) → [完整交付文档](android-port/docs/ANDROID.md) |
+| Android 发布页 | [Release v1.1.0-android](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0-android) |
+| Windows 发布页 | [Release v1.1.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0) |
+| 晶体库来源与文献 | [library/SOURCES.md](library/SOURCES.md) |
+| 许可 | [MIT License](LICENSE) |
+
+---
+
+# Windows 原生版（v1.1）
 
 CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编辑工具。它使用 **C++17 + Win32 + OpenGL 3.3** 实现，不依赖 Qt 或其他第三方运行库，便携包包含 `CrystalLens.exe` 和可离线打开的晶体结构库。
 
@@ -368,19 +411,3 @@ crystal_camera_tests: 305 checks passed, 0 failed
 
 - 无第三方运行时库；使用 Windows SDK（Win32、GDI+、DWM、Common Dialogs、OpenGL `opengl32`）。
 - MIT License，详见 [LICENSE](LICENSE)。
----
-
-## 📱 Android 版（v1.1.0 · 新增）
-
-本仓库同时提供 CrystalLens 的 **安卓移植版**（ndroid-port/）：Java WebView 宿主 + WebGL2 共享核心，功能对齐 v1.1（CIF/XYZ/VESTA 解析、对称展开、超胞/边界原子、周期键、配位多面体、测量、编辑撤销、导出、离线晶体库、中英文界面、触控交互）。
-
-| 版本 | 下载 / 使用 |
-|---|---|
-| **免安装预览版** | 下载 `CrystalLens-Android-Preview.html`，用手机 Chrome 直接打开（离线、无需安装） |
-| **APK（打包版）** | 下载 `CrystalLens-v1.1.0-android.apk` 侧载安装（Android 7.0+，仅 VIBRATE 权限） |
-
-- 发布页：**[Android v1.1.0 Release](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0-android)**
-- 详细说明与构建方法：[android-port/README.md](android-port/README.md)
-- 原有 Windows 版不受影响：[Windows v1.1.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0)
-
-![CrystalLens Android](android-port/screenshots/03-phone-portrait.png)
