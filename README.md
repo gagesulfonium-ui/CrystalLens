@@ -1,5 +1,6 @@
 # CrystalLens
-
+v1面向轻量化、便携化的需求，推出windows原生版和Android以及预览版本，实测Android版本目前无法正常使用，需要下一个版本debug，推荐直接打开preview版本（HTML文件）可以在chrome等浏览器直接使用，并且Windows原生版功能全部拥有，界面略有改变，也借此实现了跨平台使用的目的。
+强烈推荐使用html preview版本和windows原生版本！！！！！
 **CrystalLens 是一个跨平台的晶体结构查看与编辑器**：以 Windows 原生版（C++17 + Win32 + OpenGL 3.3）为基础，并重构出 Android 版（Java WebView + WebGL2），两套实现共享相同的晶体学能力与深色专业界面。不依赖任何第三方运行库，内置 12 种常见矿物/晶体的离线结构库（CIF，来自 COD），支持 CIF / XYZ / VESTA 文件。
 
 | 平台 | 技术栈 | 版本 | 获取方式 |
