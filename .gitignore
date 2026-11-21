@@ -1,0 +1,22 @@
+# Build output
+build/
+build-*/
+dist/
+*.obj
+*.pdb
+*.ilk
+*.exp
+*.lib
+*.exe
+
+# Runtime generated
+CrystalLens Screenshots/
+*.log
+screenshot-debug.txt
+
+# OS/editor noise
+Thumbs.db
+desktop.ini
+.vs/
+.vscode/
+.idea/
