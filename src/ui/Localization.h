@@ -7,6 +7,15 @@ namespace cl {
 enum class Language { Chinese = 0, English = 1 };
 
 #define CL_STRING_LIST(X)                                                                              \
+    X(ElementStyleMenu, L"元素颜色与尺寸…", L"Element color and size…") \
+    X(ElementRadius, L"显示半径 (%)", L"Display radius (%)") \
+    X(ElementColor, L"选择颜色…", L"Choose color…") \
+    X(ElementDefault, L"恢复此元素默认值", L"Reset this element") \
+    X(RadiusInvalid, L"半径比例须为 25 到 300 的整数。", L"Enter a whole number from 25 to 300.") \
+    X(ExteriorMenu, L"晶胞外原子范围…", L"Atoms outside the cell…") \
+    X(ExteriorAmount, L"各晶轴向外延伸 (%)", L"Margin along each axis (%)") \
+    X(ExteriorHint, L"按晶格矢量向各面外扩。0 关闭，100 显示一层相邻晶胞。", L"Extend each face along the lattice axes. Use 0 for off or 100 for one cell.") \
+    X(ExteriorInvalid, L"请输入 0 到 100 的整数。", L"Enter a whole number from 0 to 100.") \
     X(AppName, L"CrystalLens", L"CrystalLens")                                                        \
     X(AppTagline, L"晶体结构，清晰可见", L"Crystallography, beautifully rendered")                      \
     X(Ready, L"就绪", L"Ready")                                                                       \
@@ -223,8 +232,8 @@ enum class Language { Chinese = 0, English = 1 };
     X(AboutFeature3, L"晶胞与原子编辑、撤销/重做、CIF/XYZ 导出", L"Cell and atom editing, undo/redo, CIF/XYZ export") \
     X(AboutFeature4, L"键长键角测量、高 DPI 与中英双语", L"Geometry measurement, high DPI and Chinese/English") \
     X(AboutShortcuts, L"快捷键", L"Shortcuts")                                                        \
-    X(ShortcutOrbit, L"旋转", L"Orbit")                                                               \
-    X(ShortcutZoom, L"缩放", L"Zoom")                                                                 \
+    X(ShortcutOrbit, L"旋转（Shift 精调）", L"Orbit (Shift for fine control)")                                                               \
+    X(ShortcutZoom, L"指针缩放（或 Ctrl + 左键拖动）", L"Cursor zoom (or Ctrl + left drag)")                                                                 \
     X(ShortcutPan, L"平移", L"Pan")                                                                   \
     X(ShortcutFit, L"适应窗口", L"Fit to window")                                                    \
     X(ShortcutReset, L"重置视图", L"Reset view")                                                      \
@@ -264,7 +273,7 @@ enum class Language { Chinese = 0, English = 1 };
     X(UnsupportedFormat, L"不支持的文件格式", L"Unsupported file format")                            \
     X(EmptyFileName, L"（未命名）", L"(untitled)")                                                    \
     X(CopyAtomLineFmt, L"%s  %s  frac(%.4f, %.4f, %.4f)", L"%s  %s  frac(%.4f, %.4f, %.4f)")         \
-    X(VersionPrefix, L"v1.2.0", L"v1.2.0")                                                               \
+    X(VersionPrefix, L"v1.3.0", L"v1.3.0")                                                               \
     X(TooltipPanelLeft, L"结构面板", L"Structure panel")                                             \
     X(TooltipPanelRight, L"测量面板", L"Measurement panel")                                           \
     X(MoreElementsFmt, L"+%d 种元素", L"+%d more")                                                    \

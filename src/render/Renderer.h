@@ -21,6 +21,8 @@ struct RenderOptions : AppearanceState {
     bool showBonds = true;
     bool showLabels = false;
     bool showImages = true;
+    int exteriorPercent = 0; // Fraction of one cell along each lattice axis.
+    ElementStyles elementStyles{};
     AtomStyle style = AtomStyle::BallAndStick;
     float atomScale = 0.30f;
     float bondRadius = 0.105f;

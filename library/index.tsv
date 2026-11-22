@@ -41,3 +41,35 @@ siderite.cif	菱铁矿	Siderite	FeCO₃	R -3 c :H	9000098
 stishovite.cif	斯石英	Stishovite	SiO₂	P 42/m n m	9005852
 coesite.cif	柯石英	Coesite	SiO₂	C 1 2/c 1	9000802
 ilmenite.cif	钛铁矿	Ilmenite	FeTiO₃	R -3 :H	9000906
+diopside.cif	透辉石	Diopside	CaMgSi₂O₆	C 1 2/c 1	9001307
+jadeite.cif	硬玉	Jadeite	NaAlSi₂O₆	C 1 2/c 1	9000143
+enstatite.cif	顽火辉石	Enstatite	MgSiO₃	P b c a	9001593
+wollastonite.cif	硅灰石	Wollastonite	CaSiO₃	P -1	9005777
+kyanite.cif	蓝晶石	Kyanite	Al₂SiO₅	P -1	9001836
+andalusite.cif	红柱石	Andalusite	Al₂SiO₅	P n n m	9003990
+sillimanite.cif	矽线石	Sillimanite	Al₂SiO₅	P b n m	9006525
+grossular.cif	钙铝榴石	Grossular	Ca₃Al₂Si₃O₁₂	I a -3 d	9001868
+pyrope.cif	镁铝榴石	Pyrope	Mg₃Al₂Si₃O₁₂	I a -3 d	9006556
+almandine.cif	铁铝榴石	Almandine	Fe₃Al₂Si₃O₁₂	I a -3 d	9001431
+andradite.cif	钙铁榴石	Andradite	Ca₃Fe₂Si₃O₁₂	I a -3 d	9000239
+spessartine.cif	锰铝榴石	Spessartine	Mn₃Al₂Si₃O₁₂	I a -3 d	9002692
+smithsonite.cif	菱锌矿	Smithsonite	ZnCO₃	R -3 c :H	9000099
+rhodochrosite.cif	菱锰矿	Rhodochrosite	MnCO₃	R -3 c :H	9000097
+strontianite.cif	菱锶矿	Strontianite	SrCO₃	P n m a	9008198
+witherite.cif	毒重石	Witherite	BaCO₃	P m c n	9006838
+cerussite.cif	白铅矿	Cerussite	PbCO₃	P m c n	9008411
+anglesite.cif	铅矾	Anglesite	PbSO₄	P b n m	9000652
+chromite.cif	铬铁矿	Chromite	FeCr₂O₄	F d -3 m :2	9007325
+eskolaite.cif	氧化铬矿	Eskolaite	Cr₂O₃	R -3 c :H	9008084
+pyrolusite.cif	软锰矿	Pyrolusite	MnO₂	P 42/m n m	9015694
+hausmannite.cif	黑锰矿	Hausmannite	Mn₃O₄	I 41/a m d :2	9001963
+ramsdellite.cif	斜方锰矿	Ramsdellite	MnO₂	P n m a	9003475
+baddeleyite.cif	斜锆石	Baddeleyite	ZrO₂	P 1 21/c 1	9016714
+covellite.cif	铜蓝	Covellite	CuS	P 63/m m c	9000523
+millerite.cif	针镍矿	Millerite	NiS	R 3 m :H	9004078
+stibnite.cif	辉锑矿	Stibnite	Sb₂S₃	P n m a	9007051
+bismuthinite.cif	辉铋矿	Bismuthinite	Bi₂S₃	P n m a	9003472
+wulfenite.cif	钼铅矿	Wulfenite	PbMoO₄	I 41/a :2	9008105
+powellite.cif	钼钙矿	Powellite	CaMoO₄	I 41/a :2	9009632
+clinoenstatite.cif	斜顽火辉石	Clinoenstatite	MgSiO₃	P 1 21/c 1	9008077
+cristobalite.cif	方石英	Cristobalite	SiO₂	P 41 21 2	9008110

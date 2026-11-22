@@ -1,10 +1,22 @@
 #pragma once
 
+#include "core/PeriodicTable.h"
+
+#include <array>
 #include <cstdint>
 
 namespace cl {
 
 constexpr int kMaxCellRepeats = 16;
+
+struct ElementStyle {
+    int color = -1; // Use the element table when no override is set.
+    int radiusPercent = 100;
+    uint32_t Color(const Element& element) const {
+        return color < 0 ? element.color : static_cast<uint32_t>(color);
+    }
+};
+using ElementStyles = std::array<ElementStyle, 119>; // Includes unknown element X.
 
 struct AppearanceState {
     uint32_t cellColor = 0xD6DEE9;

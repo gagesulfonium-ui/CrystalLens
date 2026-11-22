@@ -75,6 +75,13 @@ AppSettings Settings::Load() {
     settings.showBonds = ReadBool(path, L"ShowBonds", settings.showBonds);
     settings.showLabels = ReadBool(path, L"ShowLabels", settings.showLabels);
     settings.showImages = ReadBool(path, L"ShowImages", settings.showImages);
+    settings.exteriorPercent = std::clamp(ReadInt(path, L"ExteriorPercent", 0), 0, 100);
+    for (size_t z = 0; z < settings.elementStyles.size(); ++z) {
+        auto& style = settings.elementStyles[z];
+        const auto key = L"Element" + std::to_wstring(z);
+        style.color = std::clamp(ReadInt(path, (key + L"Color").c_str(), -1), -1, 0xFFFFFF);
+        style.radiusPercent = std::clamp(ReadInt(path, (key + L"Radius").c_str(), 100), 25, 300);
+    }
     settings.showAxes = ReadBool(path, L"ShowAxes", settings.showAxes);
     settings.orthographic = ReadBool(path, L"Orthographic", settings.orthographic);
     settings.atomStyle = std::clamp(ReadInt(path, L"AtomStyle", 0), 0, 2);
@@ -123,6 +130,14 @@ void Settings::Save(const AppSettings& settings, const AppSettings& previous) {
     store(L"ShowBonds", previous.showBonds, settings.showBonds);
     store(L"ShowLabels", previous.showLabels, settings.showLabels);
     store(L"ShowImages", previous.showImages, settings.showImages);
+    store(L"ExteriorPercent", previous.exteriorPercent, settings.exteriorPercent);
+    for (size_t z = 0; z < settings.elementStyles.size(); ++z) {
+        const auto key = L"Element" + std::to_wstring(z);
+        const auto& before = previous.elementStyles[z];
+        const auto& after = settings.elementStyles[z];
+        if (before.color != after.color) WriteInt(path, (key + L"Color").c_str(), after.color);
+        if (before.radiusPercent != after.radiusPercent) WriteInt(path, (key + L"Radius").c_str(), after.radiusPercent);
+    }
     store(L"ShowAxes", previous.showAxes, settings.showAxes);
     store(L"Orthographic", previous.orthographic, settings.orthographic);
     store(L"AtomStyle", previous.atomStyle, settings.atomStyle);

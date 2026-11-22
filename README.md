@@ -6,23 +6,25 @@ CrystalLens 是一款轻量的晶体结构查看与编辑器。可打开 CIF、X
 
 | 平台 | 版本 | 下载 |
 |---|---|---|
-| Windows 10/11 x64 | [v1.2.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.2.0) | [Windows 便携版 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.2.0/CrystalLens-v1.2.0-win64.zip) · [Windows 源码 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.2.0/CrystalLens-v1.2.0-source.zip) |
+| Windows 10/11 x64 | [v1.3.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.3.0) | [Windows 便携版 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.3.0/CrystalLens-v1.3.0-win64.zip) · [Windows 源码 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.3.0/CrystalLens-v1.3.0-source.zip) |
 | Android 7.0+ / 浏览器预览 | [v1.1.0-android](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0-android) | [免安装 HTML 预览](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0-android/CrystalLens-Android-Preview.html) · [Android APK](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0-android/CrystalLens-v1.1.0-android.apk) |
 
 **Windows 快速开始**　解压整个便携包，运行 `CrystalLens.exe`，按 `Ctrl+L` 打开经典晶体库。
 
 **手机端预览**　Android v1.1.0 的 APK 在实测中存在运行问题。推荐下载 HTML 预览，用 Chrome 打开即可离线查看内置的 12 种结构。
 
-## Windows v1.2.0 更新
+## Windows v1.3.0 更新
 
-- **晶胞跟随鼠标旋转。** 左键上下拖动可连续翻过顶面和底面，松手即停。按住左键拖回起点，即可恢复按下时的朝向。平移后再旋转，晶胞中心仍停在刚才的屏幕位置。
-- **离线晶体库从 12 种增至 42 种。** 新增 30 份来自 Crystallography Open Database（COD）的实验结构。按住 Ctrl 可多选并打开独立窗口，例如并排观察石墨与金刚石，或比较石英、柯石英和斯石英。每份 CIF 都有对应的 COD 编号、文献和 SHA-256 校验值。[查看 42 种结构与来源](library/SOURCES.md)
+- **离线晶体库新增 32 份 COD 实验结构，共 74 种。** 按 `Ctrl+L`，多选蓝晶石、红柱石和矽线石，可以在独立窗口中比较 Al₂SiO₅ 的三种晶体结构。[查看结构清单、原始文献及校验值](library/SOURCES.md)
+- **旋转与缩放。** 左键拖动旋转，近距离观察时旋转灵敏度会降低。按住 `Shift` 再开始拖动，可用四分之一速度微调。滚轮以指针在视图焦平面上的位置为中心缩放，也可按住 `Ctrl` 再用左键向上拖动放大、向下拖动缩小。
+- **查看晶胞外原子。** 打开「视图 → 晶胞外原子范围…」，输入 0–100 的整数。25 表示在超胞六个面外各扩展对应晶格周期的四分之一，100 表示一个完整周期，0 关闭。程序对 CIF 已展开的位点施加整格平移，保留同位置的不同占位。对于未给出对称操作的 CIF，沿用文件中提供的位点。达到显示上限时视口会提示截断。
+- **按元素改颜色和大小。** 点击左侧图例中的元素，或从「视图 → 元素颜色与尺寸…」选择当前结构中的任一元素。选择颜色、输入显示半径比例（25%–300%），点击「确定」即可应用到该元素及其周期副本。可单独恢复该元素默认值。外观设置保存在本机，导出 CIF 时使用原始晶体学数据。
 
 ## 核心功能
 
 - **结构读取**：CIF（对称操作展开、`1.234(5)` 不确定度数字、多 data block、无引号逐行对称操作、无序组/集合）、XYZ（元素符号/原子序数）、VESTA（CELLP / GROUP / SYMOP / STRUC）。
 - **三维显示**：晶胞/超胞（1–16 倍）与子晶胞线框、周期化学键、球棍 / 空间填充 / **配位多面体**（半透明面 + 像素级描边）、元素图例、原子标签、坐标轴、透视/正交投影。
-- **边界原子**：默认显示相邻晶胞的一层实心原子与完整键网络（可一键关闭），可见位点与 CrystalMaker 一致。
+- **边界原子**：可切换显示胞面、棱和顶点上的周期像。Windows 版还可独立设置晶胞外显示范围，跨胞键按两个端点的晶格平移匹配。
 - **测量与编辑**：周期最小镜像的键长/键角测量；晶胞参数编辑，原子增/删/改（作用于不对称单元，对称等价位点一起更新），50 步撤销/重做。
 - **导出**：CIF、XYZ、PNG 截图、结构摘要复制。
 - **界面与晶体库**：中文 / English 一键切换；外观设置（边框颜色/粗细、背景色、多面体透明度与描边）持久化；两平台均包含首批 12 种结构（岩盐、萤石、钙钛矿、硫铂矿、金红石/板钛矿/锐钛矿、闪锌矿/纤锌矿、金刚石、α-石英、方解石）。
@@ -44,15 +46,20 @@ CrystalLens 是一款轻量的晶体结构查看与编辑器。可打开 CIF、X
 |---|---|
 | Android 版说明与构建 | [android-port/README.md](android-port/README.md) → [完整交付文档](android-port/docs/ANDROID.md) |
 | Android 发布页 | [Release v1.1.0-android](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0-android) |
-| Windows 发布页 | [Release v1.2.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.2.0) |
+| Windows 发布页 | [Release v1.3.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.3.0) |
 | 晶体库来源与文献 | [library/SOURCES.md](library/SOURCES.md) |
 | 许可 | [MIT License](LICENSE) |
 
 ---
 
-# Windows 原生版（v1.2.0）
+# Windows 原生版（v1.3.0）
 
 CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编辑工具。它使用 **C++17 + Win32 + OpenGL 3.3** 实现，不依赖 Qt 或其他第三方运行库，便携包包含 `CrystalLens.exe` 和可离线打开的晶体结构库。
+
+## v1.2 晶胞旋转与扩展晶体库
+
+- **晶胞跟随鼠标旋转。** 左键上下拖动可连续翻过顶面和底面，松手即停。按住左键拖回起点，即可恢复按下时的朝向。平移后再旋转，晶胞中心仍停在刚才的屏幕位置。
+- **离线晶体库从 12 种增至 42 种。** 新增 30 份来自 Crystallography Open Database（COD）的实验结构。按住 Ctrl 可多选并打开独立窗口，例如并排观察石墨与金刚石，或比较石英、柯石英和斯石英。每份 CIF 都有对应的 COD 编号、文献和 SHA-256 校验值。[查看晶体库来源](library/SOURCES.md)
 
 ## v1.1 配位多面体
 
@@ -219,7 +226,7 @@ CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编�
 
 ## 快速开始
 
-1. 解压 `CrystalLens-v1.2.0-win64.zip`。
+1. 解压 `CrystalLens-v1.3.0-win64.zip`。
 2. 运行 `CrystalLens.exe`。
 3. 打开或拖入结构文件。示例包括：
    - `examples/quartz.cif`（α-石英）
@@ -230,7 +237,7 @@ CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编�
 4. 鼠标旋转/缩放；右侧测量；`Ctrl+E` 编辑晶胞；选中原子后 `F2` 编辑原子。
 5. 左侧晶胞参数区的“超胞 N×N×N”可打开超胞设置；“视图 → 超胞…”也可以。
 6. “外观”区域可切换球棍/空间填充/多面体，并打开外观设置修改边框和背景。
-7. 若要只查看晶胞内原子，关闭左侧“显示 → 边界原子”；重新打开可显示完整配位。
+7. 若要只查看单胞内容，将「视图 → 晶胞外原子范围…」设为 0，关闭左侧「边界原子」，并将超胞设为 1×1×1。
 
 也可以在命令行传入一个或多个文件路径。
 
@@ -245,13 +252,14 @@ CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编�
 | 操作 | 功能 |
 |---|---|
 | 左键拖动 | 沿拖动方向绕晶胞中心旋转，可连续翻过顶面和底面。按住左键拖回起点可恢复按下时的朝向，松手即停。 |
-| 滚轮 | 缩放 |
+| Shift + 左键拖动 | 精细旋转 |
+| 滚轮 / Ctrl + 左键上下拖动 | 围绕指针位置缩放 |
 | 中键拖动 / 右键拖动 | 平移 |
 | 左键单击原子 | 选择原子并在右侧显示信息 |
 | 测量模式左键单击原子 | 键长（2 个原子）/ 键角（3 个原子） |
 | 右侧“编辑原子 / 删除” | 编辑或删除选中原子 |
 | 左侧“编辑”链接 | 编辑晶胞参数 |
-| 左侧“边界原子”开关 | 显示/隐藏相邻晶胞原子和完整键网络 |
+| 左侧“边界原子”开关 | 显示或隐藏闭区间胞面、棱及顶点的周期像 |
 | 左侧“超胞 N×N×N” | 打开 a/b/c 方向 1–16 倍的超胞设置 |
 | 左侧“外观” → “设置” | 修改晶胞边框颜色/粗细、视口背景颜色 |
 | “外观”样式段 | 球棍 / 空间填充 / 多面体三种显示模式 |
@@ -350,7 +358,7 @@ ctest --test-dir build -C Release --output-on-failure
 .\pack.ps1
 ```
 
-生成 `dist\CrystalLens-v1.2.0-win64.zip`。
+生成 `dist\CrystalLens-v1.3.0-win64.zip`。
 
 ## 项目结构
 
@@ -390,14 +398,14 @@ build\Release\crystal_tests.exe
 build\Release\crystal_camera_tests.exe
 ```
 
-Windows v1.2.0 的 x64 Release 构建通过两组测试。
+Windows v1.3.0 的 x64 Release 构建通过两组测试。
 
 ```text
-crystal_tests:        626 checks passed, 0 failed
-crystal_camera_tests: 317 checks passed, 0 failed
+crystal_tests:        847 checks passed, 0 failed
+crystal_camera_tests: 351 checks passed, 0 failed
 ```
 
-核心测试核对了全部 42 份库内 CIF 的 COD 编号和晶胞成分，并覆盖对称展开、键搜索、周期测量、编辑与导出。相机测试覆盖拖回起点、跨越顶面、连续一万次旋转后的姿态稳定性，以及平移后的旋转中心和拾取。
+核心测试核对了全部 74 份库内 CIF 的 COD 编号和晶胞成分，并覆盖对称展开、键搜索、周期测量、编辑与导出。相机测试覆盖拖回起点、跨越顶面、连续一万次旋转后的姿态稳定性，平移后的旋转中心与拾取、指针缩放、斜晶胞外的周期像及混合占位元素的独立尺寸。
 
 历史版本 CPU 侧基准（Release x64）：
 

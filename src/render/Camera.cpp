@@ -113,7 +113,9 @@ void Camera::OrbitBy(double horizontalRadians, double verticalRadians) {
 void Camera::OrbitFromDrag(const Camera& start, double dx, double dy, int width, int height) {
     const int span = std::min(width, height);
     if (span <= 0) return;
-    const double radiansPerPixel = kPi / span;
+    const double visibleHalfHeight = start.distance * std::tan(start.fovY * 0.5);
+    const double sensitivity = Clamp(visibleHalfHeight / start.sceneRadius_, 0.18, 1.0);
+    const double radiansPerPixel = sensitivity * kPi / span;
     OrbitFrom(start, dx * radiansPerPixel, dy * radiansPerPixel);
 }
 
@@ -149,6 +151,15 @@ void Camera::Zoom(double wheelSteps) {
     if (wheelSteps == 0.0) return;
     distance *= std::exp(-wheelSteps * 0.16);
     distance = Clamp(distance, std::max(0.05, sceneRadius_ * 0.035), sceneRadius_ * 40.0 + 100.0);
+}
+
+void Camera::ZoomAt(double steps, double x, double y, int width, int height) {
+    if (width <= 0 || height <= 0) return;
+    const double oldDistance = distance;
+    Zoom(steps);
+    // Keep the point under the cursor on the target plane at the same pixel.
+    const double scale = (oldDistance - distance) * 2 * std::tan(fovY * 0.5) / height;
+    target += (Right() * (x - width * 0.5) + Up() * (height * 0.5 - y)) * scale;
 }
 
 Ray Camera::ScreenRay(double x, double y, int width, int height) const {

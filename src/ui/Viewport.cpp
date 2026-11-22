@@ -55,10 +55,10 @@ std::wstring ColorToText(const Element& element) {
     return out;
 }
 
-Color LabelColorForElement(const Element& element) {
-    const float r = ((element.color >> 16) & 0xFF) / 255.0f;
-    const float g = ((element.color >> 8) & 0xFF) / 255.0f;
-    const float b = (element.color & 0xFF) / 255.0f;
+Color LabelColorForElement(uint32_t color) {
+    const float r = ((color >> 16) & 0xFF) / 255.0f;
+    const float g = ((color >> 8) & 0xFF) / 255.0f;
+    const float b = (color & 0xFF) / 255.0f;
     return Color(0.38f + 0.62f * r, 0.38f + 0.62f * g, 0.38f + 0.62f * b, 0.96f);
 }
 
@@ -275,6 +275,7 @@ void Viewport::SelectAtom(int index) {
 
 void Viewport::SetOptions(const RenderOptions& options) {
     const bool boundaryChanged = options_.showImages != options.showImages ||
+                                 options_.exteriorPercent != options.exteriorPercent ||
                                  options_.style != options.style ||
                                  options_.supercellX != options.supercellX ||
                                  options_.supercellY != options.supercellY ||
@@ -340,12 +341,18 @@ void Viewport::RemoveMeasurement(int index) {
     InvalidateView();
 }
 
-void Viewport::UpdateOrbitDrag(int x, int y) {
+void Viewport::UpdateLeftDrag(int x, int y) {
     const int dx = x - dragStartX_, dy = y - dragStartY_;
     if (!movedDuringDrag_ && std::hypot(dx, dy) <= 3.0 * dpiScale_) return;
     movedDuringDrag_ = true;
     userAdjustedCamera_ = true;
-    camera_.OrbitFromDrag(orbitStart_, dx, dy, width_, height_);
+    if (dragMode_ == DragMode::Zoom) {
+        camera_ = dragCamera_;
+        camera_.ZoomAt(-12.0 * dy / std::max(1, height_), dragStartX_, dragStartY_, width_, height_);
+    } else {
+        const double scale = fineRotation_ ? 0.25 : 1.0;
+        camera_.OrbitFromDrag(dragCamera_, dx * scale, dy * scale, width_, height_);
+    }
     InvalidateView();
 }
 
@@ -661,7 +668,7 @@ void Viewport::DrawElementLegend() {
     const float panelY = S(54.0f);
     for (size_t i = 0; i < elements.size(); ++i) {
         const Element& element = ElementByZ(elements[i]);
-        const Color color = Color::Hex(element.color, 0.90f);
+        const Color color = Color::Hex(options_.elementStyles[element.z].Color(element), 0.90f);
         const float cy = panelY + rowH * static_cast<float>(i) + rowH * 0.5f;
         overlay_.Circle(panelX + S(6.0f), cy, S(4.2f), color, 20);
         overlay_.Text(Utf8ToWide(element.symbol), panelX + panelW, cy, S(9.2f), kHudDim, TextAlign::Right,
@@ -956,7 +963,8 @@ void Viewport::DrawAtomLabels() {
         }
         if (collision) continue;
         placed.push_back(box);
-        const Color textColor = LabelColorForElement(ElementByZ(atom.atomicNumber));
+        const Element& element = ElementByZ(atom.atomicNumber);
+        const Color textColor = LabelColorForElement(options_.elementStyles[element.z].Color(element));
         overlay_.Text(text, x + S(1.0f), y + S(1.0f), textSize, Color::Hex(0x000000, 0.65f), TextAlign::Left,
                       TextVAlign::Top);
         overlay_.Text(text, x, y, textSize, textColor, TextAlign::Left, TextVAlign::Top);
@@ -1116,8 +1124,8 @@ LRESULT Viewport::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
         }
         const int x = GET_X_LPARAM(lParam);
         const int y = GET_Y_LPARAM(lParam);
-        if (dragMode_ == DragMode::Orbit) {
-            UpdateOrbitDrag(x, y);
+        if (dragMode_ == DragMode::Orbit || dragMode_ == DragMode::Zoom) {
+            UpdateLeftDrag(x, y);
         } else if (dragMode_ == DragMode::Pan) {
             camera_.Pan(x - lastMouseX_, y - lastMouseY_, width_, height_);
             lastMouseX_ = x;
@@ -1143,18 +1151,19 @@ LRESULT Viewport::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
         if (pendingFit_ && !userAdjustedCamera_) FitToStructure();
         SetCapture(hwnd_);
         movedDuringDrag_ = false;
-        dragMode_ = DragMode::Orbit;
+        dragMode_ = (wParam & MK_CONTROL) ? DragMode::Zoom : DragMode::Orbit;
+        fineRotation_ = (wParam & MK_SHIFT) != 0;
         dragStartX_ = x;
         dragStartY_ = y;
-        orbitStart_ = camera_;
+        dragCamera_ = camera_;
         SetCursorForState();
         return 0;
     }
     case WM_LBUTTONUP: {
-        if (dragMode_ == DragMode::Orbit) {
+        if (dragMode_ == DragMode::Orbit || dragMode_ == DragMode::Zoom) {
             const int x = GET_X_LPARAM(lParam), y = GET_Y_LPARAM(lParam);
-            UpdateOrbitDrag(x, y);
-            const bool clicked = !movedDuringDrag_;
+            UpdateLeftDrag(x, y);
+            const bool clicked = dragMode_ == DragMode::Orbit && !movedDuringDrag_;
             EndDrag();
             if (clicked) HandleLeftClick(x, y);
         }
@@ -1201,7 +1210,13 @@ LRESULT Viewport::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
     case WM_MOUSEWHEEL: {
         if (!structure_) return 0;
         const double steps = static_cast<double>(GET_WHEEL_DELTA_WPARAM(wParam)) / WHEEL_DELTA;
-        camera_.Zoom(steps);
+        POINT point{GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
+        ScreenToClient(hwnd_, &point);
+        RECT client{};
+        GetClientRect(hwnd_, &client);
+        if (!PtInRect(&client, point)) return SendMessageW(GetParent(hwnd_), message, wParam, lParam);
+        EndDrag();
+        camera_.ZoomAt(steps, point.x, point.y, width_, height_);
         userAdjustedCamera_ = true;
         InvalidateRect(hwnd_, nullptr, FALSE);
         return 0;
@@ -1273,12 +1288,14 @@ LRESULT Viewport::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
         }
         case VK_ADD:
         case VK_OEM_PLUS:
+            EndDrag();
             camera_.Zoom(1.0);
             userAdjustedCamera_ = true;
             InvalidateRect(hwnd_, nullptr, FALSE);
             return 0;
         case VK_SUBTRACT:
         case VK_OEM_MINUS:
+            EndDrag();
             camera_.Zoom(-1.0);
             userAdjustedCamera_ = true;
             InvalidateRect(hwnd_, nullptr, FALSE);

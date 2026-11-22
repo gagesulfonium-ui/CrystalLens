@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(CrystalLens VERSION 1.2.0 LANGUAGES CXX RC)
+project(CrystalLens VERSION 1.3.0 LANGUAGES CXX RC)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -38,6 +38,7 @@ add_executable(CrystalLens WIN32
     src/ui/Viewport.cpp
     src/ui/Popups.cpp
     src/ui/AppearanceWindow.cpp
+    src/ui/ElementStyleDialog.cpp
     src/ui/CrystalLibrary.cpp
     src/ui/MainWindow.cpp
     resources/app.rc

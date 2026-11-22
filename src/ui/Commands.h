@@ -40,7 +40,9 @@ enum CommandId : int {
     CmdSupercell,
     CmdAppearance,
     CmdPolyhedral,
-    CmdLibrary
+    CmdLibrary,
+    CmdExterior,
+    CmdElementStyle
 };
 
 } // namespace cl

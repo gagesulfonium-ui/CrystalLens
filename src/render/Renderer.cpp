@@ -612,9 +612,12 @@ void Renderer::RebuildAtoms(const SiteMeshes& meshes) {
         const float baseRadius =
             (options_.style == AtomStyle::SpaceFill || !transitionMetal) ? element.vdw : element.covalent;
         instance.radius = std::max(0.10f, baseRadius * styleScale);
-        instance.r = ((element.color >> 16) & 0xFF) / 255.0f;
-        instance.g = ((element.color >> 8) & 0xFF) / 255.0f;
-        instance.b = (element.color & 0xFF) / 255.0f;
+        const ElementStyle& style = options_.elementStyles[element.z];
+        instance.radius *= style.radiusPercent / 100.f;
+        const uint32_t color = style.Color(element);
+        instance.r = ((color >> 16) & 0xFF) / 255.0f;
+        instance.g = ((color >> 8) & 0xFF) / 255.0f;
+        instance.b = (color & 0xFF) / 255.0f;
         instance.flags = 0.0f;
         instance.index = static_cast<float>(selectableIndex);
         if (!meshes.empty()) instance.radius *= 0.72f;
@@ -667,6 +670,36 @@ void Renderer::RebuildAtoms(const SiteMeshes& meshes) {
                         const Vec3 offset = structure_->cell.FractionalToCartesian({double(tx), double(ty), double(tz)});
                         appendAtom(atom, atom.cart + offset, -1, images_, static_cast<int>(i), tx, ty, tz);
                     }
+        }
+        // The exterior shell is a separate pass so it cannot displace ordinary
+        // supercell or boundary sites from the display budget.
+        const double margin = std::clamp(options_.exteriorPercent, 0, 100) / 100.0;
+        if (margin > 0.0) {
+            for (size_t i = 0; i < cellCount; ++i) {
+                const Atom& atom = structure_->atoms[i];
+                const auto range = [&](double f, int n) {
+                    return std::pair<int, int>{int(std::ceil(-margin - f - eps)),
+                                               int(std::floor(n + margin - f + eps))};
+                };
+                const auto [xmin, xmax] = range(atom.frac.x, nx);
+                const auto [ymin, ymax] = range(atom.frac.y, ny);
+                const auto [zmin, zmax] = range(atom.frac.z, nz);
+                for (int tx = xmin; tx <= xmax; ++tx)
+                    for (int ty = ymin; ty <= ymax; ++ty)
+                        for (int tz = zmin; tz <= zmax; ++tz) {
+                            const Vec3 f = atom.frac + Vec3{double(tx), double(ty), double(tz)};
+                            if (f.x >= -eps && f.x <= nx + eps && f.y >= -eps && f.y <= ny + eps &&
+                                f.z >= -eps && f.z <= nz + eps) continue;
+                            if (!boundaryBudget) {
+                                boundaryLimited_ = true;
+                                atomCount_ = static_cast<int>(atoms_.size());
+                                return;
+                            }
+                            --boundaryBudget;
+                            appendAtom(atom, structure_->cell.FractionalToCartesian(f), -1, images_,
+                                       static_cast<int>(i), tx, ty, tz);
+                        }
+            }
         }
     }
     atomCount_ = static_cast<int>(atoms_.size());
@@ -826,7 +859,8 @@ void Renderer::BuildPolyhedra(const SiteMeshes& meshes) {
     for (const ImageInstance& image : images_) triangleCount += meshes[image.atom].size();
     polyVertices_.reserve(3 * triangleCount);
     for (const ImageInstance& image : images_) {
-        const auto color = ElementByZ(structure_->atoms[image.atom].atomicNumber).color;
+        const Element& element = ElementByZ(structure_->atoms[image.atom].atomicNumber);
+        const auto color = options_.elementStyles[element.z].Color(element);
         for (const auto& tri : meshes[image.atom]) {
             for (int i = 0; i < 3; ++i) {
                 const Vec3 p = image.position + tri.corners[i];

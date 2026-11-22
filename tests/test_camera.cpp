@@ -212,6 +212,78 @@ void TestDisplayGeometry() {
     CHECK(renderer.AtomCount() == 0 && renderer.BondCount() == 0 && renderer.LineCount() == 0);
 }
 
+void TestCursorZoom() {
+    for (bool orthographic : {false, true}) {
+        Camera camera;
+        camera.Reset({2, 3, -1}, 6, 1.5);
+        camera.SetProjection(orthographic);
+        camera.Pan(24, -16, 900, 600);
+        camera.OrbitBy(0.2, -1.1);
+        const Camera start = camera;
+        const Vec3 point = camera.target + camera.Right() * 2.5 - camera.Up() * 1.3;
+        const auto pixel = camera.WorldToScreen(point, 900, 600);
+        for (double steps : {0.25, 2.0, -1.0, -1.25}) {
+            camera.ZoomAt(steps, pixel.x, pixel.y, 900, 600);
+            const auto zoomed = camera.WorldToScreen(point, 900, 600);
+            CHECK_NEAR(zoomed.x, pixel.x, 1e-9);
+            CHECK_NEAR(zoomed.y, pixel.y, 1e-9);
+        }
+        CHECK_NEAR(camera.distance, start.distance, 1e-9);
+        CHECK(Length(camera.target - start.target) < 1e-9);
+        camera.ZoomAt(1000, 450, 300, 900, 600);
+        const Camera close = camera;
+        camera.OrbitFromDrag(close, 100, 0, 900, 600);
+        Camera fitted = start;
+        fitted.OrbitFromDrag(start, 100, 0, 900, 600);
+        CHECK(Dot(close.Forward(), camera.Forward()) > Dot(start.Forward(), fitted.Forward()));
+    }
+}
+
+void TestExteriorAndElementSizes() {
+    Structure s;
+    CHECK(s.cell.SetFromParameters(4, 5, 6, 77, 83, 68));
+    Atom a;
+    a.frac = {0.10, 0.50, 0.85};
+    a.cart = s.cell.FractionalToCartesian(a.frac);
+    a.atomicNumber = 26;
+    a.occupancy = 0.6;
+    Atom b = a;
+    b.atomicNumber = 12;
+    b.occupancy = 0.4;
+    s.atoms = {a,b};
+    Renderer renderer;
+    renderer.SetStructure(&s);
+    RenderOptions options;
+    const auto original = renderer.SiteRadii();
+    options.exteriorPercent = 20;
+    options.elementStyles[26] = {0xCC3366, 200};
+    renderer.SetOptions(options);
+    CHECK(renderer.AtomCount() == 8);
+    CHECK_NEAR(renderer.SiteRadii()[0], 2 * original[0], 1e-6);
+    CHECK_NEAR(renderer.SiteRadii()[1], original[1], 1e-6);
+    std::vector<Vec3> points;
+    renderer.GetVisiblePoints(points);
+    CHECK(points.size() == 8 + 8 * 8);
+    for (int tx : {0, 1}) for (int tz : {-1, 0}) {
+        const Vec3 expected = a.cart + s.cell.aVec * tx + s.cell.cVec * tz;
+        int seen = 0;
+        for (size_t i = 8; i + 7 < points.size(); i += 8) {
+            if (Length((points[i] + points[i + 7]) * 0.5 - expected) < 1e-5) ++seen;
+        }
+        CHECK(seen == 2);
+    }
+    options.supercellX = 2;
+    renderer.SetOptions(options);
+    CHECK(renderer.AtomCount() == 12);
+    options.exteriorPercent = 0;
+    renderer.SetOptions(options);
+    CHECK(renderer.AtomCount() == 4 && s.atoms.size() == 2);
+    s.cell.valid = false;
+    options.exteriorPercent = 100;
+    renderer.SetOptions(options);
+    CHECK(renderer.AtomCount() == 2);
+}
+
 void TestCoordinationRendering() {
     const auto library = std::filesystem::path(CL_EXAMPLES_DIR).parent_path() / "library";
     const struct Example {
@@ -333,6 +405,8 @@ int RunCameraTests() {
     TestSupercellFit();
     TestPolyhedronFaces();
     TestDisplayGeometry();
+    TestCursorZoom();
+    TestExteriorAndElementSizes();
     TestCoordinationRendering();
     TestAtomPicking();
     return gFailed == 0 ? 0 : 1;

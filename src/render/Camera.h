@@ -41,6 +41,7 @@ public:
     void OrbitFromDrag(const Camera& start, double dx, double dy, int width, int height);
     void Pan(double dxPixels, double dyPixels, int width, int height);
     void Zoom(double wheelSteps);
+    void ZoomAt(double steps, double x, double y, int width, int height);
     void SetProjection(bool ortho) { orthographic = ortho; }
 
     Ray ScreenRay(double x, double y, int width, int height) const;

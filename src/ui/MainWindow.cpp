@@ -2,6 +2,7 @@
 
 #include "Format.h"
 #include "CrystalLibrary.h"
+#include "ElementStyleDialog.h"
 #include "Icons.h"
 #include "Localization.h"
 #include "core/PeriodicTable.h"
@@ -242,6 +243,8 @@ MainWindow::MainWindow(const AppSettings& settings) : viewport_(this), savedSett
     options_.showBonds = settings.showBonds;
     options_.showLabels = settings.showLabels;
     options_.showImages = settings.showImages;
+    options_.exteriorPercent = settings.exteriorPercent;
+    options_.elementStyles = settings.elementStyles;
     options_.showAxes = settings.showAxes;
     options_.supercellX = settings.supercellX;
     options_.supercellY = settings.supercellY;
@@ -489,14 +492,14 @@ LRESULT MainWindow::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
         }
         if (pressed_) {
             const int index = FindHotspot(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+            pressed_ = false;
+            if (GetCapture() == hwnd_) ReleaseCapture();
             if (index >= 0) {
                 const Hotspot hotspot = hotspots_[static_cast<size_t>(index)];
                 if (hotspot.enabled && hotspot.kind == pressedKind_ && hotspot.value == pressedValue_) {
                     ExecuteHotspot(hotspot);
                 }
             }
-            pressed_ = false;
-            if (GetCapture() == hwnd_) ReleaseCapture();
         }
         return 0;
     }
@@ -508,6 +511,10 @@ LRESULT MainWindow::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
         POINT pt{GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
         ScreenToClient(hwnd_, &pt);
         const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
+        POINT screen{GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
+        RECT view{};
+        GetWindowRect(viewport_.Hwnd(), &view);
+        if (PtInRect(&view, screen)) return SendMessageW(viewport_.Hwnd(), message, wParam, lParam);
         if (PtInRect(&leftPanelRect_, pt)) {
             ScrollPanel(true, delta);
             return 0;
@@ -1170,6 +1177,7 @@ void MainWindow::PaintLeftPanel(Painter& painter) {
     for (const auto& [z, count] : counts) {
         if (drawn >= 14) break;
         const Element& element = ElementByZ(z);
+        const auto rgb = options_.elementStyles[element.z].Color(element);
         const std::wstring text = Utf8ToWide(element.symbol) + L" " + std::to_wstring(count);
         const float chipW = painter.MeasureText(text, S(8.8f), true) + S(25.0f);
         if (chipX + chipW > contentX + contentW && chipX > contentX) {
@@ -1177,12 +1185,14 @@ void MainWindow::PaintLeftPanel(Painter& painter) {
             chipY += chipH + S(5.0f);
         }
         const UiRect chip(chipX, chipY, chipW, chipH);
+        addHotspotVisible(HotspotKind::ElementStyle, MakeRect(chip.X, chip.Y, chip.Width, chip.Height),
+                          z, true, T(Str::ElementStyleMenu));
         painter.FillRoundRect(chip, S(6.0f), UiColor(255, 20, 27, 39));
         painter.StrokeRoundRect(chip, S(6.0f), UiColor(255, 32, 42, 57), S(0.7f));
         painter.FillRoundRect(UiRect(chipX + S(7.0f), chipY + chipH * 0.5f - S(3.0f), S(6.0f), S(6.0f)),
-                              S(3.0f), UiColor(255, static_cast<BYTE>((element.color >> 16) & 0xFF),
-                                               static_cast<BYTE>((element.color >> 8) & 0xFF),
-                                               static_cast<BYTE>(element.color & 0xFF)));
+                              S(3.0f), UiColor(255, static_cast<BYTE>((rgb >> 16) & 0xFF),
+                                               static_cast<BYTE>((rgb >> 8) & 0xFF),
+                                               static_cast<BYTE>(rgb & 0xFF)));
         painter.Text(text, UiRect(chipX + S(17.0f), chipY, chipW - S(20.0f), chipH), S(8.8f),
                      UiColor(255, 186, 199, 217), UiTextAlign::Left, UiTextVAlign::Middle, true);
         chipX += chipW + S(5.0f);
@@ -1276,9 +1286,10 @@ void MainWindow::PaintRightPanel(Painter& painter) {
         const UiRect card(contentX, y, contentW, cardH);
         painter.FillRoundRect(card, S(9.0f), UiColor(255, 13, 18, 27));
         painter.StrokeRoundRect(card, S(9.0f), UiColor(255, 33, 43, 59), S(0.9f));
-        const UiColor elementColor(255, static_cast<BYTE>((element.color >> 16) & 0xFF),
-                                   static_cast<BYTE>((element.color >> 8) & 0xFF),
-                                   static_cast<BYTE>(element.color & 0xFF));
+        const auto rgb = options_.elementStyles[element.z].Color(element);
+        const UiColor elementColor(255, static_cast<BYTE>((rgb >> 16) & 0xFF),
+                                   static_cast<BYTE>((rgb >> 8) & 0xFF),
+                                   static_cast<BYTE>(rgb & 0xFF));
         painter.FillRoundRect(UiRect(contentX + S(12.0f), y + S(12.0f), S(34.0f), S(34.0f)), S(17.0f),
                               UiColor(210, elementColor.GetR(), elementColor.GetG(), elementColor.GetB()));
         painter.Text(Utf8ToWide(element.symbol),
@@ -1633,6 +1644,8 @@ std::vector<MenuEntry> MainWindow::BuildMenu(int menuIndex) const {
         add(T(Str::ToggleBonds), L"B", CmdToggleBonds, loaded, options_.showBonds);
         add(T(Str::ToggleLabels), L"L", CmdToggleLabels, loaded, options_.showLabels);
         add(T(Str::DisplayImages), L"", CmdToggleImages, hasCell, options_.showImages);
+        add(T(Str::ExteriorMenu), L"", CmdExterior, hasCell, options_.exteriorPercent > 0);
+        add(T(Str::ElementStyleMenu), L"", CmdElementStyle, loaded);
         add(T(Str::SupercellMenu), L"", CmdSupercell, hasCell);
         add(T(Str::AppearanceMenu), L"", CmdAppearance);
         add(T(Str::ToggleAxes), L"", CmdToggleAxes, loaded, options_.showAxes);
@@ -1662,6 +1675,10 @@ std::vector<MenuEntry> MainWindow::BuildMenu(int menuIndex) const {
 
 void MainWindow::ExecuteHotspot(const Hotspot& hotspot) {
     if (!hotspot.enabled) return;
+    if (hotspot.kind == HotspotKind::ElementStyle) {
+        ElementStyleDialog(hotspot.value);
+        return;
+    }
     if (hotspot.kind == HotspotKind::RemoveMeasurement) {
         HideTooltip();
         viewport_.RemoveMeasurement(hotspot.value);
@@ -1761,6 +1778,12 @@ void MainWindow::ExecuteCommand(int command) {
             ApplyOptions();
         }
         break;
+    case CmdExterior:
+        ExteriorDialog();
+        break;
+    case CmdElementStyle:
+        ElementStyleDialog(structure_ && selectedAtom_ >= 0 ? structure_->atoms[selectedAtom_].atomicNumber : -1);
+        break;
     case CmdSupercell:
         SupercellDialog();
         break;
@@ -1855,6 +1878,8 @@ void MainWindow::SaveSettingsNow() {
     settings.showBonds = options_.showBonds;
     settings.showLabels = options_.showLabels;
     settings.showImages = options_.showImages;
+    settings.exteriorPercent = options_.exteriorPercent;
+    settings.elementStyles = options_.elementStyles;
     settings.showAxes = options_.showAxes;
     settings.orthographic = viewport_.Orthographic();
     settings.atomStyle = options_.style == AtomStyle::Polyhedral ? 2
@@ -2141,6 +2166,27 @@ void MainWindow::SupercellDialog() {
                    return {};
                },
                scale_);
+}
+
+void MainWindow::ElementStyleDialog(int preferred) {
+    if (structure_ && EditElementStyles(hwnd_, structure_->elementCounts, preferred, options_.elementStyles))
+        ApplyOptions();
+}
+
+void MainWindow::ExteriorDialog() {
+    if (!structure_ || !structure_->cell.valid) return;
+    const std::vector<FormField> fields = {
+        {T(Str::ExteriorAmount), std::to_wstring(options_.exteriorPercent), L"0 – 100 %"}
+    };
+    form_.Show(T(Str::ExteriorMenu), T(Str::ExteriorHint), fields, T(Str::DialogOK), T(Str::DialogCancel),
+               [this](const std::vector<std::wstring>& values) -> std::wstring {
+                   double percent = 0;
+                   if (values.size() != 1 || !ParseNumberToken(values[0], percent) || !std::isfinite(percent) ||
+                       percent != std::floor(percent) || percent < 0 || percent > 100) return T(Str::ExteriorInvalid);
+                   options_.exteriorPercent = static_cast<int>(percent);
+                   ApplyOptions();
+                   return {};
+               }, scale_);
 }
 
 void MainWindow::AppearanceDialog() {

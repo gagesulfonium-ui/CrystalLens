@@ -71,7 +71,7 @@ public:
     bool RendererReady() const { return rendererReady_; }
 
 private:
-    enum class DragMode { None, Orbit, Pan };
+    enum class DragMode { None, Orbit, Pan, Zoom };
 
     static LRESULT CALLBACK StaticWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
     LRESULT WndProc(UINT message, WPARAM wParam, LPARAM lParam);
@@ -84,7 +84,7 @@ private:
     void DrawEmptyState();
     void DrawStructureHud();
     void DrawElementLegend();
-    void UpdateOrbitDrag(int x, int y);
+    void UpdateLeftDrag(int x, int y);
     void EndDrag();
     void DrawAxisGizmo();
     void DrawMeasurementLabels();
@@ -136,7 +136,8 @@ private:
     bool emptyButtonRectValid_ = false;
     bool pendingFit_ = true;
     bool userAdjustedCamera_ = false;
-    Camera orbitStart_;
+    bool fineRotation_ = false;
+    Camera dragCamera_;
 
     bool rendererReady_ = false;
     std::string rendererError_;

@@ -13,7 +13,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $BuildDir = Join-Path $Root 'build'
-$Version = '1.2.0'
+$Version = '1.3.0'
 $StageName = "CrystalLens-v$Version-win64"
 $DistDir = Join-Path $Root 'dist'
 $StageDir = Join-Path $DistDir $StageName

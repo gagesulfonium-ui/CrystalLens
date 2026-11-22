@@ -17,6 +17,8 @@ struct AppSettings : AppearanceState {
     bool showBonds = true;
     bool showLabels = false;
     bool showImages = true;
+    int exteriorPercent = 0; // Fraction of one cell along each lattice axis.
+    ElementStyles elementStyles{};
     bool showAxes = true;
     bool orthographic = false;
     int atomStyle = 0;

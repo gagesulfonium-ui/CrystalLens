@@ -34,7 +34,7 @@ public:
     void OnViewportCommand(int commandId) override;
 
 private:
-    enum class HotspotKind { None, Command, OpenMenu, Slider, RemoveMeasurement };
+    enum class HotspotKind { None, Command, OpenMenu, Slider, RemoveMeasurement, ElementStyle };
     struct Hotspot {
         HotspotKind kind = HotspotKind::None;
         RECT rect{};
@@ -84,6 +84,8 @@ private:
     void EditCellDialog();
     void SupercellDialog();
     void AppearanceDialog();
+    void ExteriorDialog();
+    void ElementStyleDialog(int preferred);
     void AddAtomDialog();
     void EditSelectedAtomDialog();
     void DeleteSelectedAtom();
