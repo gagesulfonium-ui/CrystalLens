@@ -626,7 +626,37 @@ void TestLibraryStructures() {
         {"wurtzite", "1100044", {{"Zn",2},{"S",2}}},
         {"diamond", "9011997", {{"C",8}}},
         {"quartz", "9013321", {{"Si",3},{"O",6}}},
-        {"calcite", "9000965", {{"Ca",6},{"C",6},{"O",18}}}
+        {"calcite", "9000965", {{"Ca",6},{"C",6},{"O",18}}},
+        {"corundum", "9007496", {{"Al",12},{"O",18}}},
+        {"hematite", "9000139", {{"Fe",12},{"O",18}}},
+        {"magnetite", "9010939", {{"Fe",24},{"O",32}}},
+        {"spinel", "9001364", {{"Al",16},{"Mg",8},{"O",32}}},
+        {"pyrite", "9000594", {{"Fe",4},{"S",8}}},
+        {"marcasite", "9000005", {{"Fe",2},{"S",4}}},
+        {"cinnabar", "1011369", {{"Hg",3},{"S",3}}},
+        {"chalcopyrite", "9007572", {{"Cu",4},{"Fe",4},{"S",8}}},
+        {"cuprite", "1000063", {{"Cu",4},{"O",2}}},
+        {"tenorite", "9014580", {{"Cu",4},{"O",4}}},
+        {"zincite", "9004178", {{"O",2},{"Zn",2}}},
+        {"periclase", "9006456", {{"Mg",4},{"O",4}}},
+        {"cassiterite", "9007533", {{"O",4},{"Sn",2}}},
+        {"graphite", "9011577", {{"C",4}}},
+        {"molybdenite", "9007660", {{"Mo",2},{"S",4}}},
+        {"aragonite", "9000229", {{"C",4},{"Ca",4},{"O",12}}},
+        {"dolomite", "9000083", {{"C",6},{"Ca",3},{"Mg",3},{"O",18}}},
+        {"magnesite", "9000380", {{"C",6},{"Mg",6},{"O",18}}},
+        {"barite", "9004122", {{"Ba",4},{"O",16},{"S",4}}},
+        {"celestine", "9004091", {{"O",16},{"S",4},{"Sr",4}}},
+        {"anhydrite", "9004096", {{"Ca",4},{"O",16},{"S",4}}},
+        {"forsterite", "9000319", {{"Mg",8},{"O",16},{"Si",4}}},
+        {"fayalite", "9000469", {{"Fe",8},{"O",16},{"Si",4}}},
+        {"zircon", "9005518", {{"O",16},{"Si",4},{"Zr",4}}},
+        {"scheelite", "9009626", {{"Ca",4},{"O",16},{"W",4}}},
+        {"sylvite", "9003112", {{"Cl",4},{"K",4}}},
+        {"siderite", "9000098", {{"C",6},{"Fe",6},{"O",18}}},
+        {"stishovite", "9005852", {{"O",4},{"Si",2}}},
+        {"coesite", "9000802", {{"O",32},{"Si",16}}},
+        {"ilmenite", "9000906", {{"Fe",6},{"O",18},{"Ti",6}}}
     };
     for (const auto& example : examples) {
         Begin(std::string("COD library / ") + example.file);
@@ -636,9 +666,12 @@ void TestLibraryStructures() {
         CHECK(LoadStructureFile(file.wstring(), structure, error));
         CHECK(structure.blockName == example.cod);
         CHECK(structure.cell.valid && !structure.bonds.empty());
-        std::map<std::string, int> elements;
-        for (const auto& atom : structure.atoms) ++elements[atom.element];
-        CHECK(elements == example.elements);
+        std::map<std::string, double> composition;
+        for (const auto& atom : structure.atoms) composition[atom.element] += atom.occupancy;
+        CHECK(composition.size() == example.elements.size());
+        for (const auto& [element, count] : example.elements) {
+            CHECK_NEAR(composition[element], count, 1e-5);
+        }
     }
 }
 

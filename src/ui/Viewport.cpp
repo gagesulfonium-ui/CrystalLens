@@ -189,7 +189,7 @@ Vec3 Viewport::AtomWorldPosition(int index) const {
 }
 
 void Viewport::SetStructure(std::shared_ptr<const Structure> structure) {
-    StopOrbitAnimation();
+    EndDrag();
     const MeasureMode previousMode = mode_;
     mode_ = MeasureMode::None;
     pendingPicks_.clear();
@@ -226,7 +226,7 @@ void Viewport::SetStructure(std::shared_ptr<const Structure> structure) {
 
 void Viewport::RefreshStructure(bool preserveCamera, int selectIndex) {
     if (!structure_) return;
-    StopOrbitAnimation();
+    EndDrag();
     const MeasureMode previousMode = mode_;
     mode_ = MeasureMode::None;
     pendingPicks_.clear();
@@ -340,61 +340,26 @@ void Viewport::RemoveMeasurement(int index) {
     InvalidateView();
 }
 
-void Viewport::BeginOrbitAnimation() {
-    if (!orbitAnimating_) {
-        orbitTargetYaw_ = camera_.yaw;
-        orbitTargetPitch_ = camera_.pitch;
-        orbitVelocityYaw_ = 0.0;
-        orbitVelocityPitch_ = 0.0;
-        orbitLastTickMs_ = GetTickCount64();
-        orbitLastInputMs_ = orbitLastTickMs_;
-        orbitAnimating_ = true;
-    }
-    SetTimer(hwnd_, kViewportTimer, 8, nullptr);
+void Viewport::UpdateOrbitDrag(int x, int y) {
+    const int dx = x - dragStartX_, dy = y - dragStartY_;
+    if (!movedDuringDrag_ && std::hypot(dx, dy) <= 3.0 * dpiScale_) return;
+    movedDuringDrag_ = true;
+    userAdjustedCamera_ = true;
+    camera_.OrbitFromDrag(orbitStart_, dx, dy, width_, height_);
+    InvalidateView();
 }
 
-void Viewport::StopOrbitAnimation() {
-    orbitAnimating_ = false;
-    orbitVelocityYaw_ = 0.0;
-    orbitVelocityPitch_ = 0.0;
-    SetTimer(hwnd_, kViewportTimer, 16, nullptr);
-}
-
-void Viewport::UpdateOrbitAnimation() {
-    if (!orbitAnimating_) return;
-    const ULONGLONG now = GetTickCount64();
-    double dt = static_cast<double>(now - orbitLastTickMs_) / 1000.0;
-    orbitLastTickMs_ = now;
-    dt = std::clamp(dt, 0.001, 0.05);
-    const bool dragging = mouseDown_ && dragMode_ == DragMode::Orbit;
-    if (!dragging) {
-        orbitTargetYaw_ += orbitVelocityYaw_ * dt;
-        orbitTargetPitch_ += orbitVelocityPitch_ * dt;
-        orbitTargetPitch_ = Clamp(orbitTargetPitch_, -85.0 * kDegToRad, 85.0 * kDegToRad);
-        const double decay = std::exp(-6.0 * dt);
-        orbitVelocityYaw_ *= decay;
-        orbitVelocityPitch_ *= decay;
-        if (std::abs(orbitVelocityYaw_) < 0.04) orbitVelocityYaw_ = 0.0;
-        if (std::abs(orbitVelocityPitch_) < 0.04) orbitVelocityPitch_ = 0.0;
-    }
-    const double easing = dragging ? 26.0 : 18.0;
-    const double alpha = 1.0 - std::exp(-easing * dt);
-    camera_.yaw += (orbitTargetYaw_ - camera_.yaw) * alpha;
-    camera_.pitch += (orbitTargetPitch_ - camera_.pitch) * alpha;
-    camera_.pitch = Clamp(camera_.pitch, -85.0 * kDegToRad, 85.0 * kDegToRad);
-    const bool settled = std::abs(orbitTargetYaw_ - camera_.yaw) < 0.0004 &&
-                         std::abs(orbitTargetPitch_ - camera_.pitch) < 0.0004;
-    if (!dragging && orbitVelocityYaw_ == 0.0 && orbitVelocityPitch_ == 0.0 && settled) {
-        camera_.yaw = orbitTargetYaw_;
-        camera_.pitch = orbitTargetPitch_;
-        orbitAnimating_ = false;
-        SetTimer(hwnd_, kViewportTimer, 16, nullptr);
-    }
+void Viewport::EndDrag() {
+    if (dragMode_ == DragMode::None) return;
+    dragMode_ = DragMode::None;
+    dragButton_ = 0;
+    if (GetCapture() == hwnd_) ReleaseCapture();
+    SetCursorForState();
 }
 
 void Viewport::FitToStructure() {
     if (!structure_) return;
-    StopOrbitAnimation();
+    EndDrag();
     std::vector<Vec3> points;
     if (rendererReady_) renderer_.GetVisiblePoints(points);
     if (points.empty()) {
@@ -409,7 +374,7 @@ void Viewport::FitToStructure() {
 
 void Viewport::ResetView() {
     if (!structure_) return;
-    StopOrbitAnimation();
+    EndDrag();
     userAdjustedCamera_ = false;
     camera_.Reset(Vec3{}, structure_->boundRadius, Aspect());
     FitToStructure();
@@ -516,7 +481,7 @@ void Viewport::Flash(const std::wstring& text) {
 void Viewport::SetCursorForState() {
     if (!hwnd_) return;
     LPCWSTR id = IDC_ARROW;
-    if (mouseDown_ && dragMode_ != DragMode::None) {
+    if (dragMode_ != DragMode::None) {
         id = IDC_SIZEALL;
     } else if (mode_ != MeasureMode::None && structure_) {
         id = IDC_CROSS;
@@ -551,7 +516,6 @@ void Viewport::UpdateHover(int x, int y) {
 
 void Viewport::RenderFrame(bool swapBuffers) {
     if (!rendererReady_ || !gl_.valid || width_ <= 0 || height_ <= 0) return;
-    UpdateOrbitAnimation();
     if (pendingFit_ && structure_ && !userAdjustedCamera_) FitToStructure();
     if (!wglMakeCurrent(gl_.hdc, gl_.hglrc)) return;
     glViewport(0, 0, width_, height_);
@@ -1115,6 +1079,7 @@ LRESULT Viewport::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
     case WM_CREATE:
         return 0;
     case WM_SIZE: {
+        EndDrag();
         width_ = LOWORD(lParam);
         height_ = HIWORD(lParam);
         UpdateWindowRegion();
@@ -1151,35 +1116,14 @@ LRESULT Viewport::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
         }
         const int x = GET_X_LPARAM(lParam);
         const int y = GET_Y_LPARAM(lParam);
-        if (mouseDown_ && dragMode_ != DragMode::None) {
-            const int dx = x - lastMouseX_;
-            const int dy = y - lastMouseY_;
-            if (std::abs(x - dragStartX_) + std::abs(y - dragStartY_) > static_cast<int>(3 * dpiScale_)) {
-                movedDuringDrag_ = true;
-            }
-            if (dragMode_ == DragMode::Orbit) {
-                BeginOrbitAnimation();
-                const ULONGLONG now = GetTickCount64();
-                double inputDt = static_cast<double>(now - orbitLastInputMs_) / 1000.0;
-                orbitLastInputMs_ = now;
-                inputDt = std::clamp(inputDt, 0.004, 0.05);
-                const double yawDelta = -dx * 0.0072;
-                const double pitchDelta = dy * 0.0072;
-                orbitTargetYaw_ += yawDelta;
-                orbitTargetPitch_ = Clamp(orbitTargetPitch_ + pitchDelta, -85.0 * kDegToRad,
-                                          85.0 * kDegToRad);
-                orbitVelocityYaw_ = std::clamp(orbitVelocityYaw_ * 0.70 + (yawDelta / inputDt) * 0.30,
-                                               -4.0, 4.0);
-                orbitVelocityPitch_ = std::clamp(orbitVelocityPitch_ * 0.70 + (pitchDelta / inputDt) * 0.30,
-                                                 -4.0, 4.0);
-                userAdjustedCamera_ = true;
-            } else if (dragMode_ == DragMode::Pan) {
-                camera_.Pan(dx, dy, width_, height_);
-                userAdjustedCamera_ = true;
-            }
+        if (dragMode_ == DragMode::Orbit) {
+            UpdateOrbitDrag(x, y);
+        } else if (dragMode_ == DragMode::Pan) {
+            camera_.Pan(x - lastMouseX_, y - lastMouseY_, width_, height_);
             lastMouseX_ = x;
             lastMouseY_ = y;
-            InvalidateRect(hwnd_, nullptr, FALSE);
+            userAdjustedCamera_ = true;
+            InvalidateView();
         } else {
             UpdateHover(x, y);
         }
@@ -1195,76 +1139,52 @@ LRESULT Viewport::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
             }
             return 0;
         }
+        if (dragMode_ != DragMode::None) return 0;
+        if (pendingFit_ && !userAdjustedCamera_) FitToStructure();
         SetCapture(hwnd_);
-        mouseDown_ = true;
         movedDuringDrag_ = false;
         dragMode_ = DragMode::Orbit;
-        dragButton_ = 1;
-        dragStartX_ = lastMouseX_ = x;
-        dragStartY_ = lastMouseY_ = y;
-        BeginOrbitAnimation();
+        dragStartX_ = x;
+        dragStartY_ = y;
+        orbitStart_ = camera_;
         SetCursorForState();
         return 0;
     }
     case WM_LBUTTONUP: {
-        if (mouseDown_ && dragButton_ == 1) {
-            const bool moved = movedDuringDrag_;
-            mouseDown_ = false;
-            dragMode_ = DragMode::None;
-            dragButton_ = 0;
-            if (GetCapture() == hwnd_) ReleaseCapture();
-            if (!moved) {
-                StopOrbitAnimation();
-                HandleLeftClick(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-            } else {
-                SetTimer(hwnd_, kViewportTimer, 8, nullptr);
-            }
-            SetCursorForState();
+        if (dragMode_ == DragMode::Orbit) {
+            const int x = GET_X_LPARAM(lParam), y = GET_Y_LPARAM(lParam);
+            UpdateOrbitDrag(x, y);
+            const bool clicked = !movedDuringDrag_;
+            EndDrag();
+            if (clicked) HandleLeftClick(x, y);
         }
         return 0;
     }
     case WM_MBUTTONDOWN:
     case WM_RBUTTONDOWN: {
-        if (!structure_) return 0;
+        if (!structure_ || dragMode_ != DragMode::None) return 0;
         SetFocus(hwnd_);
         SetCapture(hwnd_);
-        mouseDown_ = true;
-        movedDuringDrag_ = false;
         dragMode_ = DragMode::Pan;
         dragButton_ = message == WM_MBUTTONDOWN ? 2 : 3;
-        dragStartX_ = lastMouseX_ = GET_X_LPARAM(lParam);
-        dragStartY_ = lastMouseY_ = GET_Y_LPARAM(lParam);
-        StopOrbitAnimation();
-        SetTimer(hwnd_, kViewportTimer, 8, nullptr);
+        lastMouseX_ = GET_X_LPARAM(lParam);
+        lastMouseY_ = GET_Y_LPARAM(lParam);
         SetCursorForState();
         return 0;
     }
     case WM_MBUTTONUP:
-    case WM_RBUTTONUP: {
-        if (mouseDown_ && ((message == WM_MBUTTONUP && dragButton_ == 2) ||
-                           (message == WM_RBUTTONUP && dragButton_ == 3))) {
-            mouseDown_ = false;
-            dragMode_ = DragMode::None;
-            dragButton_ = 0;
-            if (GetCapture() == hwnd_) ReleaseCapture();
-            StopOrbitAnimation();
-            SetCursorForState();
-        }
+    case WM_RBUTTONUP:
+        if ((message == WM_MBUTTONUP && dragButton_ == 2) ||
+            (message == WM_RBUTTONUP && dragButton_ == 3)) EndDrag();
         return 0;
-    }
-    case WM_CAPTURECHANGED: {
-        if (mouseDown_) {
-            mouseDown_ = false;
-            dragMode_ = DragMode::None;
-            dragButton_ = 0;
-            StopOrbitAnimation();
-            SetCursorForState();
-        }
-        return 0;
-    }
+    case WM_CAPTURECHANGED:
+    case WM_CANCELMODE:
+    case WM_KILLFOCUS:
+        EndDrag();
+        break;
     case WM_MOUSELEAVE:
         trackingMouseLeave_ = false;
-        if (!mouseDown_) {
+        if (dragMode_ == DragMode::None) {
             if (hoveredAtom_ >= 0) {
                 hoveredAtom_ = -1;
                 UpdateHighlight();
@@ -1340,25 +1260,17 @@ LRESULT Viewport::WndProc(UINT message, WPARAM wParam, LPARAM lParam) {
             if (host_) host_->OnViewportCommand(CmdDeleteAtom);
             return 0;
         case VK_LEFT:
-            camera_.Orbit(-8.0, 0.0);
-            userAdjustedCamera_ = true;
-            InvalidateRect(hwnd_, nullptr, FALSE);
-            return 0;
         case VK_RIGHT:
-            camera_.Orbit(8.0, 0.0);
-            userAdjustedCamera_ = true;
-            InvalidateRect(hwnd_, nullptr, FALSE);
-            return 0;
         case VK_UP:
-            camera_.Orbit(0.0, -8.0);
+        case VK_DOWN: {
+            constexpr double step = 3.3 * kDegToRad;
+            EndDrag();
+            camera_.OrbitBy(step * ((wParam == VK_RIGHT) - (wParam == VK_LEFT)),
+                            step * ((wParam == VK_DOWN) - (wParam == VK_UP)));
             userAdjustedCamera_ = true;
-            InvalidateRect(hwnd_, nullptr, FALSE);
+            InvalidateView();
             return 0;
-        case VK_DOWN:
-            camera_.Orbit(0.0, 8.0);
-            userAdjustedCamera_ = true;
-            InvalidateRect(hwnd_, nullptr, FALSE);
-            return 0;
+        }
         case VK_ADD:
         case VK_OEM_PLUS:
             camera_.Zoom(1.0);

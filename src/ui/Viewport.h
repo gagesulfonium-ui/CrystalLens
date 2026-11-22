@@ -84,9 +84,8 @@ private:
     void DrawEmptyState();
     void DrawStructureHud();
     void DrawElementLegend();
-    void UpdateOrbitAnimation();
-    void BeginOrbitAnimation();
-    void StopOrbitAnimation();
+    void UpdateOrbitDrag(int x, int y);
+    void EndDrag();
     void DrawAxisGizmo();
     void DrawMeasurementLabels();
     void DrawAtomLabels();
@@ -124,7 +123,6 @@ private:
     int selectedAtom_ = -1;
     int hoveredAtom_ = -1;
 
-    bool mouseDown_ = false;
     bool movedDuringDrag_ = false;
     DragMode dragMode_ = DragMode::None;
     int dragButton_ = 0;
@@ -138,13 +136,7 @@ private:
     bool emptyButtonRectValid_ = false;
     bool pendingFit_ = true;
     bool userAdjustedCamera_ = false;
-    bool orbitAnimating_ = false;
-    double orbitTargetYaw_ = 0.0;
-    double orbitTargetPitch_ = 0.0;
-    double orbitVelocityYaw_ = 0.0;
-    double orbitVelocityPitch_ = 0.0;
-    unsigned long long orbitLastTickMs_ = 0;
-    unsigned long long orbitLastInputMs_ = 0;
+    Camera orbitStart_;
 
     bool rendererReady_ = false;
     std::string rendererError_;

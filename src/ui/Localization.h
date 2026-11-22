@@ -264,7 +264,7 @@ enum class Language { Chinese = 0, English = 1 };
     X(UnsupportedFormat, L"不支持的文件格式", L"Unsupported file format")                            \
     X(EmptyFileName, L"（未命名）", L"(untitled)")                                                    \
     X(CopyAtomLineFmt, L"%s  %s  frac(%.4f, %.4f, %.4f)", L"%s  %s  frac(%.4f, %.4f, %.4f)")         \
-    X(VersionPrefix, L"v1.1", L"v1.1")                                                               \
+    X(VersionPrefix, L"v1.2.0", L"v1.2.0")                                                               \
     X(TooltipPanelLeft, L"结构面板", L"Structure panel")                                             \
     X(TooltipPanelRight, L"测量面板", L"Measurement panel")                                           \
     X(MoreElementsFmt, L"+%d 种元素", L"+%d more")                                                    \

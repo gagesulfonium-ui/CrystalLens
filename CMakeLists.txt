@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(CrystalLens VERSION 1.1.0 LANGUAGES CXX RC)
+project(CrystalLens VERSION 1.2.0 LANGUAGES CXX RC)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

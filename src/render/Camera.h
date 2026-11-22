@@ -25,10 +25,10 @@ struct ScreenPoint {
 
 class Camera {
 public:
+    Camera();
+
     Vec3 target{0, 0, 0};
     double distance = 20.0;
-    double yaw = 35.0 * kDegToRad;
-    double pitch = 24.0 * kDegToRad;
     double fovY = 38.0 * kDegToRad;
     bool orthographic = false;
 
@@ -37,7 +37,8 @@ public:
     void FitPoints(const std::vector<Vec3>& worldPoints, double aspect, double margin = 1.16);
     void FitScenePoints(const std::vector<Vec3>& points, double aspect, double margin);
     void Reset(const Vec3& center, double radius, double aspect);
-    void Orbit(double dxPixels, double dyPixels);
+    void OrbitBy(double horizontalRadians, double verticalRadians);
+    void OrbitFromDrag(const Camera& start, double dx, double dy, int width, int height);
     void Pan(double dxPixels, double dyPixels, int width, int height);
     void Zoom(double wheelSteps);
     void SetProjection(bool ortho) { orthographic = ortho; }
@@ -56,6 +57,10 @@ public:
     double SceneRadius() const { return sceneRadius_; }
 
 private:
+    void ResetOrientation();
+    void OrbitFrom(const Camera& start, double horizontalRadians, double verticalRadians);
+    Vec3 right_, up_;
+    Vec3 sceneCenter_;
     double sceneRadius_ = 10.0;
     void Basis(Vec3& forward, Vec3& right, Vec3& up) const;
 };

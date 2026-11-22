@@ -11,3 +11,33 @@ wurtzite.cif	纤锌矿（2H）	Wurtzite (2H)	ZnS	P 63 m c	1100044
 diamond.cif	金刚石	Diamond	C	F d -3 m :1	9011997
 quartz.cif	α-石英	α-Quartz	SiO₂	P 32 2 1	9013321
 calcite.cif	方解石	Calcite	CaCO₃	R -3 c :H	9000965
+corundum.cif	刚玉	Corundum	Al₂O₃	R -3 c :H	9007496
+hematite.cif	赤铁矿	Hematite	Fe₂O₃	R -3 c :H	9000139
+magnetite.cif	磁铁矿	Magnetite	Fe₃O₄	F d -3 m :2	9010939
+spinel.cif	尖晶石	Spinel	MgAl₂O₄	F d -3 m :2	9001364
+pyrite.cif	黄铁矿	Pyrite	FeS₂	P a -3	9000594
+marcasite.cif	白铁矿	Marcasite	FeS₂	P m n n	9000005
+cinnabar.cif	辰砂	Cinnabar	HgS	P 31 2 1	1011369
+chalcopyrite.cif	黄铜矿	Chalcopyrite	CuFeS₂	I -4 2 d	9007572
+cuprite.cif	赤铜矿	Cuprite	Cu₂O	P n -3 m :1	1000063
+tenorite.cif	黑铜矿	Tenorite	CuO	C 1 2/c 1	9014580
+zincite.cif	红锌矿	Zincite	ZnO	P 63 m c	9004178
+periclase.cif	方镁石	Periclase	MgO	F m -3 m	9006456
+cassiterite.cif	锡石	Cassiterite	SnO₂	P 42/m n m	9007533
+graphite.cif	石墨	Graphite	C	P 63/m m c	9011577
+molybdenite.cif	辉钼矿（2H）	Molybdenite (2H)	MoS₂	P 63/m m c	9007660
+aragonite.cif	文石	Aragonite	CaCO₃	P m c n	9000229
+dolomite.cif	白云石	Dolomite	CaMg(CO₃)₂	R -3 :H	9000083
+magnesite.cif	菱镁矿	Magnesite	MgCO₃	R -3 c :H	9000380
+barite.cif	重晶石	Barite	BaSO₄	P n m a	9004122
+celestine.cif	天青石	Celestine	SrSO₄	P n m a	9004091
+anhydrite.cif	硬石膏	Anhydrite	CaSO₄	A m m a	9004096
+forsterite.cif	镁橄榄石	Forsterite	Mg₂SiO₄	P b n m	9000319
+fayalite.cif	铁橄榄石	Fayalite	Fe₂SiO₄	P b n m	9000469
+zircon.cif	锆石	Zircon	ZrSiO₄	I 41/a m d :2	9005518
+scheelite.cif	白钨矿	Scheelite	CaWO₄	I 41/a :2	9009626
+sylvite.cif	钾石盐	Sylvite	KCl	F m -3 m	9003112
+siderite.cif	菱铁矿	Siderite	FeCO₃	R -3 c :H	9000098
+stishovite.cif	斯石英	Stishovite	SiO₂	P 42/m n m	9005852
+coesite.cif	柯石英	Coesite	SiO₂	C 1 2/c 1	9000802
+ilmenite.cif	钛铁矿	Ilmenite	FeTiO₃	R -3 :H	9000906

@@ -72,16 +72,47 @@ void TestRayThroughCenter() {
 void TestOrbitAndZoom() {
     Camera camera;
     camera.Reset(Vec3{}, 5.0, 1.5);
-    const double startYaw = camera.yaw;
+    const Camera start = camera;
+    const Vec3 front = start.target - start.Forward();
     const double startDistance = camera.distance;
-    camera.Orbit(40.0, 20.0);
-    CHECK(camera.yaw < startYaw);
-    CHECK(camera.pitch > 24.0 * kDegToRad);
+    camera.OrbitFromDrag(start, 40.0, 20.0, 1200, 800);
+    const ScreenPoint moved = camera.WorldToScreen(front, 1200, 800);
+    CHECK(moved.x > 600 && moved.y > 400);
+    const Camera singleMove = camera;
+    for (int i = 0; i <= 40; ++i) camera.OrbitFromDrag(start, i, i * 0.5, 1200, 800);
+    CHECK(Length(camera.Eye() - singleMove.Eye()) < 1e-12);
+    camera.OrbitFromDrag(start, 80, 40, 2400, 1600);
+    CHECK(Length(camera.Up() - singleMove.Up()) < 1e-12);
+    camera.OrbitFromDrag(start, 0, 800, 1200, 800);
+    CHECK_NEAR(Dot(camera.Forward(), start.Forward()), -1.0, 1e-12);
+    camera.OrbitFromDrag(start, 0, 0, 1200, 800);
+    CHECK(Length(camera.Up() - start.Up()) < 1e-12);
+    CHECK(Length(camera.Eye() - start.Eye()) < 1e-12);
+    for (int i = 0; i < 10000; ++i) camera.OrbitBy(0.031, std::cos(i) * 0.02);
+    CHECK_NEAR(Length(camera.Eye() - camera.target), startDistance, 1e-10);
+    CHECK_NEAR(Length(camera.Right()), 1.0, 1e-12);
+    CHECK_NEAR(Length(camera.Up()), 1.0, 1e-12);
+    CHECK_NEAR(Dot(camera.Right(), camera.Up()), 0.0, 1e-12);
     camera.Zoom(3.0);
     CHECK(camera.distance < startDistance);
-    camera.Orbit(0.0, -10000.0);
-    CHECK(camera.pitch <= 85.0 * kDegToRad + 1e-6);
-    CHECK(camera.pitch >= -85.0 * kDegToRad - 1e-6);
+}
+
+void TestPannedOrbit() {
+    for (bool ortho : {false, true}) {
+        const Vec3 center{10, -2, 5};
+        Camera camera;
+        camera.Reset(center, 5, 1.5);
+        camera.SetProjection(ortho);
+        camera.Pan(140, -60, 1200, 800);
+        const Camera start = camera;
+        const auto before = camera.WorldToScreen(center, 1200, 800);
+        camera.OrbitFromDrag(start, 350, -600, 1200, 800);
+        const auto after = camera.WorldToScreen(center, 1200, 800);
+        CHECK_NEAR(before.x, after.x, 1e-9);
+        CHECK_NEAR(before.y, after.y, 1e-9);
+        const Ray ray = camera.ScreenRay(after.x, after.y, 1200, 800);
+        CHECK(Length(Cross(center - ray.origin, ray.direction)) < 1e-9);
+    }
 }
 
 void TestOrthographic() {
@@ -99,8 +130,6 @@ void TestOrthographic() {
 void TestTightPointFit() {
     Camera camera;
     camera.SetScene(Vec3{0, 0, 0}, 8.0);
-    camera.yaw = 35.0 * kDegToRad;
-    camera.pitch = 24.0 * kDegToRad;
     std::vector<Vec3> points;
     for (int x = -1; x <= 1; x += 2) {
         for (int y = -1; y <= 1; y += 2) {
@@ -298,6 +327,7 @@ int RunCameraTests() {
     TestFitFramesTheScene();
     TestRayThroughCenter();
     TestOrbitAndZoom();
+    TestPannedOrbit();
     TestOrthographic();
     TestTightPointFit();
     TestSupercellFit();

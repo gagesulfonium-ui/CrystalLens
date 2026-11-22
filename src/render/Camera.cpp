@@ -6,46 +6,39 @@
 namespace cl {
 
 namespace {
-constexpr double kPitchLimit = 85.0 * kDegToRad;
-
-Vec3 WorldUp() { return {0.0, 0.0, 1.0}; }
+// Rodrigues' formula for rotating a world-space vector about a unit axis.
+Vec3 RotateVector(const Vec3& v, const Vec3& axis, double c, double s) {
+    return v * c + Cross(axis, v) * s + axis * (Dot(axis, v) * (1.0 - c));
+}
 } // namespace
 
+Camera::Camera() { ResetOrientation(); }
+
+void Camera::ResetOrientation() {
+    constexpr double yaw = 35.0 * kDegToRad;
+    constexpr double pitch = 24.0 * kDegToRad;
+    right_ = {-std::sin(yaw), std::cos(yaw), 0.0};
+    up_ = {-std::cos(yaw) * std::sin(pitch), -std::sin(yaw) * std::sin(pitch), std::cos(pitch)};
+}
+
 void Camera::SetScene(const Vec3& center, double radius) {
-    target = center;
+    sceneCenter_ = target = center;
     sceneRadius_ = std::max(0.5, radius);
 }
 
 Vec3 Camera::Eye() const {
-    const double cp = std::cos(pitch);
-    return target + Vec3{cp * std::cos(yaw), cp * std::sin(yaw), std::sin(pitch)} * distance;
+    return target - Forward() * distance;
 }
 
 void Camera::Basis(Vec3& forward, Vec3& right, Vec3& up) const {
-    forward = Normalize(target - Eye());
-    Vec3 worldUp = WorldUp();
-    if (std::abs(Dot(forward, worldUp)) > 0.999) worldUp = {0.0, 1.0, 0.0};
-    right = Normalize(Cross(forward, worldUp));
-    up = Normalize(Cross(right, forward));
+    forward = Forward();
+    right = right_;
+    up = up_;
 }
 
-Vec3 Camera::Forward() const {
-    Vec3 f, r, u;
-    Basis(f, r, u);
-    return f;
-}
-
-Vec3 Camera::Right() const {
-    Vec3 f, r, u;
-    Basis(f, r, u);
-    return r;
-}
-
-Vec3 Camera::Up() const {
-    Vec3 f, r, u;
-    Basis(f, r, u);
-    return u;
-}
+Vec3 Camera::Forward() const { return Cross(up_, right_); }
+Vec3 Camera::Right() const { return right_; }
+Vec3 Camera::Up() const { return up_; }
 
 double Camera::NearPlane() const {
     return std::max(0.02, distance - sceneRadius_ * 2.2);
@@ -109,15 +102,38 @@ void Camera::FitScenePoints(const std::vector<Vec3>& points, double aspect, doub
 
 void Camera::Reset(const Vec3& center, double radius, double aspect) {
     SetScene(center, radius);
-    yaw = 35.0 * kDegToRad;
-    pitch = 24.0 * kDegToRad;
+    ResetOrientation();
     Fit(aspect);
 }
 
-void Camera::Orbit(double dxPixels, double dyPixels) {
-    yaw -= dxPixels * 0.0072;
-    pitch += dyPixels * 0.0072;
-    pitch = Clamp(pitch, -kPitchLimit, kPitchLimit);
+void Camera::OrbitBy(double horizontalRadians, double verticalRadians) {
+    OrbitFrom(*this, horizontalRadians, verticalRadians);
+}
+
+void Camera::OrbitFromDrag(const Camera& start, double dx, double dy, int width, int height) {
+    const int span = std::min(width, height);
+    if (span <= 0) return;
+    const double radiansPerPixel = kPi / span;
+    OrbitFrom(start, dx * radiansPerPixel, dy * radiansPerPixel);
+}
+
+void Camera::OrbitFrom(const Camera& start, double horizontal, double vertical) {
+    const double angle = std::hypot(horizontal, vertical);
+    if (angle == 0.0) {
+        right_ = start.right_;
+        up_ = start.up_;
+        target = start.target;
+        return;
+    }
+    // Rotate the camera opposite the gesture so the near face follows the pointer.
+    const Vec3 axis = (start.up_ * -horizontal - start.right_ * vertical) / angle;
+    const double c = std::cos(angle), s = std::sin(angle);
+    const Vec3 right = Normalize(RotateVector(start.right_, axis, c, s));
+    const Vec3 up = RotateVector(start.up_, axis, c, s);
+    // Preserve the screen offset of the scene center even after a pan.
+    target = sceneCenter_ + RotateVector(start.target - sceneCenter_, axis, c, s);
+    right_ = right;
+    up_ = Normalize(up - right * Dot(right, up));
 }
 
 void Camera::Pan(double dxPixels, double dyPixels, int width, int height) {

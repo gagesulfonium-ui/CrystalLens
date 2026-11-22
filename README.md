@@ -1,11 +1,11 @@
 # CrystalLens
 v1面向轻量化、便携化的需求，推出windows原生版和Android以及预览版本，实测Android版本目前无法正常使用，需要下一个版本debug，推荐直接打开preview版本（HTML文件）可以在chrome等浏览器直接使用，并且Windows原生版功能全部拥有，界面略有改变，也借此实现了跨平台使用的目的。
 **强烈推荐使用html preview版本和windows原生版本！！！！！**
-**CrystalLens 是一个跨平台的晶体结构查看与编辑器**：以 Windows 原生版（C++17 + Win32 + OpenGL 3.3）为基础，并重构出 Android 版（Java WebView + WebGL2），两套实现共享相同的晶体学能力与深色专业界面。不依赖任何第三方运行库，内置 12 种常见矿物/晶体的离线结构库（CIF，来自 COD），支持 CIF / XYZ / VESTA 文件。
+**CrystalLens 是一个跨平台的晶体结构查看与编辑器**：以 Windows 原生版（C++17 + Win32 + OpenGL 3.3）为基础，并重构出 Android 版（Java WebView + WebGL2），两套实现共享相同的晶体学能力与深色专业界面。不依赖任何第三方运行库，内置离线结构库（Windows 42 种，Android 12 种）（CIF，来自 COD），支持 CIF / XYZ / VESTA 文件。
 
 | 平台 | 技术栈 | 版本 | 获取方式 |
 |---|---|---|---|
-| **Windows 10/11 x64** | C++17 · Win32 · OpenGL 3.3 | [v1.1.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0) | [便携版 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0/CrystalLens-v1.1.0-win64.zip) · [源码 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0/CrystalLens-v1.1.0-source.zip) |
+| **Windows 10/11 x64** | C++17 · Win32 · OpenGL 3.3 | [v1.2.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.2.0) | [便携版 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.2.0/CrystalLens-v1.2.0-win64.zip) · [源码 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.2.0/CrystalLens-v1.2.0-source.zip) |
 | **Android 7.0+**（无原生库，支持所有 ABI） | Java WebView · WebGL2 · JavaScript | [v1.1.0-android](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0-android) | [APK](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0-android/CrystalLens-v1.1.0-android.apk) · [免安装预览 HTML](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0-android/CrystalLens-Android-Preview.html) |
 
 > **免安装预览版**是单个 HTML 文件：复制到手机用 Chrome 打开即可，完全离线、无需安装；它与 APK 使用同一份 Web 核心代码。
@@ -17,7 +17,7 @@ v1面向轻量化、便携化的需求，推出windows原生版和Android以及�
 - **边界原子**：默认显示相邻晶胞的一层实心原子与完整键网络（可一键关闭），可见位点与 CrystalMaker 一致。
 - **测量与编辑**：周期最小镜像的键长/键角测量；晶胞参数编辑，原子增/删/改（作用于不对称单元，对称等价位点一起更新），50 步撤销/重做。
 - **导出**：CIF、XYZ、PNG 截图、结构摘要复制。
-- **界面与晶体库**：中文 / English 一键切换；外观设置（边框颜色/粗细、背景色、多面体透明度与描边）持久化；12 种结构离线晶体库（岩盐、萤石、钙钛矿、硫铂矿、金红石/板钛矿/锐钛矿、闪锌矿/纤锌矿、金刚石、α-石英、方解石）。
+- **界面与晶体库**：中文 / English 一键切换；外观设置（边框颜色/粗细、背景色、多面体透明度与描边）持久化；两平台均包含首批 12 种结构（岩盐、萤石、钙钛矿、硫铂矿、金红石/板钛矿/锐钛矿、闪锌矿/纤锌矿、金刚石、α-石英、方解石）。
 - **平台差异**：Windows 版支持多窗口并排、完整键盘快捷键与文件拖放；Android 版为触屏优先（单指旋转带惯性、双指缩放/平移、双击适配视图），多个结构以标签页呈现，文件通过系统「打开方式」或应用内选择器打开。
 
 ## 截图
@@ -36,15 +36,21 @@ v1面向轻量化、便携化的需求，推出windows原生版和Android以及�
 |---|---|
 | Android 版说明与构建 | [android-port/README.md](android-port/README.md) → [完整交付文档](android-port/docs/ANDROID.md) |
 | Android 发布页 | [Release v1.1.0-android](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0-android) |
-| Windows 发布页 | [Release v1.1.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0) |
+| Windows 发布页 | [Release v1.2.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.2.0) |
 | 晶体库来源与文献 | [library/SOURCES.md](library/SOURCES.md) |
 | 许可 | [MIT License](LICENSE) |
 
 ---
 
-# Windows 原生版（v1.1）
+# Windows 原生版（v1.2.0）
 
 CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编辑工具。它使用 **C++17 + Win32 + OpenGL 3.3** 实现，不依赖 Qt 或其他第三方运行库，便携包包含 `CrystalLens.exe` 和可离线打开的晶体结构库。
+
+## v1.2 晶胞旋转与扩展晶体库
+
+左键拖动时，朝向由按下位置和当前鼠标位置直接决定。轻拖可以微调，垂直拖动可以翻过晶胞顶部，松手即停。按住左键拖回起点会恢复原朝向。平移后，晶胞仍绕自身中心旋转。
+
+经典晶体库新增 30 份 COD 实验结构，共 42 份。可以对照石墨与金刚石、黄铁矿与白铁矿、方解石与文石，以及石英、柯石英和斯石英。完整清单、文献和文件校验值见[晶体库来源](library/SOURCES.md)。
 
 ## v1.1 配位多面体
 
@@ -66,7 +72,7 @@ CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编�
 | 闪锌矿、纤锌矿（2H） | ZnS 的立方和六方晶型 |
 | 金刚石、α-石英、方解石 | C、SiO₂、CaCO₃ |
 
-12 份 CIF 均从 COD 的格拉纳达大学镜像取得，存放在程序旁的 `library` 文件夹，解压后可离线使用。数据编号、原始论文及下载文件的 SHA-256 见[晶体库来源](library/SOURCES.md)。
+首批 12 份 CIF 均从 COD 的格拉纳达大学镜像取得，存放在程序旁的 `library` 文件夹，解压后可离线使用。数据编号、原始论文及下载文件的 SHA-256 见[晶体库来源](library/SOURCES.md)。
 
 打开本地文件时也可多选或成组拖入。首个文件使用空窗口，后续每个文件新建一个窗口。关闭一个晶胞后，其余晶胞仍可继续操作。
 
@@ -211,7 +217,7 @@ CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编�
 
 ## 快速开始
 
-1. 解压 `CrystalLens-v1.1.0-win64.zip`。
+1. 解压 `CrystalLens-v1.2.0-win64.zip`。
 2. 运行 `CrystalLens.exe`。
 3. 打开或拖入结构文件。示例包括：
    - `examples/quartz.cif`（α-石英）
@@ -236,7 +242,7 @@ CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编�
 
 | 操作 | 功能 |
 |---|---|
-| 左键拖动 | 旋转 |
+| 左键拖动 | 沿拖动方向绕晶胞中心旋转，可连续翻过顶面和底面。按住左键拖回起点可恢复按下时的朝向，松手即停。 |
 | 滚轮 | 缩放 |
 | 中键拖动 / 右键拖动 | 平移 |
 | 左键单击原子 | 选择原子并在右侧显示信息 |
@@ -342,7 +348,7 @@ ctest --test-dir build -C Release --output-on-failure
 .\pack.ps1
 ```
 
-生成 `dist\CrystalLens-v1.1.0-win64.zip`。
+生成 `dist\CrystalLens-v1.2.0-win64.zip`。
 
 ## 项目结构
 
