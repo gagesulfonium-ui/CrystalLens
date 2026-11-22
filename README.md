@@ -1,16 +1,24 @@
 # CrystalLens
-v1面向轻量化、便携化的需求，推出windows原生版和Android以及预览版本，实测Android版本目前无法正常使用，需要下一个版本debug，推荐直接打开preview版本（HTML文件）可以在chrome等浏览器直接使用，并且Windows原生版功能全部拥有，界面略有改变，也借此实现了跨平台使用的目的。
-**强烈推荐使用html preview版本和windows原生版本！！！！！**
-**CrystalLens 是一个跨平台的晶体结构查看与编辑器**：以 Windows 原生版（C++17 + Win32 + OpenGL 3.3）为基础，并重构出 Android 版（Java WebView + WebGL2），两套实现共享相同的晶体学能力与深色专业界面。不依赖任何第三方运行库，内置离线结构库（Windows 42 种，Android 12 种）（CIF，来自 COD），支持 CIF / XYZ / VESTA 文件。
 
-| 平台 | 技术栈 | 版本 | 获取方式 |
-|---|---|---|---|
-| **Windows 10/11 x64** | C++17 · Win32 · OpenGL 3.3 | [v1.2.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.2.0) | [便携版 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.2.0/CrystalLens-v1.2.0-win64.zip) · [源码 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.2.0/CrystalLens-v1.2.0-source.zip) |
-| **Android 7.0+**（无原生库，支持所有 ABI） | Java WebView · WebGL2 · JavaScript | [v1.1.0-android](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0-android) | [APK](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0-android/CrystalLens-v1.1.0-android.apk) · [免安装预览 HTML](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0-android/CrystalLens-Android-Preview.html) |
+CrystalLens 是一款轻量的晶体结构查看与编辑器。可打开 CIF、XYZ 和 VESTA 文件，在三维视图中旋转晶胞、查看配位多面体、测量键长与键角，也可以编辑原子和晶胞参数。
 
-> **免安装预览版**是单个 HTML 文件：复制到手机用 Chrome 打开即可，完全离线、无需安装；它与 APK 使用同一份 Web 核心代码。
+## 下载
 
-## 核心功能（两平台一致）
+| 平台 | 版本 | 下载 |
+|---|---|---|
+| Windows 10/11 x64 | [v1.2.0](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.2.0) | [Windows 便携版 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.2.0/CrystalLens-v1.2.0-win64.zip) · [Windows 源码 ZIP](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.2.0/CrystalLens-v1.2.0-source.zip) |
+| Android 7.0+ / 浏览器预览 | [v1.1.0-android](https://github.com/gagesulfonium-ui/CrystalLens/releases/tag/v1.1.0-android) | [免安装 HTML 预览](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0-android/CrystalLens-Android-Preview.html) · [Android APK](https://github.com/gagesulfonium-ui/CrystalLens/releases/download/v1.1.0-android/CrystalLens-v1.1.0-android.apk) |
+
+**Windows 快速开始**　解压整个便携包，运行 `CrystalLens.exe`，按 `Ctrl+L` 打开经典晶体库。
+
+**手机端预览**　Android v1.1.0 的 APK 在实测中存在运行问题。推荐下载 HTML 预览，用 Chrome 打开即可离线查看内置的 12 种结构。
+
+## Windows v1.2.0 更新
+
+- **晶胞跟随鼠标旋转。** 左键上下拖动可连续翻过顶面和底面，松手即停。按住左键拖回起点，即可恢复按下时的朝向。平移后再旋转，晶胞中心仍停在刚才的屏幕位置。
+- **离线晶体库从 12 种增至 42 种。** 新增 30 份来自 Crystallography Open Database（COD）的实验结构。按住 Ctrl 可多选并打开独立窗口，例如并排观察石墨与金刚石，或比较石英、柯石英和斯石英。每份 CIF 都有对应的 COD 编号、文献和 SHA-256 校验值。[查看 42 种结构与来源](library/SOURCES.md)
+
+## 核心功能
 
 - **结构读取**：CIF（对称操作展开、`1.234(5)` 不确定度数字、多 data block、无引号逐行对称操作、无序组/集合）、XYZ（元素符号/原子序数）、VESTA（CELLP / GROUP / SYMOP / STRUC）。
 - **三维显示**：晶胞/超胞（1–16 倍）与子晶胞线框、周期化学键、球棍 / 空间填充 / **配位多面体**（半透明面 + 像素级描边）、元素图例、原子标签、坐标轴、透视/正交投影。
@@ -45,12 +53,6 @@ v1面向轻量化、便携化的需求，推出windows原生版和Android以及�
 # Windows 原生版（v1.2.0）
 
 CrystalLens 是一个面向 Windows 10/11 x64 的原生晶体结构查看与编辑工具。它使用 **C++17 + Win32 + OpenGL 3.3** 实现，不依赖 Qt 或其他第三方运行库，便携包包含 `CrystalLens.exe` 和可离线打开的晶体结构库。
-
-## v1.2 晶胞旋转与扩展晶体库
-
-左键拖动时，朝向由按下位置和当前鼠标位置直接决定。轻拖可以微调，垂直拖动可以翻过晶胞顶部，松手即停。按住左键拖回起点会恢复原朝向。平移后，晶胞仍绕自身中心旋转。
-
-经典晶体库新增 30 份 COD 实验结构，共 42 份。可以对照石墨与金刚石、黄铁矿与白铁矿、方解石与文石，以及石英、柯石英和斯石英。完整清单、文献和文件校验值见[晶体库来源](library/SOURCES.md)。
 
 ## v1.1 配位多面体
 
@@ -372,7 +374,7 @@ docs/                   截图
 - 化学键由几何着色器生成 6 面平滑法线圆柱，一个实例化 draw call 绘制全部键；深度与光照为真实几何。
 - 球体与圆柱共享主光/补光/双高光/边缘光模型。
 - 选择与悬停通过每实例索引 + uniform 在顶点着色器中计算，避免鼠标移动时重建 VBO。
-- 相机目标为渲染空间原点；取景使用超胞角点与当前显示原子，超胞尺寸变化后自动重新适配。
+- 相机根据可见几何的包围盒确定旋转中心。平移后再旋转时，晶胞中心保持在平移后的屏幕位置。
 - 显示集合按超胞闭区间 `[0,Nx]×[0,Ny]×[0,Nz]` 生成，并按坐标去重；键网络在显示集合上用空间网格近邻搜索。成键条件为共价半径和 + 容差（金属–非金属较宽，其余较紧），因此 Bi₂Te₃ 的远距离 Bi–Te 接触不连，而 K–F/Ni–F 等正常配位保留。
 - 超胞的每个小晶胞边线一次批量生成，并在 GPU 半透明 overlay pass 中绘制，因此 2×2×2/3×3×3 超胞的每个小胞边框都可见，且不依赖逐帧 CPU 投影。
 - 多面体模式对每个中心原子搜索完整周期性配位（不受当前边界原子是否显示的限制），在 CPU 端构建凸包三角形后上传为静态 VBO；玻璃半透明面与中心原子一次绘制。
@@ -388,14 +390,14 @@ build\Release\crystal_tests.exe
 build\Release\crystal_camera_tests.exe
 ```
 
-当前结果：
+Windows v1.2.0 的 x64 Release 构建通过两组测试。
 
 ```text
-crystal_tests:        407 checks passed, 0 failed
-crystal_camera_tests: 305 checks passed, 0 failed
+crystal_tests:        626 checks passed, 0 failed
+crystal_camera_tests: 317 checks passed, 0 failed
 ```
 
-覆盖解析、对称展开、无引号对称操作、去重、键搜索、最小镜像测量、晶胞修改、原子增删改、CIF/XYZ 导出往返。
+核心测试核对了全部 42 份库内 CIF 的 COD 编号和晶胞成分，并覆盖对称展开、键搜索、周期测量、编辑与导出。相机测试覆盖拖回起点、跨越顶面、连续一万次旋转后的姿态稳定性，以及平移后的旋转中心和拾取。
 
 历史版本 CPU 侧基准（Release x64）：
 
