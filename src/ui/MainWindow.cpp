@@ -2,6 +2,7 @@
 
 #include "Format.h"
 #include "CrystalLibrary.h"
+#include "SolidViewer.h"
 #include "ElementStyleDialog.h"
 #include "Icons.h"
 #include "Localization.h"
@@ -1612,6 +1613,7 @@ std::vector<MenuEntry> MainWindow::BuildMenu(int menuIndex) const {
     case 0:
         add(T(Str::OpenFile), L"Ctrl+O", CmdOpen);
         add(T(Str::Library), L"Ctrl+L", CmdLibrary);
+        add(T(Str::SolidViewer), L"", CmdSolidViewer);
         add(T(Str::ReloadFile), L"Ctrl+R", CmdReload, !currentPath_.empty());
         add(T(Str::SaveStructure), L"Ctrl+S", CmdSaveStructure, loaded);
         add(T(Str::SaveScreenshot), L"Ctrl+Shift+S", CmdScreenshot, loaded);
@@ -1702,6 +1704,9 @@ void MainWindow::ToggleMeasureMode(MeasureMode mode) {
 void MainWindow::ExecuteCommand(int command) {
     if ((help_.IsVisible() || form_.IsVisible()) && command != CmdHelp) return;
     switch (command) {
+    case CmdSolidViewer:
+        ShowSolidViewer(hwnd_);
+        break;
     case CmdLibrary:
         for (const auto& path : ChooseLibraryStructures(hwnd_)) OpenDocument(path);
         break;

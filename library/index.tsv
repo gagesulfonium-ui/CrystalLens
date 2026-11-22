@@ -73,3 +73,174 @@ wulfenite.cif	钼铅矿	Wulfenite	PbMoO₄	I 41/a :2	9008105
 powellite.cif	钼钙矿	Powellite	CaMoO₄	I 41/a :2	9009632
 clinoenstatite.cif	斜顽火辉石	Clinoenstatite	MgSiO₃	P 1 21/c 1	9008077
 cristobalite.cif	方石英	Cristobalite	SiO₂	P 41 21 2	9008110
+cod-9012002.cif	铝	Aluminium	Al	F m -3 m	9012002
+cod-9013014.cif	铜	Copper	Cu	F m -3 m	9013014
+cod-9012431.cif	银	Silver	Ag	F m -3 m	9012431
+cod-9012430.cif	金	Gold	Au	F m -3 m	9012430
+cod-9013024.cif	镍	Nickel	Ni	F m -3 m	9013024
+cod-1011103.cif	铂	Platinum	Pt	F m -3 m	1011103
+cod-1011104.cif	钯	Palladium	Pd	F m -3 m	1011104
+cod-9008482.cif	铑	Rhodium	Rh	F m -3 m	9008482
+cod-9008470.cif	铱	Iridium	Ir	F m -3 m	9008470
+cod-9012004.cif	铅	Lead	Pb	F m -3 m	9012004
+cod-9006587.cif	α-铁	Alpha iron	Fe	I m -3 m	9006587
+cod-5000220.cif	铬	Chromium	Cr	I m -3 m	5000220
+cod-9006486.cif	钨	Tungsten	W	I m -3 m	9006486
+cod-9012432.cif	钼	Molybdenum	Mo	I m -3 m	9012432
+cod-9008546.cif	铌	Niobium	Nb	I m -3 m	9008546
+cod-9008552.cif	钽	Tantalum	Ta	I m -3 m	9008552
+cod-9008557.cif	钒	Vanadium	V	I m -3 m	9008557
+cod-9012001.cif	镁	Magnesium	Mg	P 63/m m c	9012001
+cod-9008517.cif	α-钛	Alpha titanium	Ti	P 63/m m c	9008517
+cod-9008523.cif	α-锆	Alpha zirconium	Zr	P 63/m m c	9008523
+cod-9008501.cif	α-铪	Alpha hafnium	Hf	P 63/m m c	9008501
+cod-9012435.cif	锌	Zinc	Zn	P 63/m m c	9012435
+cod-9008492.cif	钴	Cobalt	Co	P 63/m m c	9008492
+cod-9008513.cif	钌	Ruthenium	Ru	P 63/m m c	9008513
+cod-1008870.cif	锇	Osmium	Os	P 63/m m c	1008870
+cod-9008512.cif	铼	Rhenium	Re	P 63/m m c	9008512
+cod-9011998.cif	硅	Silicon	Si	F d -3 m :1	9011998
+cod-9011629.cif	锗	Germanium	Ge	F d -3 m :1	9011629
+cod-9012005.cif	β-锡	Beta tin	Sn	I 41/a m d :1	9012005
+cod-9009658.cif	铋	Bismuth	Bi	R -3 m :H	9009658
+cod-5000214.cif	锑	Antimony	Sb	R -3 m :H	5000214
+cod-1011098.cif	三方碲	Trigonal tellurium	Te	P 31 2 1	1011098
+cod-9008579.cif	三方硒	Trigonal selenium	Se	P 32 2 1	9008579
+cod-9008085.cif	镓	Gallium	Ga	C m c e	9008085
+cod-9012374.cif	铟	Indium	In	I 4/m m m	9012374
+cod-5910079.cif	六方氮化硼	Hexagonal boron nitride	BN	P 63/m m c	5910079
+cod-1010514.cif	氮化铝	Aluminium nitride	AlN	P 63 m c	1010514
+cod-1010168.cif	氮化镓	Gallium nitride	GaN	P 63 m c	1010168
+cod-1010169.cif	氮化铟	Indium nitride	InN	P 63 m c	1010169
+cod-1541726.cif	磷化硼	Boron phosphide	BP	F -4 3 m	1541726
+cod-1011301.cif	磷化铝	Aluminium phosphide	AlP	F -4 3 m	1011301
+cod-1540257.cif	砷化铝	Aluminium arsenide	AlAs	F -4 3 m	1540257
+cod-1010152.cif	锑化铝	Aluminium antimonide	AlSb	F -4 3 m	1010152
+cod-9008846.cif	磷化镓	Gallium phosphide	GaP	F -4 3 m	9008846
+cod-9008845.cif	砷化镓	Gallium arsenide	GaAs	F -4 3 m	9008845
+cod-9008847.cif	锑化镓	Gallium antimonide	GaSb	F -4 3 m	9008847
+cod-1010146.cif	磷化铟	Indium phosphide	InP	F -4 3 m	1010146
+cod-1011353.cif	砷化铟	Indium arsenide	InAs	F -4 3 m	1011353
+cod-1011354.cif	锑化铟	Indium antimonide	InSb	F -4 3 m	1011354
+cod-9008857.cif	硒化锌	Zinc selenide	ZnSe	F -4 3 m	9008857
+cod-1010538.cif	碲化锌	Zinc telluride	ZnTe	F -4 3 m	1010538
+cod-1011054.cif	硫镉矿	Greenockite	CdS	P 63 m c	1011054
+cod-9008863.cif	硒镉矿	Cadmoselite	CdSe	P 63 m c	9008863
+cod-1010539.cif	碲化镉	Cadmium telluride	CdTe	F -4 3 m	1010539
+cod-9013403.cif	方铅矿	Galena	PbS	F m -3 m	9013403
+cod-9011360.cif	硒铅矿	Clausthalite	PbSe	F m -3 m	9011360
+cod-9011358.cif	碲铅矿	Altaite	PbTe	F m -3 m	9011358
+cod-1011253.cif	硫锡矿	Herzenbergite	SnS	P m c n	1011253
+cod-1537675.cif	硒化亚锡	Tin selenide	SnSe	P n m a	1537675
+cod-1011120.cif	碲铋矿	Tellurobismuthite	Bi₂Te₃	R -3 m :R	1011120
+cod-9011965.cif	硒铋矿	Bismuth selenide	Bi₂Se₃	R -3 m :H	9011965
+cod-9007590.cif	碲锑矿	Antimony telluride	Sb₂Te₃	R -3 m :H	9007590
+cod-9009145.cif	二硫化钨	Tungsten disulfide	WS₂	P 63/m m c	9009145
+cod-9012193.cif	二硒化钨	Tungsten diselenide	WSe₂	P 63/m m c	9012193
+cod-2310945.cif	二硒化钼	Molybdenum diselenide	MoSe₂	P 63/m m c	2310945
+cod-2310465.cif	二碲化钼	Molybdenum ditelluride	MoTe₂	P 63/m m c	2310465
+cod-1010275.cif	二硫化钛	Titanium disulfide	TiS₂	P -3 m 1	1010275
+cod-1011330.cif	硫锡石	Berndtite 2T	SnS₂	P -3 m 1	1011330
+cod-1010995.cif	立方碳化硅	Cubic silicon carbide	SiC	F -4 3 m	1010995
+cod-1011320.cif	碳化钛	Titanium carbide	TiC	F m -3 m	1011320
+cod-1011322.cif	碳化锆	Zirconium carbide	ZrC	F m -3 m	1011322
+cod-9008641.cif	碳化铪	Hafnium carbide	HfC	F m -3 m	9008641
+cod-9008682.cif	碳化铌	Niobium carbide	NbC	F m -3 m	9008682
+cod-1011321.cif	碳化钒	Vanadium carbide	VC	F m -3 m	1011321
+cod-9007456.cif	碳化钨	Tungsten carbide	WC	P -6 m 2	9007456
+cod-1011099.cif	氮化钛	Titanium nitride	TiN	F m -3 m	1011099
+cod-1011361.cif	氮化锆	Zirconium nitride	ZrN	F m -3 m	1011361
+cod-1539063.cif	氮化铪	Hafnium nitride	HfN	F m -3 m	1539063
+cod-1011317.cif	氮化钪	Scandium nitride	ScN	F m -3 m	1011317
+cod-9006658.cif	方锰矿	Manganosite	MnO	F m -3 m	9006658
+cod-9008693.cif	方镍矿	Bunsenite	NiO	F m -3 m	9008693
+cod-1533087.cif	一氧化钴	Cobalt monoxide	CoO	F m -3 m	1533087
+cod-9006694.cif	石灰	Lime	CaO	F m -3 m	9006694
+cod-1011328.cif	氧化锶	Strontium oxide	SrO	F m -3 m	1011328
+cod-1011362.cif	氧化钡	Barium oxide	BaO	F m -3 m	1011362
+cod-9009008.cif	方铈石	Cerianite	CeO₂	F m -3 m	9009008
+cod-1513300.cif	氧化钇	Yttria	Y₂O₃	I a -3	1513300
+cod-9008121.cif	氧化钪	Scandia	Sc₂O₃	I a -3	9008121
+cod-1538147.cif	氧化铟	Indium oxide	In₂O₃	I a -3	1538147
+cod-2004987.cif	β-氧化镓	Beta gallium oxide	Ga₂O₃	C 1 2/m 1	2004987
+cod-1011066.cif	三氧化二钒	Vanadium sesquioxide	V₂O₃	R -3 c :R	1011066
+cod-9012221.cif	五氧化二钒	Vanadium pentoxide	V₂O₅	P m m n :2	9012221
+cod-1011043.cif	α-氧化钼	Molybdite	MoO₃	P b n m	1011043
+cod-1528915.cif	单斜三氧化钨	Tungsten trioxide	WO₃	P 1 21/n 1	1528915
+cod-9006849.cif	四方二氧化锗	Rutile type germania	GeO₂	P 42/m n m	9006849
+cod-9009088.cif	仲碲石	Paratellurite	TeO₂	P 41 21 2	9009088
+cod-9007434.cif	氟镁石	Sellaite	MgF₂	P 42/m n m	9007434
+cod-9016413.cif	氟化锶	Strontium fluoride	SrF₂	F m -3 m	9016413
+cod-9009004.cif	氟化钡	Barium fluoride	BaF₂	F m -3 m	9009004
+cod-1530081.cif	氟化锰	Manganese fluoride	MnF₂	P 42/m n m	1530081
+cod-2103614.cif	氟化钴	Cobalt fluoride	CoF₂	P 42/m n m	2103614
+cod-9007538.cif	氟化镍	Nickel fluoride	NiF₂	P 42/m n m	9007538
+cod-9007536.cif	氟化亚铁	Iron difluoride	FeF₂	P 42/m n m	9007536
+cod-9008597.cif	角银矿	Chlorargyrite	AgCl	F m -3 m	9008597
+cod-9008596.cif	溴银矿	Bromargyrite	AgBr	F m -3 m	9008596
+cod-1011025.cif	碘银矿	Iodargyrite	AgI	P 63 m c S	1011025
+cod-9013925.cif	氯铜矿	Nantokite	CuCl	F -4 3 m	9013925
+cod-9013929.cif	溴化亚铜	Copper bromide	CuBr	F -4 3 m	9013929
+cod-9013920.cif	碘铜矿	Marshite	CuI	F -4 3 m	9013920
+cod-1011236.cif	硫钙石	Oldhamite	CaS	F m -3 m	1011236
+cod-9008672.cif	硫化镁	Magnesium sulfide	MgS	F m -3 m	9008672
+cod-1538782.cif	硫化锶	Strontium sulfide	SrS	F m -3 m	1538782
+cod-8104341.cif	硫化钡	Barium sulfide	BaS	F m -3 m	8104341
+cod-9005930.cif	硫锰矿	Alabandite	MnS	F m -3 m	9005930
+cod-9016639.cif	毒砂	Arsenopyrite	FeAsS	P 1 21/c 1	9016639
+cod-9000133.cif	辉砷钴矿	Cobaltite	CoAsS	P c a 21	9000133
+cod-1011036.cif	红砷镍矿	Nickeline	NiAs	P 63/m m c	1011036
+cod-9009411.cif	斜方砷铁矿	Loellingite	FeAs₂	P n n m	9009411
+cod-1507756.cif	四方钛酸钡	Tetragonal barium titanate	BaTiO₃	P 4 m m	1507756
+cod-9011192.cif	钛酸铅	Lead titanate	PbTiO₃	P 4 m m	9011192
+cod-1532743.cif	锆酸钡	Barium zirconate	BaZrO₃	P m -3 m	1532743
+cod-1528398.cif	锆酸锶	Strontium zirconate	SrZrO₃	P b n m	1528398
+cod-2102087.cif	钽酸钾	Potassium tantalate	KTaO₃	P m -3 m	2102087
+cod-2310011.cif	铌酸钾	Potassium niobate	KNbO₃	B m m 2	2310011
+cod-9014118.cif	铌酸钠	Sodium niobate	NaNbO₃	P b m a	9014118
+cod-1544665.cif	铌酸锂	Lithium niobate	LiNbO₃	R 3 c :H	1544665
+cod-1544717.cif	钽酸锂	Lithium tantalate	LiTaO₃	R 3 c :H	1544717
+cod-1508503.cif	铝酸镧	Lanthanum aluminate	LaAlO₃	R -3 c :H	1508503
+cod-1533069.cif	铝酸钇	Yttrium aluminate	YAlO₃	P b n m	1533069
+cod-9010587.cif	镁钛矿	Geikielite	MgTiO₃	R -3 :H	9010587
+cod-9007384.cif	红钛锰矿	Pyrophanite	MnTiO₃	R -3 :H	9007384
+cod-1011090.cif	磷酸铁锂	Lithium iron phosphate	LiFePO₄	P b n m	1011090
+cod-1550397.cif	钴酸锂	Lithium cobalt oxide	LiCoO₂	R -3 m :H	1550397
+cod-1514050.cif	锰酸锂	Lithium manganese oxide	LiMn₂O₄	F d -3 m :1	1514050
+cod-2003066.cif	钇铝石榴石	Yttrium aluminium garnet	Y₃Al₅O₁₂	I a -3 d	2003066
+cod-9007017.cif	锌尖晶石	Gahnite	ZnAl₂O₄	F d -3 m :2	9007017
+cod-9001970.cif	铁尖晶石	Hercynite	FeAl₂O₄	F d -3 m :2	9001970
+cod-9005102.cif	锌铁尖晶石	Franklinite	ZnFe₂O₄	F d -3 m :2	9005102
+cod-1538531.cif	四氧化三钴	Cobalt oxide spinel	Co₃O₄	F d -3 m :1	1538531
+cod-9006180.cif	镁铬铁矿	Magnesiochromite	MgCr₂O₄	F d -3 m :2	9006180
+cod-1011241.cif	镁铁尖晶石	Magnesioferrite	MgFe₂O₄	F d -3 m :1	1011241
+cod-1011202.cif	钙镁橄榄石	Monticellite	CaMgSiO₄	P b n m	1011202
+cod-9007627.cif	硅锌矿	Willemite	Zn₂SiO₄	R -3 :H	9007627
+cod-9005857.cif	硅铍石	Phenakite	Be₂SiO₄	R -3 :H	9005857
+cod-9005861.cif	金绿宝石	Chrysoberyl	BeAl₂O₄	P b n m	9005861
+cod-1000034.cif	钙长石	Anorthite	CaAl₂Si₂O₈	P -1	1000034
+cod-9000702.cif	钠长石	Albite	NaAlSi₃O₈	C -1	9000702
+cod-9000701.cif	微斜长石	Microcline	KAlSi₃O₈	C -1	9000701
+cod-1010215.cif	镁黄长石	Akermanite	Ca₂MgSi₂O₇	P -4 21 m	1010215
+cod-1000048.cif	钙铝黄长石	Gehlenite	Ca₂Al₂SiO₇	P -4 21 m	1000048
+cod-2002799.cif	二硼化钛	Titanium diboride	TiB₂	P 6/m m m	2002799
+cod-1510856.cif	二硼化锆	Zirconium diboride	ZrB₂	P 6/m m m	1510856
+cod-1010302.cif	六硼化钙	Calcium hexaboride	CaB₆	P m -3 m	1010302
+cod-1010990.cif	氟化锂	Lithium fluoride	LiF	F m -3 m	1010990
+cod-1010326.cif	氯化锂	Lithium chloride	LiCl	F m -3 m	1010326
+cod-1011363.cif	溴化锂	Lithium bromide	LiBr	F m -3 m	1011363
+cod-1010327.cif	碘化锂	Lithium iodide	LiI	F m -3 m	1010327
+cod-1011141.cif	氟化钠	Sodium fluoride	NaF	F m -3 m	1011141
+cod-1010045.cif	溴化钠	Sodium bromide	NaBr	F m -3 m	1010045
+cod-9008681.cif	碘化钠	Sodium iodide	NaI	F m -3 m	9008681
+cod-1010978.cif	氟化钾	Potassium fluoride	KF	F m -3 m	1010978
+cod-1010046.cif	溴化钾	Potassium bromide	KBr	F m -3 m	1010046
+cod-9008654.cif	碘化钾	Potassium iodide	KI	F m -3 m	9008654
+cod-9008708.cif	氟化铷	Rubidium fluoride	RbF	F m -3 m	9008708
+cod-1010047.cif	氯化铷	Rubidium chloride	RbCl	F m -3 m	1010047
+cod-1010048.cif	溴化铷	Rubidium bromide	RbBr	F m -3 m	1010048
+cod-9008710.cif	碘化铷	Rubidium iodide	RbI	F m -3 m	9008710
+cod-9008621.cif	氟化铯	Caesium fluoride	CsF	F m -3 m	9008621
+cod-9008789.cif	氯化铯	Caesium chloride	CsCl	P m -3 m	9008789
+cod-9008788.cif	溴化铯	Caesium bromide	CsBr	P m -3 m	9008788
+cod-9008790.cif	碘化铯	Caesium iodide	CsI	P m -3 m	9008790

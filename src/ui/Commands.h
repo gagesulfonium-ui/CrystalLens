@@ -42,7 +42,8 @@ enum CommandId : int {
     CmdPolyhedral,
     CmdLibrary,
     CmdExterior,
-    CmdElementStyle
+    CmdElementStyle,
+    CmdSolidViewer
 };
 
 } // namespace cl

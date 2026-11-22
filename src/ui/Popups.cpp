@@ -1191,7 +1191,7 @@ void HelpWindow::Paint() {
         DrawLogo(g, UiRect(pad, 28.0f * dpi_, 46.0f * dpi_, 46.0f * dpi_), true);
         painter.Text(T(Str::AppName), UiRect(pad + 58.0f * dpi_, 30.0f * dpi_, 300.0f * dpi_, 27.0f * dpi_),
                      21.0f * dpi_, UiColor(255, 238, 243, 250), UiTextAlign::Left, UiTextVAlign::Top, true);
-        painter.Text(Fmt(T(Str::AboutVersionFmt), L"1.3.0"), UiRect(pad + 58.0f * dpi_, 58.0f * dpi_,
+        painter.Text(Fmt(T(Str::AboutVersionFmt), L"1.4.0"), UiRect(pad + 58.0f * dpi_, 58.0f * dpi_,
                                                                  360.0f * dpi_, 18.0f * dpi_),
                      9.5f * dpi_, UiColor(255, 128, 143, 167), UiTextAlign::Left, UiTextVAlign::Top);
 

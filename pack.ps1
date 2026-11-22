@@ -13,7 +13,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $BuildDir = Join-Path $Root 'build'
-$Version = '1.3.0'
+$Version = '1.4.0'
 $StageName = "CrystalLens-v$Version-win64"
 $DistDir = Join-Path $Root 'dist'
 $StageDir = Join-Path $DistDir $StageName
@@ -50,7 +50,7 @@ Copy-Item -Path (Join-Path $Root 'examples\*.vesta') -Destination $examplesDir -
 
 $docsDest = Join-Path $StageDir 'docs'
 New-Item -ItemType Directory -Path $docsDest -Force | Out-Null
-foreach ($name in @('halite-polyhedra-v11.png', 'polyhedra-v09.png', 'screenshot-v08-srtio3.png', 'screenshot-main.png', 'screenshot-supercell.png', 'screenshot-polyhedral.png', 'screenshot-bi2te3.png', 'screenshot-crcobr3.png', 'screenshot-appearance.png', 'screenshot-help.png', 'screenshot-editcell.png', 'screenshot-editatom.png')) {
+foreach ($name in @('polyhedron-editor-v14.png', 'halite-polyhedra-v11.png', 'polyhedra-v09.png', 'screenshot-v08-srtio3.png', 'screenshot-main.png', 'screenshot-supercell.png', 'screenshot-polyhedral.png', 'screenshot-bi2te3.png', 'screenshot-crcobr3.png', 'screenshot-appearance.png', 'screenshot-help.png', 'screenshot-editcell.png', 'screenshot-editatom.png')) {
     $source = Join-Path $Root "docs\$name"
     if (Test-Path -LiteralPath $source) {
         Copy-Item -LiteralPath $source -Destination $docsDest

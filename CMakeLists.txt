@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(CrystalLens VERSION 1.3.0 LANGUAGES CXX RC)
+project(CrystalLens VERSION 1.4.0 LANGUAGES CXX RC)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -10,6 +10,8 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 option(CRYSTALLENS_BUILD_TESTS "Build the core test suite" ON)
 
 add_library(crystal_core STATIC
+    src/core/Solids.cpp
+    src/core/SolidDocument.cpp
     src/core/Crystal.cpp
     src/core/CifParser.cpp
     src/core/XyzParser.cpp
@@ -39,6 +41,7 @@ add_executable(CrystalLens WIN32
     src/ui/Popups.cpp
     src/ui/AppearanceWindow.cpp
     src/ui/ElementStyleDialog.cpp
+    src/ui/SolidViewer.cpp
     src/ui/CrystalLibrary.cpp
     src/ui/MainWindow.cpp
     resources/app.rc
@@ -89,6 +92,13 @@ if(CRYSTALLENS_BUILD_TESTS)
         target_compile_options(crystal_tests PRIVATE /utf-8 /W3 /permissive-)
     endif()
     add_test(NAME core_tests COMMAND crystal_tests)
+
+    add_executable(crystal_solid_tests tests/test_solids.cpp)
+    target_link_libraries(crystal_solid_tests PRIVATE crystal_core)
+    if(MSVC)
+        target_compile_options(crystal_solid_tests PRIVATE /utf-8 /W3 /permissive-)
+    endif()
+    add_test(NAME solid_tests COMMAND crystal_solid_tests)
 
     add_executable(crystal_camera_tests tests/test_camera.cpp src/render/Camera.cpp src/render/Picking.cpp
                    src/render/GL.cpp src/render/Renderer.cpp src/render/PolyhedronMesh.cpp)

@@ -27,6 +27,7 @@ enum class Language { Chinese = 0, English = 1 };
     X(MeasureMenu, L"测量", L"Measure")                                                               \
     X(HelpMenu, L"帮助", L"Help")                                                                     \
     X(Library, L"经典晶体库", L"Crystal library") \
+    X(SolidViewer, L"多面体模型…", L"Polyhedron models…") \
     X(LibraryHint, L"双击打开一个晶体，或按住 Ctrl / Shift 多选，在独立窗口中打开。", L"Double-click a crystal, or use Ctrl / Shift to open several in separate windows.") \
     X(NoCoordinationHull, L"无三维配位 · 球棍", L"No 3D shell · ball and stick") \
     X(LibraryMineral, L"晶体名称", L"Crystal") \
@@ -273,7 +274,7 @@ enum class Language { Chinese = 0, English = 1 };
     X(UnsupportedFormat, L"不支持的文件格式", L"Unsupported file format")                            \
     X(EmptyFileName, L"（未命名）", L"(untitled)")                                                    \
     X(CopyAtomLineFmt, L"%s  %s  frac(%.4f, %.4f, %.4f)", L"%s  %s  frac(%.4f, %.4f, %.4f)")         \
-    X(VersionPrefix, L"v1.3.0", L"v1.3.0")                                                               \
+    X(VersionPrefix, L"v1.4.0", L"v1.4.0")                                                               \
     X(TooltipPanelLeft, L"结构面板", L"Structure panel")                                             \
     X(TooltipPanelRight, L"测量面板", L"Measurement panel")                                           \
     X(MoreElementsFmt, L"+%d 种元素", L"+%d more")                                                    \
